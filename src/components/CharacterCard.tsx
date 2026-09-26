@@ -33,15 +33,8 @@ export function CharacterCard({
   priority?: boolean;
 }) {
   const style = categoryStyles[character.category];
-  const badges = (character.badges ?? []).filter((b) => BADGE_STYLE[b]).slice(0, 2);
-  const badge =
-    character.famousType === "historical"
-      ? "Historical"
-      : character.famousType === "inspired"
-        ? "Inspired-by"
-        : character.famousType === "verified_creator"
-          ? "Verified"
-          : null;
+  // At most one badge per card, most meaningful first.
+  const topBadge = ["pick", "hot", "new", "trending"].find((b) => character.badges?.includes(b));
 
   return (
     <article
@@ -71,29 +64,13 @@ export function CharacterCard({
         ) : (
           <span />
         )}
-        <span className="flex flex-col items-end gap-1">
-          {badges.map((b) => (
-            <span
-              key={b}
-              className={cn(
-                "rounded-md px-1.5 py-0.5 text-[10px] font-bold shadow-sm",
-                BADGE_STYLE[b].className,
-              )}
-            >
-              {BADGE_STYLE[b].label}
-            </span>
-          ))}
-          {character.category === "lover" && (
-            <span className="rounded-md bg-black/55 px-1.5 py-0.5 text-[10px] font-bold text-white backdrop-blur-sm">
-              18+
-            </span>
-          )}
-          {badge && (
-            <span className="rounded-md bg-black/55 px-1.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm">
-              {badge}
-            </span>
-          )}
-        </span>
+        {topBadge && (
+          <span
+            className={cn("rounded-md px-1.5 py-0.5 text-[10px] font-bold shadow-sm", BADGE_STYLE[topBadge].className)}
+          >
+            {BADGE_STYLE[topBadge].label}
+          </span>
+        )}
       </div>
 
       <div className="absolute inset-x-0 bottom-0 p-3 text-white">
