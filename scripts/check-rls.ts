@@ -101,6 +101,58 @@ async function main() {
         await tx`rollback to savepoint s4`;
         check("users cannot write favourites for someone else", fav);
 
+        // ── chat tables (Phase 3) ──
+        const [{ id: chatA }] =
+          await tx`insert into public.chats (user_id, character_id) values (${adult}, 'ada-lovelace') returning id`;
+        await tx`insert into public.messages (chat_id, role, content) values (${chatA}, 'assistant', 'hello')`;
+
+        const peek = (await as(
+          teen,
+          () => tx`select count(*)::int as n from public.messages where chat_id = ${chatA}`,
+        )) as { n: number }[];
+        check("users cannot read other people's messages", peek[0].n === 0);
+        const own = (await as(
+          adult,
+          () => tx`select count(*)::int as n from public.messages where chat_id = ${chatA}`,
+        )) as { n: number }[];
+        check("users can read their own messages", own[0].n === 1);
+
+        const denied = async (label: string, q: () => Promise<unknown>) => {
+          await tx`savepoint sx`;
+          let blockedWrite = false;
+          try {
+            await q();
+          } catch {
+            blockedWrite = true;
+          }
+          await tx`rollback to savepoint sx`;
+          check(label, blockedWrite);
+        };
+        await denied("users cannot forge messages (writes are server-only)", () =>
+          as(
+            adult,
+            () =>
+              tx`insert into public.messages (chat_id, role, content) values (${chatA}, 'assistant', 'forged')`,
+          ),
+        );
+        await denied("users cannot reset their daily usage", () =>
+          as(
+            adult,
+            () => tx`insert into public.daily_usage (user_id, day, count) values (${adult}, current_date, 0)`,
+          ),
+        );
+        await denied("users cannot call consume_message directly", () =>
+          as(adult, () => tx`select public.consume_message(${adult}, 1000)`),
+        );
+        await denied("users cannot add memories to someone else's chat", () =>
+          as(teen, () => tx`insert into public.memories (chat_id, text) values (${chatA}, 'x')`),
+        );
+
+        const counts: number[] = [];
+        for (let i = 0; i < 4; i++)
+          counts.push((await tx`select public.consume_message(${adult}, 3) as n`)[0].n);
+        check(`daily limit stops at the cap (got ${counts.join(",")})`, counts.join(",") === "1,2,3,-1");
+
         throw new Error("__rollback__");
       })
       .catch((e) => {

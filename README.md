@@ -10,8 +10,8 @@ Plan and decisions: [`docs/PLAN.md`](docs/PLAN.md), [`docs/DECISIONS.md`](docs/D
 | ----- | -------------------------------------------------------------- | ------- |
 | 1     | Landing page, waitlist, SEO, PWA manifest                      | ✅ Done |
 | 2     | App shell: auth + age gate, explore, character page, seed data | ✅ Done |
-| 3     | Chat (streaming, memory, limits, safety)                       | Next    |
-| 4     | AI Character Creator                                           | —       |
+| 3     | Chat (streaming, memory, limits, safety)                       | ✅ Done |
+| 4     | AI Character Creator                                           | Next    |
 | 5     | Monetization (Stripe test mode, Plus, Beans, ads)              | —       |
 | 6     | Admin, moderation, legal, polish                               | —       |
 
@@ -65,6 +65,15 @@ See [`.env.example`](.env.example). Nothing is required for Phase 1.
 ```bash
 npm run db:migrate   # applies supabase/migrations/*.sql once each
 npm run db:seed      # loads the 24 official characters
+npm run db:check     # verifies the database security rules (nothing is kept)
+```
+
+## Chat (Claude)
+
+Add `ANTHROPIC_API_KEY` to `.env.local`. Models default to `claude-sonnet-5` (chat) and `claude-haiku-4-5` (summaries); override with `LLM_CHAT_MODEL` / `LLM_FAST_MODEL`. Without a key, development uses a labelled demo reply; production refuses.
+
+```bash
+npm run chat:smoke   # live test: in-character reply + honest "are you human?" answer (a few cents)
 ```
 
 Without Supabase keys the app still runs: Explore and character pages read the local seed data, and sign-in shows "not set up yet".

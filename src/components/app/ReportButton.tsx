@@ -51,9 +51,15 @@ export function ReportButton({
       <button
         type="button"
         onClick={() => dialog.current?.showModal()}
-        className={buttonClass({ variant: "ghost", size: "sm", className: "text-muted" })}
+        aria-label={label ? undefined : `Report this ${targetType}`}
+        title={label ? undefined : `Report this ${targetType}`}
+        className={
+          label
+            ? buttonClass({ variant: "ghost", size: "sm", className: "text-muted" })
+            : "text-muted hover:bg-surface-2 hover:text-text rounded-md p-1.5"
+        }
       >
-        <Flag className="h-4 w-4" aria-hidden="true" />
+        <Flag className={label ? "h-4 w-4" : "h-3.5 w-3.5"} aria-hidden="true" />
         {label}
       </button>
       <dialog

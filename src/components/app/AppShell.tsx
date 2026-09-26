@@ -28,6 +28,8 @@ function isActive(pathname: string, href: string) {
 export function AppShell({ viewer, children }: { viewer: ShellViewer; children: ReactNode }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  // An open conversation takes the whole screen on mobile (it has its own header).
+  const inChat = /^\/app\/chats\/[^/]+$/.test(pathname);
 
   return (
     <div className="min-h-dvh md:flex">
@@ -127,7 +129,12 @@ export function AppShell({ viewer, children }: { viewer: ShellViewer; children: 
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Mobile top bar */}
-        <header className="border-border bg-bg/90 sticky top-0 z-30 flex h-14 items-center justify-between border-b px-4 backdrop-blur md:hidden">
+        <header
+          className={cn(
+            "border-border bg-bg/90 sticky top-0 z-30 flex h-14 items-center justify-between border-b px-4 backdrop-blur md:hidden",
+            inChat && "hidden",
+          )}
+        >
           <Link href="/" aria-label="Sippa home">
             <Logo />
           </Link>
@@ -144,7 +151,7 @@ export function AppShell({ viewer, children }: { viewer: ShellViewer; children: 
           </div>
         </header>
 
-        <main id="app-main" className="flex-1 pb-24 md:pb-0">
+        <main id="app-main" className={cn("flex-1 md:pb-0", inChat ? "pb-0" : "pb-24")}>
           {children}
         </main>
       </div>
@@ -152,7 +159,10 @@ export function AppShell({ viewer, children }: { viewer: ShellViewer; children: 
       {/* Mobile bottom nav with centre Create */}
       <nav
         aria-label="App"
-        className="border-border bg-bg/95 fixed inset-x-0 bottom-0 z-40 border-t pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+        className={cn(
+          "border-border bg-bg/95 fixed inset-x-0 bottom-0 z-40 border-t pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden",
+          inChat && "hidden",
+        )}
       >
         <ul className="grid h-16 grid-cols-5 items-center">
           {MOBILE.map((href) => {

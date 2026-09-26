@@ -14,9 +14,11 @@
     "avatars": "node --env-file-if-exists=.env.local --import tsx scripts/generate-avatars.ts",
     "db:migrate": "node --env-file-if-exists=.env.local --import tsx scripts/db-migrate.ts",
     "db:seed": "node --env-file-if-exists=.env.local --import tsx scripts/db-seed.ts",
-    "db:check": "node --env-file-if-exists=.env.local --import tsx scripts/check-rls.ts"
+    "db:check": "node --env-file-if-exists=.env.local --import tsx scripts/check-rls.ts",
+    "chat:smoke": "node --env-file-if-exists=.env.local --import tsx scripts/smoke-chat.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.2",
     "clsx": "^2.1.1",

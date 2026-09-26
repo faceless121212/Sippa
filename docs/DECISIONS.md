@@ -37,6 +37,14 @@ Answers to the kickoff questions (spec §11), recorded 2026-09-26.
 - **Seed characters**: 24 originals in `src/data/characters.ts` (8 Lover 21+, 8 Friend, 8 Famous historical, all died 70+ years ago). Unit tests enforce these rules.
 - **Without Supabase keys** the app falls back to reading seed data locally (dev convenience); auth is unavailable until keys exist.
 
+## Phase 3 implementation notes
+
+- **Models**: `claude-sonnet-5` for chat (effort `low` for fast replies), `claude-haiku-4-5` for rolling summaries. Both set in env.
+- **Daily limit** (30 free messages, UTC days) is enforced in Postgres (`consume_message`, atomic) instead of Upstash Redis — no extra account needed, and it can't be bypassed from the client. Regenerate and edit also count. Crisis messages don't.
+- **Safety order**: crisis check → minor/sexual hard block → allowance → model. Crisis messages never reach the model; the chat shows helplines (Poland: 116 123, 800 70 2222, 112; country-aware) and later replies get a "be gentle" note.
+- **Prompt order**: safety rules → AI disclosure → character sheet (cached) → memories → summary → per-turn notes → last 24 messages. Summaries fold older messages every ~30 messages.
+- **All message writes are server-only** (service role), so users can't forge assistant replies or reset limits. Verified by `npm run db:check`.
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.

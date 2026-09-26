@@ -12,6 +12,7 @@ import { exploreHref } from "@/lib/explore-params";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import { cn, formatCount } from "@/lib/utils";
+import { startChat } from "../../chats/actions";
 import { toggleFavorite } from "./actions";
 
 type Props = { params: Promise<{ id: string }> };
@@ -47,9 +48,6 @@ export default async function CharacterPage({ params }: Props) {
 
   const category = categories.find((c) => c.id === character.category)!;
   const style = categoryStyles[character.category];
-  const startHref = viewer
-    ? `/app/chats?start=${id}`
-    : `/login?next=${encodeURIComponent(`/app/chats?start=${id}`)}`;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 md:py-10">
@@ -104,10 +102,23 @@ export default async function CharacterPage({ params }: Props) {
           </ul>
 
           <div className="mt-6 flex flex-wrap items-center gap-2">
-            <Link href={startHref} className={buttonClass({ size: "lg" })}>
-              <MessageCircle className="h-4 w-4" aria-hidden="true" />
-              Start chat
-            </Link>
+            {viewer && supabaseConfigured ? (
+              <form action={startChat}>
+                <input type="hidden" name="character_id" value={id} />
+                <button type="submit" className={buttonClass({ size: "lg" })}>
+                  <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                  Start chat
+                </button>
+              </form>
+            ) : (
+              <Link
+                href={`/login?next=${encodeURIComponent(`/app/c/${id}`)}`}
+                className={buttonClass({ size: "lg" })}
+              >
+                <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                Start chat
+              </Link>
+            )}
             {viewer && supabaseConfigured && (
               <form action={toggleFavorite}>
                 <input type="hidden" name="character_id" value={id} />
