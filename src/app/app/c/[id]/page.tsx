@@ -54,6 +54,7 @@ export default async function CharacterPage({ params }: Props) {
       <div className="grid gap-8 md:grid-cols-[minmax(0,380px)_1fr]">
         <div className="bg-surface-2 relative aspect-[3/4] overflow-hidden rounded-2xl">
           <CharacterAvatar
+            src={character.avatarUrl}
             id={character.id}
             name={character.name}
             priority

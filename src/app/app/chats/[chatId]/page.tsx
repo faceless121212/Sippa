@@ -20,10 +20,16 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
   const supabase = await createClient();
   const { data: chat } = await supabase
     .from("chats")
-    .select("id,summary,character_id,characters(id,name,hook)")
+    .select("id,summary,character_id,characters(id,name,hook,avatar_url)")
     .eq("id", chatId)
     .maybeSingle();
-  const character = chat?.characters as unknown as { id: string; name: string; hook: string } | null;
+  const row = chat?.characters as unknown as {
+    id: string;
+    name: string;
+    hook: string;
+    avatar_url: string | null;
+  } | null;
+  const character = row ? { id: row.id, name: row.name, hook: row.hook, avatarUrl: row.avatar_url } : null;
   if (!chat || !character) notFound();
 
   const [{ data: rows }, { data: memories }, chats, remaining] = await Promise.all([

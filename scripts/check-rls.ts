@@ -45,7 +45,12 @@ async function main() {
           adult,
           () => tx`select count(*)::int as n from public.characters where category = 'lover'`,
         )) as { n: number }[];
-        check("verified adult sees Lover characters", adultLovers[0].n === 8);
+        const [{ n: totalLovers }] =
+          await tx`select count(*)::int as n from public.characters where category = 'lover' and status = 'approved' and visibility in ('public', 'unlisted')`;
+        check(
+          `verified adult sees all ${totalLovers} Lover characters`,
+          totalLovers > 0 && adultLovers[0].n >= totalLovers,
+        );
         const newLovers = (await as(
           teen,
           () => tx`select count(*)::int as n from public.characters where category = 'lover'`,

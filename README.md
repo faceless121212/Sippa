@@ -11,8 +11,8 @@ Plan and decisions: [`docs/PLAN.md`](docs/PLAN.md), [`docs/DECISIONS.md`](docs/D
 | 1     | Landing page, waitlist, SEO, PWA manifest                      | ✅ Done |
 | 2     | App shell: auth + age gate, explore, character page, seed data | ✅ Done |
 | 3     | Chat (streaming, memory, limits, safety)                       | ✅ Done |
-| 4     | AI Character Creator                                           | Next    |
-| 5     | Monetization (Stripe test mode, Plus, Beans, ads)              | —       |
+| 4     | AI Character Creator                                           | ✅ Done |
+| 5     | Monetization (Stripe test mode, Plus, Beans, ads)              | Next    |
 | 6     | Admin, moderation, legal, polish                               | —       |
 
 ## Run it
@@ -73,7 +73,8 @@ npm run db:check     # verifies the database security rules (nothing is kept)
 Add `ANTHROPIC_API_KEY` to `.env.local`. Models default to `claude-sonnet-5` (chat) and `claude-haiku-4-5` (summaries); override with `LLM_CHAT_MODEL` / `LLM_FAST_MODEL`. Without a key, development uses a labelled demo reply; production refuses.
 
 ```bash
-npm run chat:smoke   # live test: in-character reply + honest "are you human?" answer (a few cents)
+npm run chat:smoke     # live test: in-character reply + honest "are you human?" answer (a few cents)
+npm run creator:smoke  # live test: generate, rules, moderation, celebrity refusal, 4 portraits, storage (~$0.15)
 ```
 
 Without Supabase keys the app still runs: Explore and character pages read the local seed data, and sign-in shows "not set up yet".

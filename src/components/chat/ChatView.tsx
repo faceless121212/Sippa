@@ -34,7 +34,7 @@ export type ChatMessage = {
 
 type Props = {
   chatId: string;
-  character: { id: string; name: string; hook: string };
+  character: { id: string; name: string; hook: string; avatarUrl?: string | null };
   initialMessages: ChatMessage[];
   initialMemories: MemoryRow[];
   summary: string;
@@ -213,7 +213,12 @@ export function ChatView(props: Props) {
           </Link>
           <Link href={`/app/c/${character.id}`} className="flex min-w-0 items-center gap-2.5">
             <span className="h-9 w-9 shrink-0 overflow-hidden rounded-full">
-              <CharacterAvatar id={character.id} name={character.name} sizes="36px" />
+              <CharacterAvatar
+                id={character.id}
+                name={character.name}
+                src={character.avatarUrl}
+                sizes="36px"
+              />
             </span>
             <span className="min-w-0">
               <span className="block truncate text-sm font-bold">{character.name}</span>
@@ -286,7 +291,12 @@ export function ChatView(props: Props) {
               ) : (
                 <div key={m.id} className="flex gap-2.5">
                   <span className="mt-0.5 h-8 w-8 shrink-0 overflow-hidden rounded-full">
-                    <CharacterAvatar id={character.id} name={character.name} sizes="32px" />
+                    <CharacterAvatar
+                      id={character.id}
+                      name={character.name}
+                      src={character.avatarUrl}
+                      sizes="32px"
+                    />
                   </span>
                   <div className="max-w-[85%] min-w-0">
                     <div className="bg-surface-2 rounded-2xl rounded-tl-md px-4 py-2.5 text-[15px] leading-relaxed whitespace-pre-wrap">

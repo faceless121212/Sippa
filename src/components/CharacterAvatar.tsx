@@ -12,6 +12,8 @@ type Props = {
   priority?: boolean;
   /** Rendered width hint for responsive sizes. */
   sizes?: string;
+  /** Explicit portrait URL (user-created characters). Seed characters fall back to /characters/<id>.jpg. */
+  src?: string | null;
 };
 
 /**
@@ -24,11 +26,13 @@ export function CharacterAvatar({
   className,
   priority,
   sizes = "(min-width: 1024px) 240px, 50vw",
+  src,
 }: Props) {
-  if (hasGenerated.has(id)) {
+  const url = src || (hasGenerated.has(id) ? `/characters/${id}.jpg` : null);
+  if (url) {
     return (
       <Image
-        src={`/characters/${id}.jpg`}
+        src={url}
         alt={`AI-generated portrait of ${name}`}
         width={768}
         height={1024}

@@ -37,7 +37,7 @@ export function ChatList({ chats, activeId }: { chats: ChatListItem[]; activeId?
             )}
           >
             <span className="h-11 w-11 shrink-0 overflow-hidden rounded-full">
-              <CharacterAvatar id={c.characterId} name={c.characterName} sizes="44px" />
+              <CharacterAvatar id={c.characterId} name={c.characterName} src={c.avatarUrl} sizes="44px" />
             </span>
             <span className="min-w-0 flex-1">
               <span className="flex items-baseline justify-between gap-2">

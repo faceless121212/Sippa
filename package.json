@@ -15,7 +15,8 @@
     "db:migrate": "node --env-file-if-exists=.env.local --import tsx scripts/db-migrate.ts",
     "db:seed": "node --env-file-if-exists=.env.local --import tsx scripts/db-seed.ts",
     "db:check": "node --env-file-if-exists=.env.local --import tsx scripts/check-rls.ts",
-    "chat:smoke": "node --env-file-if-exists=.env.local --import tsx scripts/smoke-chat.ts"
+    "chat:smoke": "node --env-file-if-exists=.env.local --import tsx scripts/smoke-chat.ts",
+    "creator:smoke": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/smoke-creator.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",

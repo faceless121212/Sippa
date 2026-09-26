@@ -85,7 +85,7 @@ export default async function HomePage() {
                 i === 0 && "[mask-image:linear-gradient(to_right,transparent,black_60%)]",
               )}
             >
-              <CharacterAvatar id={c.id} name={c.name} sizes="200px" />
+              <CharacterAvatar id={c.id} name={c.name} src={c.avatarUrl} sizes="200px" />
             </div>
           ))}
         </div>
@@ -185,7 +185,7 @@ function Ranking({
                 {i + 1}
               </span>
               <span className="h-11 w-11 shrink-0 overflow-hidden rounded-lg">
-                <CharacterAvatar id={c.id} name={c.name} sizes="44px" />
+                <CharacterAvatar id={c.id} name={c.name} src={c.avatarUrl} sizes="44px" />
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-bold">{c.name}</span>

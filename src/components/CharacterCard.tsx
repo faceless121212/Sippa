@@ -13,6 +13,7 @@ export type CardCharacter = {
   tags: string[];
   messages: number;
   badges?: string[];
+  avatarUrl?: string | null;
 };
 
 const BADGE_STYLE: Record<string, { label: string; className: string }> = {
@@ -46,6 +47,7 @@ export function CharacterCard({
       <CharacterAvatar
         id={character.id}
         name={character.name}
+        src={character.avatarUrl}
         priority={priority}
         className="absolute inset-0 -z-10 transition-transform duration-500 group-hover:scale-105"
       />
@@ -66,7 +68,10 @@ export function CharacterCard({
         )}
         {topBadge && (
           <span
-            className={cn("rounded-md px-1.5 py-0.5 text-[10px] font-bold shadow-sm", BADGE_STYLE[topBadge].className)}
+            className={cn(
+              "rounded-md px-1.5 py-0.5 text-[10px] font-bold shadow-sm",
+              BADGE_STYLE[topBadge].className,
+            )}
           >
             {BADGE_STYLE[topBadge].label}
           </span>

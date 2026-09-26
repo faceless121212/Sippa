@@ -45,6 +45,16 @@ Answers to the kickoff questions (spec §11), recorded 2026-09-26.
 - **Prompt order**: safety rules → AI disclosure → character sheet (cached) → memories → summary → per-turn notes → last 24 messages. Summaries fold older messages every ~30 messages.
 - **All message writes are server-only** (service role), so users can't forge assistant replies or reset limits. Verified by `npm run db:check`.
 
+## Phase 4 implementation notes
+
+- **Creator flow**: category → describe (free text) or 5-question quiz → Claude (`claude-sonnet-5`) returns strict JSON (Zod-validated structured output) → tune (edit, per-field regenerate, 4 dials, 4 portraits) → test chat (not saved, uses daily allowance, max 12 messages) → save as Private or Unlisted. Public publishing waits for the Phase 6 moderation queue (decision #13).
+- **Safety layers**: (1) generation prompt refuses real living people / minors; (2) code rules — Lover 21+, no minor/school wording, living-person blocklist, historical figures died 70+ years ago, no flirting for Friend/Famous; (3) independent Haiku moderation review at save (fails closed); (4) fal.ai's own image safety checker.
+- **Famous in the creator**: "Historical figure" or "Inspired-by archetype". Verified creators remain a placeholder.
+- **Portraits** are copied from fal.ai to Supabase Storage (`avatars` bucket, public read, server-only writes). Only fal.ai URLs are accepted on save.
+- **3 free creations**, counted on save. After that the API returns a paywall response (Beans/Plus arrive in Phase 5).
+- **Private characters** are only visible to and chattable by their creator (RLS + server checks).
+- **Seed content**: 40 characters (16 Lover incl. 11 women, 8 Friend, 16 Famous). Famous portraits are painted likenesses of iconic historical portraits; no living people.
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.

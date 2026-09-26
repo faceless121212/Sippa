@@ -21,6 +21,8 @@ export type PromptCharacter = {
   backstory: string;
   firstMessage: string;
   exampleDialogues: { user: string; character: string }[];
+  /** Creator sliders, 0–100. */
+  dials?: { warmth: number; humor: number; flirtiness: number; talkativeness: number } | null;
 };
 
 export type HistoryMessage = { role: "user" | "assistant"; content: string };
@@ -71,6 +73,14 @@ export function characterSheet(c: PromptCharacter): string {
     c.backstory ? `Backstory: ${c.backstory}` : "",
     c.firstMessage ? `Your opening line was: ${c.firstMessage}` : "",
   ].filter(Boolean);
+  if (c.dials) {
+    const level = (n: number) =>
+      n >= 75 ? "very high" : n >= 55 ? "high" : n >= 35 ? "medium" : n >= 15 ? "low" : "none";
+    lines.push(
+      `Tone: warmth ${level(c.dials.warmth)}, humour ${level(c.dials.humor)}, talkativeness ${level(c.dials.talkativeness)}` +
+        (c.category === "lover" ? `, flirtiness ${level(c.dials.flirtiness)}` : ""),
+    );
+  }
   const examples = c.exampleDialogues.map((d) => `User: ${d.user}\n${c.name}: ${d.character}`).join("\n\n");
   return [
     `You are playing ${c.name}.`,

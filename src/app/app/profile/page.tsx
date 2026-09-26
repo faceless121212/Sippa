@@ -19,6 +19,11 @@ export default async function ProfilePage() {
     .eq("user_id", viewer.user.id)
     .order("created_at", { ascending: false });
   const favIds = new Set((favs ?? []).map((f) => f.character_id as string));
+  const { data: mine } = await supabase
+    .from("characters")
+    .select("id,name,age,category,famous_type,hook,tags,message_count,visibility,avatar_url")
+    .eq("creator_id", viewer.user.id)
+    .order("created_at", { ascending: false });
   const all = favIds.size ? await listCharacters({ limit: 200 }, viewerIsAdult(viewer)) : [];
   const favorites = all.filter((c) => favIds.has(c.id));
   const p = viewer.profile!;
@@ -36,6 +41,43 @@ export default async function ProfilePage() {
         <span className="bg-surface-2 rounded-md px-2.5 py-1 text-xs font-bold uppercase">
           {p.plan === "plus" ? "Sippa Plus" : "Free"}
         </span>
+      </section>
+
+      <section aria-labelledby="mine">
+        <div className="flex items-center justify-between">
+          <h2 id="mine" className="text-xl font-extrabold tracking-[-0.02em]">
+            My characters
+          </h2>
+          <Link href="/app/create" className={buttonClass({ size: "sm" })}>
+            Create
+          </Link>
+        </div>
+        {mine?.length ? (
+          <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {mine.map((c) => (
+              <li key={c.id}>
+                <Link href={`/app/c/${c.id}`} className="block rounded-xl">
+                  <CharacterCard
+                    character={{
+                      id: c.id,
+                      name: c.name,
+                      age: c.age ?? undefined,
+                      category: c.category,
+                      famousType: c.famous_type ?? undefined,
+                      hook: c.hook,
+                      tags: c.tags,
+                      messages: Number(c.message_count),
+                      avatarUrl: c.avatar_url,
+                    }}
+                  />
+                </Link>
+                <p className="text-muted mt-1 text-xs capitalize">{c.visibility}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-muted mt-2 text-sm">You haven&apos;t brewed anyone yet.</p>
+        )}
       </section>
 
       <section aria-labelledby="favs">

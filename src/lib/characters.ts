@@ -16,6 +16,7 @@ export type CharacterSummary = {
   tags: string[];
   messages: number;
   badges: Badge[];
+  avatarUrl: string | null;
 };
 
 export type Badge = "hot" | "trending" | "new" | "pick";
@@ -68,6 +69,7 @@ type Row = {
   message_count: number;
   trending_score?: number;
   badges?: string[];
+  avatar_url?: string | null;
   description?: string;
   personality?: { traits?: string[] };
   speaking_style?: string;
@@ -76,7 +78,7 @@ type Row = {
 };
 
 const SUMMARY_COLUMNS =
-  "id,name,age,gender,category,famous_type,hook,tags,message_count,trending_score,badges";
+  "id,name,age,gender,category,famous_type,hook,tags,message_count,trending_score,badges,avatar_url";
 
 function fromRow(r: Row): CharacterSummary {
   return {
@@ -90,6 +92,7 @@ function fromRow(r: Row): CharacterSummary {
     tags: r.tags ?? [],
     messages: Number(r.message_count ?? 0),
     badges: computeBadges(r.badges, Number(r.message_count ?? 0), r.trending_score ?? 0),
+    avatarUrl: r.avatar_url ?? null,
   };
 }
 
@@ -105,6 +108,7 @@ function fromSeed(c: Character): CharacterSummary {
     tags: c.tags,
     messages: c.messages,
     badges: computeBadges(c.badges, c.messages, c.trending),
+    avatarUrl: `/characters/${c.id}.jpg`,
   };
 }
 

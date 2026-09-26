@@ -64,11 +64,12 @@ export async function loadChatContext(chatId: string): Promise<ChatContext> {
   const { data: c } = await admin
     .from("characters")
     .select(
-      "id,name,age,category,famous_type,hook,description,personality,speaking_style,backstory,first_message,example_dialogues,status",
+      "id,name,age,category,famous_type,hook,description,personality,speaking_style,backstory,first_message,example_dialogues,status,visibility,creator_id",
     )
     .eq("id", chat.character_id)
     .maybeSingle();
   if (!c || c.status === "hidden") throw new ChatError("This character is no longer available.", 410);
+  if (c.visibility === "private" && c.creator_id !== user.id) throw new ChatError("Chat not found.", 404);
 
   return {
     admin,
@@ -85,6 +86,7 @@ export async function loadChatContext(chatId: string): Promise<ChatContext> {
       hook: c.hook,
       description: c.description,
       traits: (c.personality as { traits?: string[] })?.traits ?? [],
+      dials: (c.personality as { dials?: PromptCharacter["dials"] })?.dials ?? null,
       speakingStyle: c.speaking_style,
       backstory: c.backstory,
       firstMessage: c.first_message,
@@ -98,10 +100,11 @@ export async function createChat(userId: string, characterId: string): Promise<s
   const admin = createAdminClient();
   const { data: c } = await admin
     .from("characters")
-    .select("id,first_message,status")
+    .select("id,first_message,status,visibility,creator_id")
     .eq("id", characterId)
     .maybeSingle();
   if (!c || c.status === "hidden") throw new ChatError("Character not found.", 404);
+  if (c.visibility === "private" && c.creator_id !== userId) throw new ChatError("Character not found.", 404);
   const { data: chat, error } = await admin
     .from("chats")
     .insert({
