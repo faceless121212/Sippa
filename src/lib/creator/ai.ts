@@ -3,12 +3,12 @@ import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
 import type { CategoryId } from "@/config/categories";
-import { CHAT_MODEL, FAST_MODEL } from "@/lib/llm";
+import { aiLive, CHAT_MODEL, FAST_MODEL } from "@/lib/llm";
 import { ALLOWED_TAGS, generatedSchema, type Draft, type Generated } from "./schema";
 
 let client: Anthropic | null = null;
 function api() {
-  if (!process.env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY is not set.");
+  if (!aiLive()) throw new Error("ANTHROPIC_API_KEY is not set.");
   client ??= new Anthropic();
   return client;
 }

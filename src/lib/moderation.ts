@@ -4,7 +4,7 @@ import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
 import { moderateDraft } from "@/lib/creator/ai";
 import { DEFAULT_DIALS, type Draft } from "@/lib/creator/schema";
-import { FAST_MODEL } from "@/lib/llm";
+import { aiLive, FAST_MODEL } from "@/lib/llm";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /** Open reports on one target that hide it pending human review. */
@@ -42,7 +42,7 @@ const textVerdict = z.object({
 
 /** Quick classifier for a single chat message (fast model). Fails open to human review. */
 export async function moderateText(text: string): Promise<z.infer<typeof textVerdict> | null> {
-  if (!process.env.ANTHROPIC_API_KEY) return null;
+  if (!aiLive()) return null;
   try {
     const res = await new Anthropic().messages.parse({
       model: FAST_MODEL,

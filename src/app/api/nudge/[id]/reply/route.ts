@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createChat } from "@/lib/chat/service";
+import { ChatError, createChat, deliverToChat } from "@/lib/chat/service";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -22,30 +22,26 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     .maybeSingle();
   if (!n) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const { data: existing } = await admin
-    .from("chats")
-    .select("id,message_count")
-    .eq("user_id", user.id)
-    .eq("character_id", n.character_id)
-    .order("updated_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  let chatId = existing?.id as string | undefined;
-  if (!chatId) {
-    chatId = await createChat(user.id, n.character_id);
-  }
-  if (!n.used_at) {
-    await admin.from("messages").insert({ chat_id: chatId, role: "assistant", content: n.text });
-    await admin
+  try {
+    if (!n.used_at) {
+      const [chatId] = await Promise.all([
+        deliverToChat(user.id, n.character_id, n.text),
+        admin.from("nudges").update({ used_at: new Date().toISOString() }).eq("id", id),
+      ]);
+      return NextResponse.json({ chatId });
+    }
+    // Already delivered: just open the latest chat with this character.
+    const { data: existing } = await admin
       .from("chats")
-      .update({
-        last_message_preview: n.text.slice(0, 120),
-        updated_at: new Date().toISOString(),
-        message_count: (existing?.message_count ?? 1) + 1,
-      })
-      .eq("id", chatId);
-    await admin.from("nudges").update({ used_at: new Date().toISOString() }).eq("id", id);
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("character_id", n.character_id)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    return NextResponse.json({ chatId: existing?.id ?? (await createChat(user.id, n.character_id)) });
+  } catch (e) {
+    if (e instanceof ChatError) return NextResponse.json({ error: e.message }, { status: e.status });
+    throw e;
   }
-  return NextResponse.json({ chatId });
 }

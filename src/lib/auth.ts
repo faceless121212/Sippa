@@ -1,6 +1,7 @@
 import "server-only";
 import type { User } from "@supabase/supabase-js";
 import { notFound, redirect } from "next/navigation";
+import { cache } from "react";
 import { supabaseConfigured } from "./supabase/config";
 import { createClient } from "./supabase/server";
 
@@ -19,8 +20,11 @@ export type Profile = {
 
 export type Viewer = { user: User; profile: Profile | null } | null;
 
-/** The signed-in user and their profile, or null. Never throws when Supabase is unconfigured. */
-export async function getViewer(): Promise<Viewer> {
+/**
+ * The signed-in user and their profile, or null. Never throws when Supabase is unconfigured.
+ * Cached per request so the layout and the page share one auth round-trip.
+ */
+export const getViewer = cache(async (): Promise<Viewer> => {
   if (!supabaseConfigured) return null;
   const supabase = await createClient();
   const {
@@ -33,7 +37,7 @@ export async function getViewer(): Promise<Viewer> {
     .eq("id", user.id)
     .maybeSingle();
   return { user, profile: (data as Profile | null) ?? null };
-}
+});
 
 export const viewerIsAdult = (v: Viewer) => Boolean(v?.profile?.is_adult && !v.profile.banned_at);
 

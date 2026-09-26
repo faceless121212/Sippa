@@ -2,7 +2,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { after } from "next/server";
 import { characterSheet, SAFETY_RULES } from "@/lib/chat/prompt";
-import { FAST_MODEL } from "@/lib/llm";
+import { aiLive, FAST_MODEL } from "@/lib/llm";
 import { hasSpokenWords } from "@/lib/nudges";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -35,7 +35,7 @@ type CharRow = {
 };
 
 async function writeMoment(c: CharRow): Promise<string | null> {
-  if (!process.env.ANTHROPIC_API_KEY) return null;
+  if (!aiLive()) return null;
   try {
     const res = await new Anthropic().messages.create({
       model: FAST_MODEL,

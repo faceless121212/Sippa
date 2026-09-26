@@ -140,6 +140,62 @@ export async function createChat(
   return chat.id;
 }
 
+/**
+ * Drops a character-authored message (a moment or a popup) into the user's latest
+ * chat with that character, starting one if needed. Returns the chat id.
+ * Kept to two sequential round-trips so "Reply" opens the chat quickly.
+ */
+export async function deliverToChat(userId: string, characterId: string, content: string): Promise<string> {
+  const admin = createAdminClient();
+  const [{ data: existing }, { data: c }] = await Promise.all([
+    admin
+      .from("chats")
+      .select("id,message_count")
+      .eq("user_id", userId)
+      .eq("character_id", characterId)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    admin
+      .from("characters")
+      .select("first_message,status,visibility,creator_id")
+      .eq("id", characterId)
+      .maybeSingle(),
+  ]);
+  if (!c || c.status === "hidden") throw new ChatError("Character not found.", 404);
+  if ((c.visibility === "private" || c.status === "pending") && c.creator_id !== userId)
+    throw new ChatError("Character not found.", 404);
+
+  const preview = content.slice(0, 120);
+  if (existing) {
+    await Promise.all([
+      admin.from("messages").insert({ chat_id: existing.id, role: "assistant", content }),
+      admin
+        .from("chats")
+        .update({
+          last_message_preview: preview,
+          updated_at: new Date().toISOString(),
+          message_count: existing.message_count + 1,
+        })
+        .eq("id", existing.id),
+    ]);
+    return existing.id;
+  }
+
+  const { data: chat, error } = await admin
+    .from("chats")
+    .insert({ user_id: userId, character_id: characterId, last_message_preview: preview, message_count: 2 })
+    .select("id")
+    .single();
+  if (error) throw error;
+  // One insert keeps the greeting before the delivered message (ids are sequential).
+  await admin.from("messages").insert([
+    { chat_id: chat.id, role: "assistant", content: c.first_message },
+    { chat_id: chat.id, role: "assistant", content },
+  ]);
+  return chat.id;
+}
+
 type Event =
   | { t: "user"; id: number }
   | { t: "d"; v: string }

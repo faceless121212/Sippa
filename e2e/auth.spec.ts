@@ -7,7 +7,8 @@ test.beforeEach(async ({ context }) => {
 test("sign-up form: fields, live password rules and links", async ({ page }) => {
   await page.goto("/signup?next=/app/create");
   await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
-  for (const label of ["Email", "Password", "Date of birth"]) await expect(page.getByLabel(label, { exact: true })).toBeVisible();
+  for (const label of ["Email", "Password", "Date of birth"])
+    await expect(page.getByLabel(label, { exact: true })).toBeVisible();
 
   const rules = page.locator("#password-rules");
   await expect(rules).toContainText("8+ characters — missing");

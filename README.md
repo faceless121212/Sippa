@@ -33,6 +33,7 @@ npm run dev                  # http://localhost:3000
 | `npm run lint`     | ESLint                                                                            |
 | `npm test`         | Unit tests (Vitest)                                                               |
 | `npm run test:e2e` | Browser tests at 360 / 768 / 1440 px (Playwright; builds and serves :3100)        |
+| `npm run test:all` | Everything: lint, types, unit, live DB/RLS checks, browser tests                  |
 | `npm run format`   | Prettier                                                                          |
 | `npm run avatars`  | Generate character portraits with fal.ai (needs `FAL_KEY`; `--force` to redo all) |
 
@@ -126,3 +127,26 @@ You have: Vercel, Anthropic, fal.ai. Still needed:
 ## Deploy (Vercel)
 
 Import the GitHub repo in Vercel, keep the Next.js defaults, add the Supabase env vars above, deploy.
+
+## Automated tests
+
+| Layer | Where | What it covers |
+| --- | --- | --- |
+| Unit (Vitest) | `src/**/*.test.ts` | pricing, bond levels, check-in, scenes, safety (crisis, minors, blocklist), prompts, creator rules, auth validation, nudges, billing mode, AI offline switch, Reply delivery (`deliverToChat`) |
+| Live DB (`npm run db:check`) | `scripts/check-rls.ts` | RLS on every table, column grants, 18+ gating, SECURITY DEFINER functions — inside a rolled-back transaction |
+| Browser, signed out | `e2e/*.spec.ts` | landing, sign-up/sign-in, explore, character pages, moments, legal, 404s, theme, page-load budget, an API sweep proving every private endpoint refuses anonymous calls |
+| Browser, signed in | `e2e/signed-in/*.spec.ts` | Home Flowers + check-in, Moments Reply (must open the chat in < 4 s), chat streaming, memory, gifts, scenes, likes, demo Flowers purchase, Plus checkout, profile settings, data export, creator, admin 404 |
+
+The e2e server runs with `SIPPA_OFFLINE_AI=1` (demo replies, no Claude/fal cost) and `PAYMENTS_MODE=demo`, and builds into `.next-e2e` so it doesn't disturb `npm run dev`.
+
+**Signed-in tests** need a dedicated test account (never a real user's):
+
+1. Sign up in the app with an address you control (e.g. a `+e2e` alias), confirm the email, and finish the age step.
+2. Add to `.env.local`:
+   ```
+   E2E_EMAIL=you+e2e@example.com
+   E2E_PASSWORD=...
+   ```
+3. `npm run test:e2e:signed-in`
+
+Without those variables the signed-in tests are skipped, not failed. They buy one demo Flowers pack per run and leave the account on the free plan.

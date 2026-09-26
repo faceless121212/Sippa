@@ -30,6 +30,7 @@ export async function generateImages({
 }: GenerateImageOptions): Promise<GeneratedImage[]> {
   const key = process.env.FAL_KEY;
   if (!key) throw new Error("FAL_KEY is not set. Add it to .env.local.");
+  if (process.env.SIPPA_OFFLINE_AI === "1") throw new Error("Image generation is off (SIPPA_OFFLINE_AI=1).");
   const model = process.env.FAL_IMAGE_MODEL || DEFAULT_MODEL;
 
   const res = await fetch(`https://fal.run/${model}`, {

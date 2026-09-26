@@ -28,19 +28,28 @@ export type StreamResult = {
 
 export class LlmUnavailableError extends Error {}
 
+/**
+ * True when real Claude calls are allowed. SIPPA_OFFLINE_AI=1 forces the demo
+ * provider and fallbacks everywhere (used by the e2e suite so tests are free and deterministic).
+ */
+export const aiLive = () => Boolean(process.env.ANTHROPIC_API_KEY) && process.env.SIPPA_OFFLINE_AI !== "1";
+
 let client: Anthropic | null = null;
 function anthropic() {
-  if (!process.env.ANTHROPIC_API_KEY) return null;
+  if (!aiLive()) return null;
   client ??= new Anthropic();
   return client;
 }
 
-export const llmMode = () => (anthropic() ? "live" : process.env.NODE_ENV === "production" ? "off" : "demo");
+const offline = () => process.env.SIPPA_OFFLINE_AI === "1";
+export const llmMode = () =>
+  anthropic() ? "live" : process.env.NODE_ENV === "production" && !offline() ? "off" : "demo";
 
 export function streamChat(req: ChatRequest): StreamResult {
   const api = anthropic();
   if (!api) {
-    if (process.env.NODE_ENV === "production") throw new LlmUnavailableError("ANTHROPIC_API_KEY is not set.");
+    if (process.env.NODE_ENV === "production" && !offline())
+      throw new LlmUnavailableError("ANTHROPIC_API_KEY is not set.");
     return demoStream(req);
   }
 

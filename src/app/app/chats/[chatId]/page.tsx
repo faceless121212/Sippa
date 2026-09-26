@@ -19,11 +19,37 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
   if (!/^[0-9a-f-]{36}$/i.test(chatId)) notFound();
 
   const supabase = await createClient();
-  const { data: chat } = await supabase
-    .from("chats")
-    .select("id,summary,character_id,characters(id,name,hook,avatar_url,category)")
-    .eq("id", chatId)
-    .maybeSingle();
+  // One round of parallel reads; the bond lookup chains off the chat row.
+  // Wrapped so the request runs once even though two consumers await it.
+  const chatQuery = Promise.resolve(
+    supabase
+      .from("chats")
+      .select("id,summary,character_id,characters(id,name,hook,avatar_url,category)")
+      .eq("id", chatId)
+      .maybeSingle(),
+  );
+  const [{ data: chat }, { data: rows }, { data: memories }, chats, remaining, bond] = await Promise.all([
+    chatQuery,
+    supabase
+      .from("messages")
+      .select("id,role,content,rating,flagged,flag_reason")
+      .eq("chat_id", chatId)
+      .order("id", { ascending: false })
+      .limit(200),
+    supabase.from("memories").select("id,text").eq("chat_id", chatId).order("created_at"),
+    listChats(),
+    remainingToday(viewer.user.id, viewer.profile!.plan),
+    chatQuery.then(async ({ data }) => {
+      if (!data) return null;
+      const { data: b } = await supabase
+        .from("bonds")
+        .select("xp")
+        .eq("user_id", viewer.user.id)
+        .eq("character_id", data.character_id)
+        .maybeSingle();
+      return b;
+    }),
+  ]);
   const row = chat?.characters as unknown as {
     id: string;
     name: string;
@@ -35,24 +61,6 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
     ? { id: row.id, name: row.name, hook: row.hook, avatarUrl: row.avatar_url, category: row.category }
     : null;
   if (!chat || !character) notFound();
-
-  const [{ data: rows }, { data: memories }, chats, remaining, { data: bond }] = await Promise.all([
-    supabase
-      .from("messages")
-      .select("id,role,content,rating,flagged,flag_reason")
-      .eq("chat_id", chatId)
-      .order("id", { ascending: false })
-      .limit(200),
-    supabase.from("memories").select("id,text").eq("chat_id", chatId).order("created_at"),
-    listChats(),
-    remainingToday(viewer.user.id, viewer.profile!.plan),
-    supabase
-      .from("bonds")
-      .select("xp")
-      .eq("user_id", viewer.user.id)
-      .eq("character_id", character.id)
-      .maybeSingle(),
-  ]);
 
   const messages: ChatMessage[] = (rows ?? [])
     .reverse()

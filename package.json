@@ -9,6 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "test:e2e:signed-in": "playwright test --project=signed-in",
+    "test:all": "npm run lint && tsc --noEmit && npm test && npm run db:check && npm run test:e2e",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "avatars": "node --env-file-if-exists=.env.local --import tsx scripts/generate-avatars.ts",

@@ -1,7 +1,7 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { characterSheet, SAFETY_RULES, type PromptCharacter } from "@/lib/chat/prompt";
-import { FAST_MODEL } from "@/lib/llm";
+import { aiLive, FAST_MODEL } from "@/lib/llm";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /** Server-enforced minimum gap between popups (client waits 3–4 min). */
@@ -31,7 +31,7 @@ type Row = {
 };
 
 export async function writeNudge(c: Row, userName: string | null): Promise<string> {
-  if (!process.env.ANTHROPIC_API_KEY) return c.first_message.slice(0, 300);
+  if (!aiLive()) return c.first_message.slice(0, 300);
   const sheet = characterSheet({
     name: c.name,
     age: c.age,
