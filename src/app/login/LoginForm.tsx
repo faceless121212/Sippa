@@ -1,84 +1,129 @@
 "use client";
 
-import { useActionState } from "react";
+import Link from "next/link";
+import { useActionState, useState } from "react";
+import { inputCls } from "@/components/auth/AuthShell";
+import { CheckEmail } from "@/components/auth/CheckEmail";
+import { PasswordField } from "@/components/auth/PasswordField";
 import { buttonClass } from "@/components/ui/button";
-import { sendMagicLink, signInWithGoogle, type LoginState } from "./actions";
+import {
+  resendConfirmation,
+  sendMagicLink,
+  signInWithPassword,
+  type AuthState,
+  type LoginState,
+} from "./actions";
 
 export function LoginForm({ next }: { next: string }) {
-  const [state, action, pending] = useActionState<LoginState, FormData>(sendMagicLink, { status: "idle" });
+  const [mode, setMode] = useState<"password" | "link">("password");
+  const [state, action, pending] = useActionState<AuthState, FormData>(signInWithPassword, {
+    status: "idle",
+  });
+  const [linkState, linkAction, linkPending] = useActionState<LoginState, FormData>(sendMagicLink, {
+    status: "idle",
+  });
+  const [resend, resendAction, resendPending] = useActionState<AuthState, FormData>(resendConfirmation, {
+    status: "idle",
+  });
 
-  if (state.status === "sent") {
+  if (resend.status === "check-email" && resend.email) {
+    return <CheckEmail email={resend.email} next={next} kind="signup" />;
+  }
+
+  if (mode === "link") {
+    if (linkState.status === "sent") {
+      return (
+        <div role="status" className="border-border bg-surface rounded-xl border p-5">
+          <p className="font-bold">Check your inbox ✉️</p>
+          <p className="text-muted mt-1 text-sm">
+            We sent a sign-in link to <span className="text-text font-medium">{linkState.message}</span>.
+          </p>
+        </div>
+      );
+    }
     return (
-      <div role="status" className="border-border bg-surface rounded-xl border p-5">
-        <p className="font-bold">Check your inbox ✉️</p>
-        <p className="text-muted mt-1 text-sm">
-          We sent a sign-in link to <span className="text-text font-medium">{state.message}</span>. It expires
-          in 1 hour.
-        </p>
-      </div>
+      <form action={linkAction} className="space-y-3">
+        <input type="hidden" name="next" value={next} />
+        <label htmlFor="link-email" className="text-sm font-semibold">
+          Email
+        </label>
+        <input id="link-email" name="email" type="email" required autoComplete="email" className={inputCls} />
+        <button
+          type="submit"
+          disabled={linkPending}
+          className={buttonClass({ size: "lg", className: "w-full" })}
+        >
+          {linkPending ? "Sending…" : "Email me a sign-in link"}
+        </button>
+        {linkState.status === "error" && (
+          <p role="alert" className="text-lover-ink text-sm font-medium">
+            {linkState.message}
+          </p>
+        )}
+        <button
+          type="button"
+          onClick={() => setMode("password")}
+          className="text-muted hover:text-text w-full text-center text-sm"
+        >
+          Use my password instead
+        </button>
+      </form>
     );
   }
 
   return (
-    <div className="space-y-4">
-      <form action={signInWithGoogle}>
+    <div className="space-y-3">
+      <form action={action} className="space-y-4">
         <input type="hidden" name="next" value={next} />
-        <button
-          type="submit"
-          className={buttonClass({ variant: "secondary", size: "lg", className: "w-full" })}
-        >
-          <GoogleIcon />
-          Continue with Google
-        </button>
-      </form>
-
-      <div className="text-muted flex items-center gap-3 text-xs">
-        <span className="bg-border h-px flex-1" /> or <span className="bg-border h-px flex-1" />
-      </div>
-
-      <form action={action} className="space-y-3">
-        <input type="hidden" name="next" value={next} />
-        <label htmlFor="login-email" className="text-sm font-semibold">
-          Email
-        </label>
-        <input
-          id="login-email"
-          name="email"
-          type="email"
-          required
-          autoComplete="email"
-          placeholder="you@example.com"
-          className="border-border bg-bg focus:border-text h-12 w-full rounded-lg border px-4 text-base focus:outline-none"
-        />
-        <button type="submit" disabled={pending} className={buttonClass({ size: "lg", className: "w-full" })}>
-          {pending ? "Sending…" : "Email me a sign-in link"}
-        </button>
+        <div className="space-y-1.5">
+          <label htmlFor="email" className="text-sm font-semibold">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            defaultValue={state.email}
+            className={inputCls}
+          />
+        </div>
+        <PasswordField autoComplete="current-password" />
+        <div className="flex justify-end">
+          <Link href="/forgot-password" className="text-muted hover:text-text text-sm font-medium">
+            Forgot password?
+          </Link>
+        </div>
         {state.status === "error" && (
           <p role="alert" className="text-lover-ink text-sm font-medium">
             {state.message}
           </p>
         )}
+        <button type="submit" disabled={pending} className={buttonClass({ size: "lg", className: "w-full" })}>
+          {pending ? "Signing in…" : "Sign in"}
+        </button>
       </form>
+      {state.unconfirmed && state.email && (
+        <form action={resendAction}>
+          <input type="hidden" name="email" value={state.email} />
+          <input type="hidden" name="next" value={next} />
+          <button
+            type="submit"
+            disabled={resendPending}
+            className={buttonClass({ variant: "secondary", className: "w-full" })}
+          >
+            {resendPending ? "Sending…" : "Resend confirmation email"}
+          </button>
+        </form>
+      )}
+      <button
+        type="button"
+        onClick={() => setMode("link")}
+        className="text-muted hover:text-text w-full text-center text-sm"
+      >
+        Email me a sign-in link instead
+      </button>
     </div>
-  );
-}
-
-function GoogleIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
-      <path
-        fill="#4285F4"
-        d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.4h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.7z"
-      />
-      <path
-        fill="#34A853"
-        d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3a7.2 7.2 0 0 1-10.7-3.8h-4v3.1A12 12 0 0 0 12 24z"
-      />
-      <path fill="#FBBC05" d="M5.4 14.3a7.2 7.2 0 0 1 0-4.6V6.6h-4a12 12 0 0 0 0 10.8l4-3.1z" />
-      <path
-        fill="#EA4335"
-        d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.4 6.6l4 3.1A7.2 7.2 0 0 1 12 4.8z"
-      />
-    </svg>
   );
 }

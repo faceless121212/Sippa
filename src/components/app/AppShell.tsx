@@ -164,16 +164,27 @@ export function AppShell({ viewer, children }: { viewer: ShellViewer; children: 
             <ThemeToggle />
           </div>
           {!viewer.signedIn && (
-            <Link
-              href={`/login?next=${encodeURIComponent(pathname)}`}
-              className={buttonClass({
-                size: "sm",
-                className: cn("w-full", collapsed ? "px-0" : "px-0 lg:px-4"),
-              })}
-            >
-              <User className={cn("h-4 w-4", !collapsed && "lg:hidden")} aria-hidden="true" />
-              <span className={cn(collapsed ? "sr-only" : "sr-only lg:not-sr-only")}>Log in</span>
-            </Link>
+            <>
+              <Link
+                href={`/signup?next=${encodeURIComponent(pathname)}`}
+                className={buttonClass({
+                  size: "sm",
+                  className: cn("w-full", collapsed ? "px-0" : "px-0 lg:px-4"),
+                })}
+              >
+                <User className={cn("h-4 w-4", !collapsed && "lg:hidden")} aria-hidden="true" />
+                <span className={cn(collapsed ? "sr-only" : "sr-only lg:not-sr-only")}>Sign up free</span>
+              </Link>
+              <Link
+                href={`/login?next=${encodeURIComponent(pathname)}`}
+                className={cn(
+                  "text-muted hover:text-text block text-center text-xs font-semibold",
+                  collapsed ? "sr-only" : "sr-only lg:not-sr-only",
+                )}
+              >
+                Sign in
+              </Link>
+            </>
           )}
         </div>
       </aside>
@@ -192,12 +203,20 @@ export function AppShell({ viewer, children }: { viewer: ShellViewer; children: 
           <div className="flex items-center gap-1">
             <ThemeToggle />
             {!viewer.signedIn && (
-              <Link
-                href={`/login?next=${encodeURIComponent(pathname)}`}
-                className={buttonClass({ size: "sm" })}
-              >
-                Log in
-              </Link>
+              <>
+                <Link
+                  href={`/login?next=${encodeURIComponent(pathname)}`}
+                  className={buttonClass({ variant: "ghost", size: "sm" })}
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href={`/signup?next=${encodeURIComponent(pathname)}`}
+                  className={buttonClass({ size: "sm" })}
+                >
+                  Sign up
+                </Link>
+              </>
             )}
           </div>
         </header>

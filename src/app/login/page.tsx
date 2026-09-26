@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Logo } from "@/components/Logo";
+import { AuthShell } from "@/components/auth/AuthShell";
+import { GoogleButton, OrDivider } from "@/components/auth/GoogleButton";
 import { AGE_BLOCK_COOKIE } from "@/lib/age";
 import { getViewer } from "@/lib/auth";
 import { safeNext } from "@/lib/safe-next";
 import { LoginForm } from "./LoginForm";
 
-export const metadata: Metadata = { title: "Log in", robots: { index: false } };
+export const metadata: Metadata = { title: "Sign in", robots: { index: false } };
 
 const errors: Record<string, string> = {
   link: "That sign-in link is invalid or expired. Request a new one.",
@@ -28,33 +29,31 @@ export default async function LoginPage({
   if (await getViewer()) redirect(next);
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center px-4 py-10">
-      <div className="w-full max-w-sm">
-        <Link href="/" aria-label="Sippa home">
-          <Logo />
-        </Link>
-        <h1 className="mt-8 text-3xl font-extrabold tracking-[-0.03em]">Start sipping</h1>
-        <p className="text-muted mt-2 text-sm">Log in or create an account. No password needed.</p>
-        {error && errors[error] && (
-          <p role="alert" className="border-border bg-surface mt-4 rounded-lg border p-3 text-sm">
-            {errors[error]}
-          </p>
-        )}
-        <div className="mt-6">
-          <LoginForm next={next} />
-        </div>
-        <p className="text-muted mt-6 text-xs leading-relaxed">
-          Sippa is for adults 18+. By continuing you agree to the{" "}
-          <Link href="/legal/terms" className="text-text underline underline-offset-2">
-            Terms
-          </Link>{" "}
-          and{" "}
-          <Link href="/legal/privacy" className="text-text underline underline-offset-2">
-            Privacy Policy
+    <AuthShell
+      title="Welcome back"
+      subtitle="Sign in to keep chatting."
+      footer={
+        <>
+          New to Sippa?{" "}
+          <Link
+            href={`/signup?next=${encodeURIComponent(next)}`}
+            className="text-text font-semibold underline underline-offset-2"
+          >
+            Create an account
           </Link>
-          .
+        </>
+      }
+    >
+      {error && errors[error] && (
+        <p role="alert" className="border-border bg-surface mb-4 rounded-lg border p-3 text-sm">
+          {errors[error]}
         </p>
+      )}
+      <div className="space-y-4">
+        <GoogleButton next={next} />
+        <OrDivider />
+        <LoginForm next={next} />
       </div>
-    </main>
+    </AuthShell>
   );
 }

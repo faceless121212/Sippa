@@ -1,4 +1,4 @@
-/** Every landing-page CTA goes to sign-up (magic link creates the account), then on to `next`. */
+/** Every landing-page CTA goes to sign-up, then on to `next` after the account is confirmed. */
 export function signupHref(next = "/app"): string {
-  return `/login?next=${encodeURIComponent(next)}`;
+  return `/signup?next=${encodeURIComponent(next)}`;
 }

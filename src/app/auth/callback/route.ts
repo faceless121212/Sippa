@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { completeOnboardingFromMetadata } from "@/lib/onboarding";
 import { safeNext } from "@/lib/safe-next";
 import { createClient } from "@/lib/supabase/server";
 
@@ -17,7 +18,8 @@ export async function GET(request: Request) {
         .select("dob")
         .eq("id", data.user.id)
         .maybeSingle();
-      const dest = profile?.dob ? next : `/onboarding?next=${encodeURIComponent(next)}`;
+      const ready = Boolean(profile?.dob) || (await completeOnboardingFromMetadata(data.user));
+      const dest = ready ? next : `/onboarding?next=${encodeURIComponent(next)}`;
       return NextResponse.redirect(`${origin}${dest}`);
     }
   }

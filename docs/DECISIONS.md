@@ -75,6 +75,16 @@ Answers to the kickoff questions (spec §11), recorded 2026-09-26.
 - **Google sign-in** is implemented; it needs the Google provider enabled in Supabase (see README). Until then the button explains it's not enabled.
 - **Wellbeing**: gentle break reminder after an hour in a chat.
 
+## Sign up & sign in (owner decision 2026-09-26)
+
+- **Email + password** with separate Sign up (`/signup`) and Sign in (`/login`) pages; magic link and Google remain as alternatives.
+- **Email confirmation required** before first sign-in (Supabase "Confirm email" on). Resend available; responses never reveal whether an email is registered.
+- **Passwords**: 8–72 characters with a letter and a number (checked live and on the server).
+- **Age check at sign-up**: date of birth is asked on the form; under-18s are refused before any account is created (30-day block cookie). The DOB is copied to the profile on first sign-in, so there's no extra onboarding step.
+- **Forgot password** → emailed link → `/reset-password`.
+- Attempt limits per IP/email on sign-up, sign-in, resend and reset (in-memory; Supabase also rate-limits).
+- Note: Supabase's built-in email sender allows only a few emails per hour — set up custom SMTP (e.g. Resend) before launch.
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.

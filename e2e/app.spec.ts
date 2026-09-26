@@ -53,7 +53,7 @@ test("protected pages send signed-out users to login", async ({ page }) => {
     await expect(page).toHaveURL(
       new RegExp(`/login\\?next=${encodeURIComponent(path).replace(/\//g, "%2F")}`),
     );
-    await expect(page.getByRole("heading", { name: "Start sipping" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
   }
 });
 

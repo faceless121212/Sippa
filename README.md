@@ -103,6 +103,12 @@ Every 3–4 minutes a character from your chats sends a short in-character messa
 
 Locally, purchases are confirmed when you return from Checkout (the server re-checks the session with Stripe). In production also add a webhook endpoint `https://<domain>/api/billing/webhook` for `checkout.session.completed`, `invoice.paid` and `customer.subscription.*`, and set `STRIPE_WEBHOOK_SECRET`.
 
+## Accounts
+
+- `/signup` (email + password + date of birth, confirmation email), `/login` (password, magic link or Google), `/forgot-password` → `/reset-password`.
+- Supabase → Authentication → URL Configuration must allow `http://localhost:3000/auth/callback` (and your production URL later).
+- Supabase's default email sender is limited to a few emails per hour; add custom SMTP before launch.
+
 ## Google sign-in
 
 1. Google Cloud Console → APIs & Services → Credentials → OAuth client ID (Web). Authorized origin `http://localhost:3000`; redirect URI `https://<project-ref>.supabase.co/auth/v1/callback`.

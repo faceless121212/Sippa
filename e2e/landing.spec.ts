@@ -25,7 +25,7 @@ test("category tabs switch sample characters and deep links", async ({ page }) =
   await expect(panel).toContainText("Ada Lovelace");
   await expect(panel.getByRole("link", { name: /Start chatting/ })).toHaveAttribute(
     "href",
-    `/login?next=${encodeURIComponent("/app/explore?category=famous")}`,
+    `/signup?next=${encodeURIComponent("/app/explore?category=famous")}`,
   );
 
   // Arrow-key navigation (WAI-ARIA tabs pattern).
@@ -66,11 +66,11 @@ test("every call-to-action on the landing page leads to sign-up", async ({ page 
   for (let i = 0; i < count; i++) {
     const href = await ctas.nth(i).getAttribute("href");
     if (href?.startsWith("#")) continue; // in-page anchors (nav) aren't CTAs
-    expect(href, await ctas.nth(i).innerText()).toMatch(/^\/login\?next=/);
+    expect(href, await ctas.nth(i).innerText()).toMatch(/^\/signup\?next=/);
   }
   await page.getByRole("link", { name: "Create your character" }).first().click();
-  await expect(page).toHaveURL(/\/login\?next=%2Fapp%2Fcreate/);
-  await expect(page.getByRole("heading", { name: "Start sipping" })).toBeVisible();
+  await expect(page).toHaveURL(/\/signup\?next=%2Fapp%2Fcreate/);
+  await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
 });
 
 test("waitlist API rejects bad input", async ({ request }) => {

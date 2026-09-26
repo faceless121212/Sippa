@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Logo } from "@/components/Logo";
 import { getViewer } from "@/lib/auth";
+import { completeOnboardingFromMetadata } from "@/lib/onboarding";
 import { safeNext } from "@/lib/safe-next";
 import { OnboardingForm } from "./OnboardingForm";
 
@@ -12,6 +13,7 @@ export default async function OnboardingPage({ searchParams }: { searchParams: P
   const viewer = await getViewer();
   if (!viewer) redirect(`/login?next=${encodeURIComponent(next)}`);
   if (viewer.profile?.dob) redirect(viewer.profile.is_adult ? next : "/onboarding/blocked");
+  if (await completeOnboardingFromMetadata(viewer.user)) redirect(next);
 
   const today = new Date().toISOString().slice(0, 10);
   return (
