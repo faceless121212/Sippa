@@ -29,6 +29,14 @@ Answers to the kickoff questions (spec §11), recorded 2026-09-26.
 | 20  | Moderation           | Automated-first (blocklist + LLM check auto-hides clear violations) + owner reviews queue.                                                                                                                                                                                                                                                        |
 | 21  | Data access          | **Supabase client (`@supabase/supabase-js`) with generated TypeScript types — no separate ORM.** Justification: RLS policies are enforced naturally with the user's session; SQL migrations live in `supabase/migrations`; one fewer dependency.                                                                                                  |
 
+## Phase 2 implementation notes
+
+- **Under-18 sign-ups**: the brand-new auth account is deleted immediately after an under-18 date of birth is entered, and a 30-day cookie blocks the login page on that browser. No data is kept.
+- **Age data** (`dob`, `is_adult`) and plan/beans/admin fields can only be written by the server (service role). Users can only update their display name (column-level grant + RLS).
+- **Lover visibility** is enforced in the database (RLS policy using `current_user_is_adult()`), not just hidden in the UI.
+- **Seed characters**: 24 originals in `src/data/characters.ts` (8 Lover 21+, 8 Friend, 8 Famous historical, all died 70+ years ago). Unit tests enforce these rules.
+- **Without Supabase keys** the app falls back to reading seed data locally (dev convenience); auth is unavailable until keys exist.
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.

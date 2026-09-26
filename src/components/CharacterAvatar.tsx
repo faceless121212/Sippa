@@ -16,7 +16,7 @@ type Props = {
 
 /**
  * Character portrait. Uses the AI-generated image in /public/characters when
- * one exists (see `npm run avatars`), otherwise the drawn SVG placeholder.
+ * one exists (see `npm run avatars`), otherwise a neutral initial tile.
  */
 export function CharacterAvatar({
   id,
@@ -39,15 +39,15 @@ export function CharacterAvatar({
     );
   }
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- static SVG placeholder
-    <img
-      src={`/avatars/${id}.svg`}
-      alt={`Illustrated portrait of ${name}`}
-      width={120}
-      height={160}
-      loading={priority ? "eager" : "lazy"}
-      decoding="async"
-      className={cn("block h-full w-full object-cover", className)}
-    />
+    <div
+      role="img"
+      aria-label={`Portrait of ${name} (coming soon)`}
+      className={cn(
+        "from-surface-2 to-border text-muted flex h-full w-full items-center justify-center bg-gradient-to-br text-4xl font-extrabold",
+        className,
+      )}
+    >
+      {name.charAt(0)}
+    </div>
   );
 }

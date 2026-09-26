@@ -42,7 +42,7 @@ export function Header() {
         <div className="ml-auto flex items-center gap-1 sm:gap-2">
           <ThemeToggle />
           <Link
-            href="/app"
+            href="/login"
             className={buttonClass({ variant: "ghost", size: "sm", className: "hidden sm:inline-flex" })}
           >
             Log in
@@ -82,7 +82,7 @@ export function Header() {
               </li>
             ))}
             <li>
-              <Link href="/app" className="hover:bg-surface-2 block rounded-lg px-2 py-3 text-base">
+              <Link href="/login" className="hover:bg-surface-2 block rounded-lg px-2 py-3 text-base">
                 Log in
               </Link>
             </li>

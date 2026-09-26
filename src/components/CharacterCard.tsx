@@ -1,8 +1,18 @@
 import { MessageCircle } from "lucide-react";
-import { categoryStyles } from "@/config/categories";
-import type { SampleCharacter } from "@/data/landing";
+import { categoryStyles, type CategoryId } from "@/config/categories";
 import { cn, formatCount } from "@/lib/utils";
 import { CharacterAvatar } from "./CharacterAvatar";
+
+export type CardCharacter = {
+  id: string;
+  name: string;
+  age?: number;
+  category: CategoryId;
+  famousType?: string;
+  hook: string;
+  tags: string[];
+  messages: number;
+};
 
 /** Tall portrait card: full-bleed image with name, hook and tags over a gradient. */
 export function CharacterCard({
@@ -10,7 +20,7 @@ export function CharacterCard({
   className,
   priority,
 }: {
-  character: SampleCharacter;
+  character: CardCharacter;
   className?: string;
   priority?: boolean;
 }) {
@@ -20,7 +30,9 @@ export function CharacterCard({
       ? "Historical"
       : character.famousType === "inspired"
         ? "Inspired-by"
-        : null;
+        : character.famousType === "verified_creator"
+          ? "Verified"
+          : null;
 
   return (
     <article

@@ -9,7 +9,8 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { avatarLooks } from "../src/data/avatar-looks";
-import { allLandingCharacters } from "../src/data/landing";
+import { seedCharacters } from "../src/data/characters";
+import { demoCharacters } from "../src/data/landing";
 import { buildAvatarPrompt } from "../src/lib/avatar-prompt";
 import { generateImage } from "../src/lib/images";
 
@@ -26,7 +27,7 @@ async function main() {
   const manifest: string[] = JSON.parse(await readFile(manifestPath, "utf8").catch(() => "[]"));
   const done = new Set(manifest);
 
-  const targets = allLandingCharacters.filter(
+  const targets = [...seedCharacters, ...demoCharacters].filter(
     (c) => (only.length ? only.includes(c.id) : true) && (force || only.length || !done.has(c.id)),
   );
   if (!targets.length) {

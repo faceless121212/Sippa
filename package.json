@@ -11,9 +11,13 @@
     "test:e2e": "playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "avatars": "node --env-file-if-exists=.env.local --import tsx scripts/generate-avatars.ts"
+    "avatars": "node --env-file-if-exists=.env.local --import tsx scripts/generate-avatars.ts",
+    "db:migrate": "node --env-file-if-exists=.env.local --import tsx scripts/db-migrate.ts",
+    "db:seed": "node --env-file-if-exists=.env.local --import tsx scripts/db-seed.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.2",
     "clsx": "^2.1.1",
     "lucide-react": "^1.48.0",
     "next": "15.5.26",
@@ -33,6 +37,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.26",
+    "postgres": "^3.4.9",
     "prettier": "^3.9.9",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",

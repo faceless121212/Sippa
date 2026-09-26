@@ -9,8 +9,8 @@ Plan and decisions: [`docs/PLAN.md`](docs/PLAN.md), [`docs/DECISIONS.md`](docs/D
 | Phase | What                                                           | State   |
 | ----- | -------------------------------------------------------------- | ------- |
 | 1     | Landing page, waitlist, SEO, PWA manifest                      | ✅ Done |
-| 2     | App shell: auth + age gate, explore, character page, seed data | Next    |
-| 3     | Chat (streaming, memory, limits, safety)                       | —       |
+| 2     | App shell: auth + age gate, explore, character page, seed data | ✅ Done |
+| 3     | Chat (streaming, memory, limits, safety)                       | Next    |
 | 4     | AI Character Creator                                           | —       |
 | 5     | Monetization (Stripe test mode, Plus, Beans, ads)              | —       |
 | 6     | Admin, moderation, legal, polish                               | —       |
@@ -55,6 +55,21 @@ See [`.env.example`](.env.example). Nothing is required for Phase 1.
 - **Landing sample characters, FAQ, creator demo results** → `src/data/landing.ts`
 - **Colours (dark + light)** → tokens at the top of `src/app/globals.css`
 - **Legal placeholder copy** → `src/app/legal/[slug]/content.ts` (needs a lawyer)
+
+## Database (Supabase)
+
+1. Put `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE_DB_URL` in `.env.local`.
+2. In Supabase → Authentication → URL Configuration: Site URL `http://localhost:3000`, redirect URL `http://localhost:3000/auth/callback`.
+3. Run:
+
+```bash
+npm run db:migrate   # applies supabase/migrations/*.sql once each
+npm run db:seed      # loads the 24 official characters
+```
+
+Without Supabase keys the app still runs: Explore and character pages read the local seed data, and sign-in shows "not set up yet".
+
+**Google sign-in** (optional): create an OAuth client in Google Cloud Console, then enable the Google provider in Supabase → Authentication → Providers with its client ID and secret.
 
 ## Accounts checklist
 

@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { avatarLooks } from "@/data/avatar-looks";
-import { allLandingCharacters } from "@/data/landing";
+import { seedCharacters } from "@/data/characters";
+import { demoCharacters } from "@/data/landing";
 import { buildAvatarPrompt, UnsafeAvatarPromptError } from "./avatar-prompt";
 
 describe("buildAvatarPrompt", () => {
-  it("every landing character has a look and a safe prompt stating adulthood", () => {
-    for (const c of allLandingCharacters) {
+  it("every character has a look and a safe prompt stating adulthood", () => {
+    for (const c of [...seedCharacters, ...demoCharacters]) {
       const look = avatarLooks[c.id];
       expect(look, c.id).toBeDefined();
       const prompt = buildAvatarPrompt({ name: c.name, age: c.age, category: c.category, look });
