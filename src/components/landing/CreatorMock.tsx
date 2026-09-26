@@ -58,9 +58,9 @@ export function CreatorMock() {
       <figcaption className="sr-only">
         Animated example: someone describes a character in one sentence and Sippa creates it.
       </figcaption>
-      <div aria-hidden="true" className="border-border bg-surface rounded-3xl border p-4 shadow-2xl sm:p-5">
-        <div className="border-border bg-bg flex items-center gap-2 rounded-2xl border px-4 py-3">
-          <Sparkles className="text-primary h-4 w-4 shrink-0" />
+      <div aria-hidden="true" className="border-border bg-surface rounded-xl border p-4 shadow-2xl sm:p-5">
+        <div className="border-border bg-bg flex items-center gap-2 rounded-xl border px-4 py-3">
+          <Sparkles className="text-primary-ink h-4 w-4 shrink-0" />
           <span className="min-h-10 flex-1 text-sm sm:min-h-6">
             {prompt.slice(0, typed)}
             {phase === "typing" && (
@@ -92,20 +92,17 @@ function Cup({ brewing }: { brewing: boolean }) {
         {[0, 1, 2].map((i) => (
           <span
             key={i}
-            className={cn(
-              "bg-primary/50 block h-2 w-1.5 rounded-full opacity-25",
-              brewing && "animate-steam",
-            )}
+            className={cn("bg-muted block h-2 w-1.5 rounded-full opacity-25", brewing && "animate-steam")}
             style={{ animationDelay: `${i * 180}ms` }}
           />
         ))}
       </div>
       <svg viewBox="0 0 120 70" className="w-28">
-        <path d="M10 6 h86 v26 a30 30 0 0 1 -30 30 h-26 a30 30 0 0 1 -30 -30 z" fill="var(--primary)" />
-        <path d="M96 14 h6 a12 12 0 0 1 0 24 h-8" stroke="var(--primary)" strokeWidth="7" fill="none" />
-        <ellipse cx="53" cy="7" rx="43" ry="5" fill="#6B4A33" />
+        <path d="M10 6 h86 v26 a30 30 0 0 1 -30 30 h-26 a30 30 0 0 1 -30 -30 z" fill="var(--text)" />
+        <path d="M96 14 h6 a12 12 0 0 1 0 24 h-8" stroke="var(--text)" strokeWidth="7" fill="none" />
+        <ellipse cx="53" cy="7" rx="43" ry="5" fill="var(--primary)" />
       </svg>
-      <div className="bg-primary/30 -mt-1 h-2 w-36 rounded-full" />
+      <div className="bg-surface-2 -mt-1 h-2 w-36 rounded-full" />
     </div>
   );
 }

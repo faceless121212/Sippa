@@ -38,13 +38,13 @@ export function Pricing() {
           </h2>
           <p className="text-muted mt-3">Start free. Upgrade to Sippa Plus when you want more.</p>
 
-          <fieldset className="border-border bg-surface mt-6 inline-flex rounded-full border p-1">
+          <fieldset className="border-border bg-surface mt-6 inline-flex rounded-lg border p-1">
             <legend className="sr-only">Billing period</legend>
             {(["monthly", "yearly"] as const).map((b) => (
               <label
                 key={b}
                 className={cn(
-                  "has-[:focus-visible]:outline-primary cursor-pointer rounded-full px-4 py-2 text-sm font-medium transition-colors has-[:focus-visible]:outline-2",
+                  "has-[:focus-visible]:outline-text cursor-pointer rounded-md px-4 py-2 text-sm font-medium transition-colors has-[:focus-visible]:outline-2",
                   billing === b ? "bg-primary text-on-primary" : "text-muted hover:text-text",
                 )}
               >
@@ -112,8 +112,8 @@ function PlanCard({
   return (
     <article
       className={cn(
-        "bg-surface flex flex-col rounded-3xl border p-6 sm:p-8",
-        highlight ? "border-primary shadow-[0_0_60px_-20px_var(--primary)]" : "border-border",
+        "bg-surface flex flex-col rounded-xl border p-6 sm:p-8",
+        highlight ? "border-text border-2" : "border-border",
       )}
     >
       <h3 className="font-display text-2xl font-semibold">{name}</h3>

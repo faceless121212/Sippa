@@ -29,7 +29,7 @@ export default async function LegalPage({ params }: Props) {
         <Logo />
       </Link>
       <h1 className="font-display mt-10 text-4xl font-semibold tracking-tight">{page.title}</h1>
-      <p role="note" className="border-primary/40 bg-primary/10 mt-4 rounded-2xl border p-4 text-sm">
+      <p role="note" className="border-border bg-surface-2 mt-4 rounded-xl border p-4 text-sm">
         <strong>Draft placeholder.</strong> This page has not been reviewed by a lawyer yet and is not legally
         binding.
       </p>

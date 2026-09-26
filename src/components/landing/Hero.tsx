@@ -6,7 +6,7 @@ export function Hero() {
     <section className="relative overflow-clip" aria-labelledby="hero-title">
       <div
         aria-hidden="true"
-        className="bg-primary/10 pointer-events-none absolute -top-40 left-1/2 h-[480px] w-[900px] -translate-x-1/2 rounded-full blur-3xl"
+        className="bg-primary/20 dark:bg-primary/10 pointer-events-none absolute -top-40 left-1/2 h-[480px] w-[900px] -translate-x-1/2 rounded-full blur-3xl"
       />
       <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-2 lg:gap-16">
         <div>
@@ -19,7 +19,10 @@ export function Hero() {
             className="font-display text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl"
           >
             Chat with characters who feel real — or{" "}
-            <span className="text-primary-ink italic">brew your own</span> in seconds.
+            <span className="bg-primary text-on-primary rounded-lg box-decoration-clone px-2">
+              brew your own
+            </span>{" "}
+            in seconds.
           </h1>
           <p className="text-muted mt-5 max-w-xl text-lg">
             Describe anyone in one sentence and Sippa pours out a full character — name, look, personality and

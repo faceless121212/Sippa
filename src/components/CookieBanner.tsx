@@ -40,7 +40,7 @@ export function CookieBanner() {
     <div
       role="region"
       aria-label="Cookie consent"
-      className="border-border bg-surface fixed inset-x-3 bottom-3 z-50 mx-auto max-w-xl rounded-2xl border p-4 shadow-2xl sm:inset-x-6"
+      className="border-border bg-surface fixed inset-x-3 bottom-3 z-50 mx-auto max-w-xl rounded-xl border p-4 shadow-2xl sm:inset-x-6"
     >
       <p className="text-muted text-sm">
         We use essential cookies to run Sippa. With your OK we&apos;ll also use cookies for measuring and ads

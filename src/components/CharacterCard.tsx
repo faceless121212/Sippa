@@ -17,7 +17,7 @@ export function CharacterCard({
   return (
     <article
       className={cn(
-        "group border-border bg-surface flex flex-col overflow-hidden rounded-2xl border",
+        "group border-border bg-surface flex flex-col overflow-hidden rounded-xl border",
         className,
       )}
     >

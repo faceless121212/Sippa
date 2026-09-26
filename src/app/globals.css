@@ -1,56 +1,57 @@
 @import "tailwindcss";
 
-@custom-variant light (&:where(.light, .light *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ------------------------------------------------------------------
-   Sippa design tokens. Dark ("espresso") is the default theme;
-   `.light` on <html> switches to the light ("latte") theme.
-   `*-ink` tokens are text-safe (WCAG AA) versions of accent colours.
+   Sippa design tokens — clean neutral UI with a lime accent.
+   Light is the default theme; `.dark` on <html> switches to dark.
+   `--primary` (lime) is a fill colour only: always pair it with
+   `--on-primary` text. Use `*-ink` tokens for coloured text (WCAG AA).
    ------------------------------------------------------------------ */
 :root {
-  --bg: #14100e;
-  --surface: #1f1916;
-  --surface-2: #2a221e;
-  --border: rgb(246 239 233 / 0.1);
-  --text: #f6efe9;
-  --muted: #a89a90;
+  --bg: #ffffff;
+  --surface: #fafafa;
+  --surface-2: #f0f0f0;
+  --border: #ededed;
+  --text: #000000;
+  --muted: #6b6b6b;
 
-  --primary: #e8a35c;
-  --primary-hover: #f2b877;
-  --on-primary: #14100e;
-  --primary-ink: #e8a35c;
+  --primary: #c3ff00;
+  --primary-hover: #b2eb00;
+  --on-primary: #000000;
+  --primary-ink: #4a6b00;
 
-  --lover: #c4577a;
-  --lover-ink: #ee8fae;
-  --friend: #6fbf8e;
-  --friend-ink: #7fd3a0;
-  --famous: #8fa7f0;
-  --famous-ink: #a9bdf7;
-
-  color-scheme: dark;
-}
-
-.light {
-  --bg: #fbf6f1;
-  --surface: #ffffff;
-  --surface-2: #f3eae2;
-  --border: rgb(20 16 14 / 0.12);
-  --text: #1f1916;
-  --muted: #6b5d55;
-
-  --primary: #e8a35c;
-  --primary-hover: #f2b877;
-  --on-primary: #14100e;
-  --primary-ink: #99561a;
-
-  --lover: #c4577a;
-  --lover-ink: #a3385c;
-  --friend: #6fbf8e;
-  --friend-ink: #2b7248;
-  --famous: #8fa7f0;
-  --famous-ink: #3552b8;
+  --lover: #ed5023;
+  --lover-ink: #c43a12;
+  --friend: #389a57;
+  --friend-ink: #2a7542;
+  --famous: #0079ff;
+  --famous-ink: #0062d1;
 
   color-scheme: light;
+}
+
+.dark {
+  --bg: #121212;
+  --surface: #000000;
+  --surface-2: #242424;
+  --border: #333333;
+  --text: #ffffff;
+  --muted: #b3b3b3;
+
+  --primary: #c3ff00;
+  --primary-hover: #d4ff4d;
+  --on-primary: #000000;
+  --primary-ink: #c3ff00;
+
+  --lover: #ed5023;
+  --lover-ink: #ff7a52;
+  --friend: #389a57;
+  --friend-ink: #4cc173;
+  --famous: #0079ff;
+  --famous-ink: #4da3ff;
+
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -72,7 +73,7 @@
   --color-famous-ink: var(--famous-ink);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   --animate-pour: pour 700ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
   --animate-steam: steam 900ms ease-in-out infinite;
@@ -127,7 +128,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--text);
   outline-offset: 2px;
   border-radius: 6px;
 }

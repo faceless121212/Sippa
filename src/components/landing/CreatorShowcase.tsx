@@ -52,9 +52,9 @@ export function CreatorShowcase() {
 
         <ol className="mt-8 grid gap-4 sm:grid-cols-3">
           {steps.map((s, i) => (
-            <li key={s.title} className="border-border bg-surface rounded-2xl border p-5">
+            <li key={s.title} className="border-border bg-surface rounded-xl border p-5">
               <span className="flex items-center gap-3">
-                <span className="bg-primary/15 text-primary-ink flex h-9 w-9 items-center justify-center rounded-full">
+                <span className="bg-primary text-on-primary flex h-9 w-9 items-center justify-center rounded-lg">
                   <s.icon className="h-4 w-4" aria-hidden="true" />
                 </span>
                 <span className="font-display text-lg font-semibold">
@@ -68,7 +68,7 @@ export function CreatorShowcase() {
         </ol>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          <form onSubmit={brew} className="border-border bg-surface rounded-3xl border p-5 sm:p-6">
+          <form onSubmit={brew} className="border-border bg-surface rounded-xl border p-5 sm:p-6">
             <label htmlFor="creator-input" className="font-display text-lg font-semibold">
               Who do you want to talk to?
             </label>
@@ -79,7 +79,7 @@ export function CreatorShowcase() {
               rows={3}
               maxLength={200}
               placeholder="e.g. a grumpy barista who secretly writes poetry"
-              className="border-border bg-bg placeholder:text-muted focus:border-primary mt-3 w-full resize-none rounded-2xl border p-4 text-base focus:outline-none"
+              className="border-border bg-bg placeholder:text-muted focus:border-text mt-3 w-full resize-none rounded-xl border p-4 text-base focus:outline-none"
             />
             <p className="text-muted mt-3 text-xs">Try one:</p>
             <ul className="mt-2 flex flex-wrap gap-2">
@@ -114,7 +114,7 @@ export function CreatorShowcase() {
             aria-live="polite"
             aria-busy={brewing}
             className={cn(
-              "border-border flex min-h-[320px] rounded-3xl border border-dashed p-5 sm:p-6",
+              "border-border flex min-h-[320px] rounded-xl border border-dashed p-5 sm:p-6",
               result && "bg-surface border-solid",
             )}
           >
@@ -138,7 +138,7 @@ function BrewResult({ example }: { example: CreatorExample }) {
   const c = example.character;
   return (
     <div className="flex w-full flex-col gap-4 sm:flex-row">
-      <div className="aspect-[3/4] w-32 shrink-0 overflow-hidden rounded-2xl sm:w-40">
+      <div className="aspect-[3/4] w-32 shrink-0 overflow-hidden rounded-xl sm:w-40">
         <CharacterAvatar id={c.id} name={c.name} priority />
       </div>
       <div className="min-w-0 flex-1">
@@ -161,7 +161,7 @@ function BrewResult({ example }: { example: CreatorExample }) {
           <span className="text-text font-semibold">Speaks: </span>
           {c.speakingStyle}
         </p>
-        <blockquote className="bg-surface-2 mt-3 rounded-2xl rounded-tl-sm p-3 text-sm">
+        <blockquote className="bg-surface-2 mt-3 rounded-xl rounded-tl-sm p-3 text-sm">
           {c.firstMessage}
         </blockquote>
         <a href="#waitlist" className={buttonClass({ size: "sm", className: "mt-4" })}>

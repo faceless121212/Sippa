@@ -41,10 +41,10 @@ export function Waitlist() {
       aria-labelledby="waitlist-title"
       className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 md:pb-24"
     >
-      <div className="border-border bg-surface relative overflow-clip rounded-3xl border p-6 sm:p-10 md:p-14">
+      <div className="border-border bg-surface relative overflow-clip rounded-xl border p-6 sm:p-10 md:p-14">
         <div
           aria-hidden="true"
-          className="bg-primary/15 pointer-events-none absolute -right-24 -bottom-24 h-72 w-72 rounded-full blur-3xl"
+          className="bg-primary/30 dark:bg-primary/10 pointer-events-none absolute -right-24 -bottom-24 h-72 w-72 rounded-full blur-3xl"
         />
         <div className="relative max-w-xl">
           <h2 id="waitlist-title" className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -55,7 +55,7 @@ export function Waitlist() {
           </p>
 
           {status.kind === "done" ? (
-            <p role="status" className="bg-primary/15 text-primary-ink mt-8 rounded-2xl p-4 font-medium">
+            <p role="status" className="bg-primary text-on-primary mt-8 rounded-xl p-4 font-medium">
               You&apos;re on the list! ☕ We&apos;ll be in touch soon.
             </p>
           ) : (
@@ -72,7 +72,7 @@ export function Waitlist() {
                   autoComplete="email"
                   maxLength={254}
                   placeholder="you@example.com"
-                  className="border-border bg-bg placeholder:text-muted focus:border-primary h-12 flex-1 rounded-full border px-5 text-base focus:outline-none"
+                  className="border-border bg-bg placeholder:text-muted focus:border-text h-12 flex-1 rounded-lg border px-5 text-base focus:outline-none"
                 />
                 <button
                   type="submit"
@@ -97,7 +97,7 @@ export function Waitlist() {
                   name="consent"
                   type="checkbox"
                   required
-                  className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--primary)]"
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--text)]"
                 />
                 <span>
                   I&apos;m 18 or older and agree to receive launch emails from Sippa. I&apos;ve read the{" "}

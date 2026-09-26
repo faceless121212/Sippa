@@ -25,15 +25,16 @@ cp .env.example .env.local   # optional in Phase 1
 npm run dev                  # http://localhost:3000
 ```
 
-| Command            | What it does                                                               |
-| ------------------ | -------------------------------------------------------------------------- |
-| `npm run dev`      | Dev server                                                                 |
-| `npm run build`    | Production build                                                           |
-| `npm start`        | Serve the production build                                                 |
-| `npm run lint`     | ESLint                                                                     |
-| `npm test`         | Unit tests (Vitest)                                                        |
-| `npm run test:e2e` | Browser tests at 360 / 768 / 1440 px (Playwright; builds and serves :3100) |
-| `npm run format`   | Prettier                                                                   |
+| Command            | What it does                                                                      |
+| ------------------ | --------------------------------------------------------------------------------- |
+| `npm run dev`      | Dev server                                                                        |
+| `npm run build`    | Production build                                                                  |
+| `npm start`        | Serve the production build                                                        |
+| `npm run lint`     | ESLint                                                                            |
+| `npm test`         | Unit tests (Vitest)                                                               |
+| `npm run test:e2e` | Browser tests at 360 / 768 / 1440 px (Playwright; builds and serves :3100)        |
+| `npm run format`   | Prettier                                                                          |
+| `npm run avatars`  | Generate character portraits with fal.ai (needs `FAL_KEY`; `--force` to redo all) |
 
 First time running e2e tests: `npx playwright install chromium`.
 

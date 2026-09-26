@@ -1,19 +1,19 @@
 import { cn } from "@/lib/utils";
 
-/** Placeholder cup-and-steam mark. */
+/** Placeholder mark: lime cup with steam on a black tile. Same in both themes. */
 export function LogoMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" className={cn("h-7 w-7", className)} aria-hidden="true">
+      <rect width="32" height="32" rx="8" fill="#000" />
       <path
-        d="M12 3 q-2.5 3 0 6 M17 2 q-2.5 3.5 0 7"
-        stroke="var(--primary)"
-        strokeWidth="2"
+        d="M12 5 q-2 2.5 0 5 M16.5 4.5 q-2 3 0 6"
+        stroke="#C3FF00"
+        strokeWidth="1.8"
         fill="none"
         strokeLinecap="round"
       />
-      <path d="M5 12 h19 v7 a8 8 0 0 1 -8 8 h-3 a8 8 0 0 1 -8 -8 z" fill="var(--primary)" />
-      <path d="M24 14 h1.5 a3.5 3.5 0 0 1 0 7 H23" stroke="var(--primary)" strokeWidth="2.4" fill="none" />
-      <rect x="4" y="28.5" width="21" height="2" rx="1" fill="var(--primary)" opacity="0.6" />
+      <path d="M6.5 13 h16 v5.5 a6.5 6.5 0 0 1 -6.5 6.5 h-3 a6.5 6.5 0 0 1 -6.5 -6.5 z" fill="#C3FF00" />
+      <path d="M22.5 15 h1.2 a2.8 2.8 0 0 1 0 5.6 H22" stroke="#C3FF00" strokeWidth="2" fill="none" />
     </svg>
   );
 }
@@ -22,7 +22,7 @@ export function Logo({ className }: { className?: string }) {
   return (
     <span className={cn("inline-flex items-center gap-2", className)}>
       <LogoMark />
-      <span className="font-display text-2xl font-semibold tracking-tight">Sippa</span>
+      <span className="text-xl font-bold tracking-tight">Sippa</span>
     </span>
   );
 }

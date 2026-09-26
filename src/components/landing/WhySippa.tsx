@@ -22,7 +22,7 @@ export function WhySippa() {
         {whySippa.map((item) => {
           const Icon = icons[item.icon];
           return (
-            <li key={item.title} className="border-border bg-surface rounded-2xl border p-5">
+            <li key={item.title} className="border-border bg-surface rounded-xl border p-5">
               <Icon className="text-primary-ink h-6 w-6" aria-hidden="true" />
               <h3 className="font-display mt-3 text-lg leading-snug font-semibold">{item.title}</h3>
               <p className="text-muted mt-2 text-sm">{item.body}</p>

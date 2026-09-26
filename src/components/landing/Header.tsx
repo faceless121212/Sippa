@@ -28,7 +28,10 @@ export function Header() {
           <ul className="flex items-center gap-1">
             {links.map((l) => (
               <li key={l.href}>
-                <a href={l.href} className="text-muted hover:text-text rounded-full px-3 py-2 text-sm">
+                <a
+                  href={l.href}
+                  className="text-muted hover:text-text hover:bg-surface-2 rounded-lg px-3 py-1.5 text-sm font-medium"
+                >
                   {l.label}
                 </a>
               </li>
@@ -49,7 +52,7 @@ export function Header() {
           </a>
           <button
             type="button"
-            className="hover:bg-surface-2 inline-flex h-9 w-9 items-center justify-center rounded-full md:hidden"
+            className="hover:bg-surface-2 inline-flex h-9 w-9 items-center justify-center rounded-lg md:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}

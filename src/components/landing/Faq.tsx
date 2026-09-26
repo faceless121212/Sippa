@@ -10,7 +10,7 @@ export function Faq() {
       >
         Questions, answered
       </h2>
-      <div className="divide-border border-border bg-surface mt-10 divide-y rounded-3xl border">
+      <div className="divide-border border-border bg-surface mt-10 divide-y rounded-xl border">
         {faqs.map((f) => (
           <details key={f.q} className="group px-5 sm:px-6">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-medium [&::-webkit-details-marker]:hidden">

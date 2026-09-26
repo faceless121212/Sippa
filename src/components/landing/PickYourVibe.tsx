@@ -69,7 +69,7 @@ export function PickYourVibe() {
               onClick={() => setActive(cat.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
-                "bg-surface relative overflow-hidden rounded-2xl border p-5 text-left transition-all",
+                "bg-surface relative overflow-hidden rounded-xl border p-5 text-left transition-all",
                 selected ? cn("border-transparent ring-2", s.ring) : "border-border hover:bg-surface-2",
               )}
             >
@@ -96,7 +96,7 @@ export function PickYourVibe() {
         id={`panel-${active}`}
         aria-labelledby={`tab-${active}`}
         tabIndex={0}
-        className="mt-8 rounded-3xl"
+        className="mt-8 rounded-xl"
       >
         <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {charactersByCategory(active).map((c) => (
