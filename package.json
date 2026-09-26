@@ -17,7 +17,8 @@
     "db:check": "node --env-file-if-exists=.env.local --import tsx scripts/check-rls.ts",
     "chat:smoke": "node --env-file-if-exists=.env.local --import tsx scripts/smoke-chat.ts",
     "creator:smoke": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/smoke-creator.ts",
-    "stripe:setup": "node --env-file-if-exists=.env.local --import tsx scripts/stripe-setup.ts"
+    "stripe:setup": "node --env-file-if-exists=.env.local --import tsx scripts/stripe-setup.ts",
+    "brand:icons": "node --env-file-if-exists=.env.local --import tsx scripts/generate-brand-icons.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",

@@ -1,19 +1,11 @@
 "use client";
 
-import {
-  Compass,
-  Home,
-  MessageCircle,
-  PanelLeftClose,
-  PanelLeftOpen,
-  Plus,
-  Sparkles,
-  User,
-} from "lucide-react";
+import { Compass, Home, MessageCircle, PanelLeftClose, PanelLeftOpen, Plus, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { BrandIcon } from "../BrandIcon";
 import { Logo, LogoMark } from "../Logo";
 import { ThemeToggle } from "../ThemeToggle";
 import { buttonClass } from "../ui/button";
@@ -121,14 +113,21 @@ export function AppShell({ viewer, children }: { viewer: ShellViewer; children: 
           {viewer.signedIn && viewer.plan !== "plus" && (
             <Link
               href="/app/plus"
-              title="Sippa Plus"
+              title="Get Sippa Plus"
               className={cn(
-                "bg-primary flex h-10 items-center justify-center gap-2 rounded-lg text-sm font-bold text-black",
-                !collapsed && "lg:justify-start lg:px-3",
+                "group bg-primary relative flex items-center gap-2.5 overflow-hidden rounded-xl p-1.5 font-extrabold text-black shadow-[0_6px_24px_-6px_rgb(195_255_0/0.7)] transition-transform hover:-translate-y-0.5",
+                collapsed ? "justify-center" : "justify-center lg:justify-start lg:pr-3",
               )}
             >
-              <Sparkles className="h-4 w-4" aria-hidden="true" />
-              <span className={cn(collapsed ? "sr-only" : "sr-only lg:not-sr-only")}>Get Plus</span>
+              <BrandIcon name="plus" size={34} />
+              <span className={cn("leading-tight", collapsed ? "sr-only" : "sr-only lg:not-sr-only")}>
+                <span className="block text-sm">Get Plus</span>
+                <span className="block text-[11px] font-semibold text-black/60">Unlimited chats</span>
+              </span>
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-700 group-hover:translate-x-full"
+              />
             </Link>
           )}
           <div className={cn("flex", collapsed ? "justify-center" : "justify-center lg:justify-start")}>

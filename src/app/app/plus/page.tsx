@@ -1,4 +1,5 @@
-import { Check, Coffee, Sparkles } from "lucide-react";
+import { Check } from "lucide-react";
+import { BrandIcon } from "@/components/BrandIcon";
 import type { Metadata } from "next";
 import { BuyButton } from "@/components/billing/BuyButton";
 import { beanCosts, beanPacks, formatPrice, pricing, siteConfig, yearlySavingsPercent } from "@/config/site";
@@ -43,7 +44,7 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
           </h1>
         </div>
         <div className="border-border bg-surface flex items-center gap-2 rounded-xl border px-4 py-2.5">
-          <Coffee className="h-4 w-4" aria-hidden="true" />
+          <BrandIcon name="beans" size={28} />
           <span className="text-sm">
             <strong className="text-lg">{p?.beans ?? 0}</strong> Beans
           </span>
@@ -70,7 +71,7 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
       <section aria-labelledby="plus" className="grid gap-4 md:grid-cols-2">
         <div className="border-text rounded-2xl border-2 p-6">
           <h2 id="plus" className="flex items-center gap-2 text-2xl font-extrabold">
-            <Sparkles className="h-5 w-5" aria-hidden="true" /> Sippa Plus
+            <BrandIcon name="plus" size={40} /> Sippa Plus
           </h2>
           <ul className="mt-4 space-y-2.5">
             {PLUS_FEATURES.map((f) => (
@@ -166,7 +167,7 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
                 </span>
               )}
               <p className="flex items-center gap-2 text-2xl font-extrabold">
-                <Coffee className="h-5 w-5" aria-hidden="true" /> {pack.beans}
+                <BrandIcon name="beans" size={36} /> {pack.beans}
               </p>
               <p className="text-muted text-sm">Beans · {formatPrice(pack.price)}</p>
               <BuyButton item={pack.id} variant={pack.label ? "primary" : "secondary"} className="mt-4">

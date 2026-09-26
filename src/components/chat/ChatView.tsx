@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowDown,
   ArrowLeft,
   ArrowUp,
   Bot,
@@ -30,6 +31,8 @@ export type ChatMessage = {
   content: string;
   rating?: 1 | -1 | null;
   streaming?: boolean;
+  /** Stable React key for messages created in this session (ids change when the server confirms them). */
+  ckey?: string;
 };
 
 type Props = {
@@ -65,27 +68,49 @@ export function ChatView(props: Props) {
   const [useBeans, setUseBeans] = useState(false);
   const abort = useRef<AbortController | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
+  const content = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const stick = useRef(true);
+  const [showJump, setShowJump] = useState(false);
 
   // Keep pinned to the bottom unless the user scrolled up to read.
   const onScroll = () => {
     const el = scroller.current;
-    if (el) stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+    if (!el) return;
+    const near = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+    stick.current = near;
+    setShowJump(!near);
   };
+  const jumpToLatest = () => {
+    const el = scroller.current;
+    if (!el) return;
+    stick.current = true;
+    setShowJump(false);
+    el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+  };
+  // Text grows smoothly inside bubbles, so follow size changes, not just state changes.
   useEffect(() => {
     const el = scroller.current;
-    if (el && stick.current) el.scrollTop = el.scrollHeight;
-  }, [messages, notice]);
+    const inner = content.current;
+    if (!el || !inner) return;
+    el.scrollTop = el.scrollHeight;
+    const ro = new ResizeObserver(() => {
+      if (stick.current) el.scrollTop = el.scrollHeight;
+    });
+    ro.observe(inner);
+    return () => ro.disconnect();
+  }, []);
 
   const run = useCallback(async (url: string, body: object | null, optimisticUser?: ChatMessage) => {
     setBusy(true);
     setNotice(null);
     stick.current = true;
+    setShowJump(false);
     const replyId = tempId--;
     setMessages((m) => [
       ...m,
-      ...(optimisticUser ? [optimisticUser] : []),
-      { id: replyId, role: "assistant", content: "", streaming: true },
+      ...(optimisticUser ? [{ ...optimisticUser, ckey: `c${optimisticUser.id}` }] : []),
+      { id: replyId, role: "assistant", content: "", streaming: true, ckey: `c${replyId}` },
     ]);
     const controller = new AbortController();
     abort.current = controller;
@@ -160,6 +185,7 @@ export function ChatView(props: Props) {
     const content = input.trim();
     if (!content || busy) return;
     setInput("");
+    inputRef.current?.focus();
     run(`/api/chats/${chatId}/messages`, { content, useBeans }, { id: tempId--, role: "user", content });
   };
 
@@ -272,122 +298,145 @@ export function ChatView(props: Props) {
         </header>
 
         {/* messages */}
-        <div
-          ref={scroller}
-          onScroll={onScroll}
-          className="flex-1 overflow-y-auto"
-          aria-live="polite"
-          aria-busy={busy}
-        >
-          <div className="mx-auto max-w-3xl space-y-4 px-3 py-5 sm:px-6">
-            <p className="text-muted bg-surface border-border mx-auto flex w-fit items-center gap-1.5 rounded-lg border px-3 py-1.5 text-center text-xs">
-              <Bot className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              You&apos;re chatting with an AI character. They aren&apos;t a real person.
-            </p>
+        <div className="relative min-h-0 flex-1">
+          <div
+            ref={scroller}
+            onScroll={onScroll}
+            className="h-full overflow-y-auto overscroll-contain"
+            aria-live="polite"
+            aria-busy={busy}
+          >
+            <div ref={content} className="mx-auto max-w-3xl space-y-4 px-3 py-5 sm:px-6">
+              <p className="text-muted bg-surface border-border mx-auto flex w-fit items-center gap-1.5 rounded-lg border px-3 py-1.5 text-center text-xs">
+                <Bot className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                You&apos;re chatting with an AI character. They aren&apos;t a real person.
+              </p>
 
-            {visible.map((m) =>
-              m.role === "system" ? (
-                <CrisisCard key={m.id} lines={props.helplines} />
-              ) : m.role === "user" ? (
-                <div key={m.id} className="group flex flex-col items-end gap-1">
-                  {editing === m.id ? (
-                    <EditBox initial={m.content} onCancel={() => setEditing(null)} onSave={saveEdit} />
-                  ) : (
-                    <div className="bg-text text-bg max-w-[85%] rounded-2xl rounded-br-md px-4 py-2.5 text-[15px] leading-relaxed whitespace-pre-wrap">
-                      <MessageText text={m.content} />
-                    </div>
-                  )}
-                  {m.id === lastUser?.id && m.id > 0 && !busy && editing === null && (
-                    <button
-                      type="button"
-                      onClick={() => setEditing(m.id)}
-                      className="text-muted hover:text-text flex items-center gap-1 text-xs"
-                    >
-                      <Pencil className="h-3 w-3" aria-hidden="true" /> Edit
-                    </button>
-                  )}
-                </div>
-              ) : (
-                <div key={m.id} className="flex gap-2.5">
-                  <span className="mt-0.5 h-8 w-8 shrink-0 overflow-hidden rounded-full">
-                    <CharacterAvatar
-                      id={character.id}
-                      name={character.name}
-                      src={character.avatarUrl}
-                      sizes="32px"
-                    />
-                  </span>
-                  <div className="max-w-[85%] min-w-0">
-                    <div className="bg-surface-2 rounded-2xl rounded-tl-md px-4 py-2.5 text-[15px] leading-relaxed whitespace-pre-wrap">
-                      {m.streaming && !m.content ? (
-                        <span className="flex gap-1 py-1.5" aria-label={`${character.name} is typing`}>
-                          {[0, 1, 2].map((d) => (
-                            <span
-                              key={d}
-                              className="bg-muted h-1.5 w-1.5 animate-bounce rounded-full"
-                              style={{ animationDelay: `${d * 120}ms` }}
-                            />
-                          ))}
-                        </span>
-                      ) : (
+              {visible.map((m) =>
+                m.role === "system" ? (
+                  <div key={m.ckey ?? m.id} className={cn(m.ckey && "animate-msg")}>
+                    <CrisisCard lines={props.helplines} />
+                  </div>
+                ) : m.role === "user" ? (
+                  <div
+                    key={m.ckey ?? m.id}
+                    className={cn("group flex flex-col items-end gap-1", m.ckey && "animate-msg")}
+                  >
+                    {editing === m.id ? (
+                      <EditBox initial={m.content} onCancel={() => setEditing(null)} onSave={saveEdit} />
+                    ) : (
+                      <div className="bg-text text-bg max-w-[85%] rounded-2xl rounded-br-md px-4 py-2.5 text-[15px] leading-relaxed whitespace-pre-wrap">
                         <MessageText text={m.content} />
-                      )}
-                    </div>
-                    {!m.streaming && m.id > 0 && (
-                      <div className="text-muted mt-1 flex items-center gap-0.5">
-                        <IconButton label="Good reply" pressed={m.rating === 1} onClick={() => rate(m.id, 1)}>
-                          <ThumbsUp className="h-3.5 w-3.5" />
-                        </IconButton>
-                        <IconButton
-                          label="Bad reply"
-                          pressed={m.rating === -1}
-                          onClick={() => rate(m.id, -1)}
-                        >
-                          <ThumbsDown className="h-3.5 w-3.5" />
-                        </IconButton>
-                        {canRegenerate && m.id === lastAssistant?.id && (
-                          <IconButton label="Regenerate reply" onClick={regenerate}>
-                            <RotateCcw className="h-3.5 w-3.5" />
-                          </IconButton>
-                        )}
-                        <ReportButton targetType="message" targetId={String(m.id)} label="" />
                       </div>
                     )}
+                    {m.id === lastUser?.id && m.id > 0 && !busy && editing === null && (
+                      <button
+                        type="button"
+                        onClick={() => setEditing(m.id)}
+                        className="text-muted hover:text-text flex items-center gap-1 text-xs"
+                      >
+                        <Pencil className="h-3 w-3" aria-hidden="true" /> Edit
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <div key={m.ckey ?? m.id} className={cn("flex gap-2.5", m.ckey && "animate-msg")}>
+                    <span className="mt-0.5 h-8 w-8 shrink-0 overflow-hidden rounded-full">
+                      <CharacterAvatar
+                        id={character.id}
+                        name={character.name}
+                        src={character.avatarUrl}
+                        sizes="32px"
+                      />
+                    </span>
+                    <div className="max-w-[85%] min-w-0">
+                      <div className="bg-surface-2 rounded-2xl rounded-tl-md px-4 py-2.5 text-[15px] leading-relaxed whitespace-pre-wrap">
+                        {m.streaming && !m.content ? (
+                          <span className="flex gap-1 py-1.5" aria-label={`${character.name} is typing`}>
+                            {[0, 1, 2].map((d) => (
+                              <span
+                                key={d}
+                                className="bg-muted h-1.5 w-1.5 animate-bounce rounded-full"
+                                style={{ animationDelay: `${d * 120}ms` }}
+                              />
+                            ))}
+                          </span>
+                        ) : m.ckey ? (
+                          <SmoothText text={m.content} />
+                        ) : (
+                          <MessageText text={m.content} />
+                        )}
+                      </div>
+                      {!m.streaming && m.id > 0 && (
+                        <div className="text-muted mt-1 flex items-center gap-0.5">
+                          <IconButton
+                            label="Good reply"
+                            pressed={m.rating === 1}
+                            onClick={() => rate(m.id, 1)}
+                          >
+                            <ThumbsUp className="h-3.5 w-3.5" />
+                          </IconButton>
+                          <IconButton
+                            label="Bad reply"
+                            pressed={m.rating === -1}
+                            onClick={() => rate(m.id, -1)}
+                          >
+                            <ThumbsDown className="h-3.5 w-3.5" />
+                          </IconButton>
+                          {canRegenerate && m.id === lastAssistant?.id && (
+                            <IconButton label="Regenerate reply" onClick={regenerate}>
+                              <RotateCcw className="h-3.5 w-3.5" />
+                            </IconButton>
+                          )}
+                          <ReportButton targetType="message" targetId={String(m.id)} label="" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ),
+              )}
+
+              {notice?.kind === "limit" && (
+                <div role="alert" className="border-border bg-surface rounded-2xl border p-5 text-center">
+                  <p className="font-extrabold">
+                    You&apos;ve used today&apos;s {props.freeLimit} free messages
+                  </p>
+                  <p className="text-muted mt-1 text-sm">
+                    They refill at midnight (UTC). Keep going with Beans (1 per message) or get unlimited chat
+                    with Sippa Plus.
+                  </p>
+                  <div className="mt-4 flex flex-wrap justify-center gap-2">
+                    {notice.beans >= 1 ? (
+                      <button type="button" onClick={continueWithBeans} className={buttonClass()}>
+                        Continue with Beans · {notice.beans} left
+                      </button>
+                    ) : null}
+                    <Link
+                      href="/app/plus"
+                      className={buttonClass({ variant: notice.beans >= 1 ? "secondary" : "primary" })}
+                    >
+                      {notice.beans >= 1 ? "Get Plus" : "Get Beans or Plus"}
+                    </Link>
                   </div>
                 </div>
-              ),
-            )}
-
-            {notice?.kind === "limit" && (
-              <div role="alert" className="border-border bg-surface rounded-2xl border p-5 text-center">
-                <p className="font-extrabold">
-                  You&apos;ve used today&apos;s {props.freeLimit} free messages
+              )}
+              {(notice?.kind === "blocked" || notice?.kind === "error") && (
+                <p role="alert" className="text-lover-ink text-center text-sm font-medium">
+                  {notice.text}
                 </p>
-                <p className="text-muted mt-1 text-sm">
-                  They refill at midnight (UTC). Keep going with Beans (1 per message) or get unlimited chat
-                  with Sippa Plus.
-                </p>
-                <div className="mt-4 flex flex-wrap justify-center gap-2">
-                  {notice.beans >= 1 ? (
-                    <button type="button" onClick={continueWithBeans} className={buttonClass()}>
-                      Continue with Beans · {notice.beans} left
-                    </button>
-                  ) : null}
-                  <Link
-                    href="/app/plus"
-                    className={buttonClass({ variant: notice.beans >= 1 ? "secondary" : "primary" })}
-                  >
-                    {notice.beans >= 1 ? "Get Plus" : "Get Beans or Plus"}
-                  </Link>
-                </div>
-              </div>
-            )}
-            {(notice?.kind === "blocked" || notice?.kind === "error") && (
-              <p role="alert" className="text-lover-ink text-center text-sm font-medium">
-                {notice.text}
-              </p>
-            )}
+              )}
+            </div>
           </div>
+          {showJump && (
+            <button
+              type="button"
+              onClick={jumpToLatest}
+              className="bg-text text-bg animate-msg absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-bold shadow-lg"
+            >
+              <ArrowDown className="h-3.5 w-3.5" aria-hidden="true" />
+              Jump to latest
+            </button>
+          )}
         </div>
 
         {/* composer */}
@@ -400,6 +449,7 @@ export function ChatView(props: Props) {
               Message {character.name}
             </label>
             <textarea
+              ref={inputRef}
               id="chat-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -650,4 +700,35 @@ function MemoryPanel({
       </div>
     </aside>
   );
+}
+
+/**
+ * Reveals streamed text at a steady pace instead of in network-sized bursts.
+ * Catches up faster when it falls behind; instant for reduced-motion users.
+ */
+function SmoothText({ text }: { text: string }) {
+  const [shown, setShown] = useState(0);
+  const shownRef = useRef(0);
+  const target = useRef(text);
+  target.current = text;
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      shownRef.current = text.length;
+      setShown(text.length);
+      return;
+    }
+    let raf = 0;
+    const tick = () => {
+      const gap = target.current.length - shownRef.current;
+      if (gap <= 0) return; // caught up — stop until more text arrives
+      shownRef.current += Math.max(1, Math.ceil(gap / 8));
+      setShown(shownRef.current);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [text]);
+
+  return <MessageText text={text.slice(0, shown)} />;
 }

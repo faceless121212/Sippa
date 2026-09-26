@@ -1,4 +1,4 @@
-import { Coffee, Sparkles } from "lucide-react";
+import { BrandIcon } from "@/components/BrandIcon";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -32,13 +32,7 @@ export default async function DemoCheckoutPage({
       <div className="border-border bg-surface mt-6 rounded-2xl border p-6">
         <p className="text-muted text-xs font-bold tracking-[0.08em] uppercase">Order summary</p>
         <div className="mt-3 flex items-center gap-3">
-          <span className="bg-bg flex h-11 w-11 items-center justify-center rounded-xl">
-            {isPlus ? (
-              <Sparkles className="h-5 w-5" aria-hidden="true" />
-            ) : (
-              <Coffee className="h-5 w-5" aria-hidden="true" />
-            )}
-          </span>
+          <BrandIcon name={isPlus ? "plus" : "beans"} size={44} />
           <div className="flex-1">
             <p className="font-extrabold">{info.title}</p>
             <p className="text-muted text-xs">
