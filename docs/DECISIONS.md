@@ -60,6 +60,7 @@ Answers to the kickoff questions (spec §11), recorded 2026-09-26.
 - **Beans buy**: extra character creations (50 Beans after the 3 free) and messages past the daily 30 (1 Bean each, only after the user taps "Continue with Beans").
 - **Packs**: 200 Beans €1.99 · 600 €4.99 · 1500 €9.99 (config: `src/config/site.ts`).
 - **Sippa Plus**: €7.99/month or €59.99/year; unlimited messages and creations, no ads, **300 Beans per month** (3,600 up front on yearly).
+- **Demo payments (owner decision: "hardcoded for now")**: without a Stripe key, purchases go through a simulated checkout that grants Plus/Beans with no money. Only in development, or in production with `PAYMENTS_MODE=demo`. Demo Plus lasts one period and doesn't renew. Adding `STRIPE_SECRET_KEY` switches to real Stripe automatically.
 - **Stripe Checkout + Customer Portal**, test mode only. Live keys are refused unless `ALLOW_LIVE_PAYMENTS=1`.
 - **Fulfilment** is idempotent (ledger keyed by Checkout Session / invoice id), via the webhook and by re-checking the session on the success page. All plan/Beans changes are server-only (verified by `npm run db:check`).
 - **Ads**: a single "house ad" slot for free users on Home promoting Plus; no third-party ad network or tracking yet (still flagged below). Never inside chats.

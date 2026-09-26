@@ -2,6 +2,7 @@ import "server-only";
 import Stripe from "stripe";
 import { beanPacks, pricing, STRIPE_ITEMS, type StripeItem } from "@/config/site";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { expireDemoPlus } from "./demo";
 
 /**
  * Stripe billing (test mode). Plan and Beans change ONLY here, after Stripe
@@ -140,6 +141,7 @@ export async function fulfilCheckout(sessionId: string, expectUserId?: string) {
 
 /** Re-reads the user's subscription from Stripe (covers missed webhooks locally). */
 export async function syncSubscription(userId: string) {
+  await expireDemoPlus(userId);
   if (!stripeConfigured()) return;
   const { data: p } = await createAdminClient()
     .from("profiles")

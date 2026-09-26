@@ -81,7 +81,11 @@ Without Supabase keys the app still runs: Explore and character pages read the l
 
 **Google sign-in** (optional): create an OAuth client in Google Cloud Console, then enable the Google provider in Supabase → Authentication → Providers with its client ID and secret.
 
-## Payments (Stripe, test mode)
+## Payments
+
+**Demo mode (default in development):** with no Stripe key, "Buy" opens a simulated checkout that grants Plus or Beans instantly — no card, no money. Force it on a deployed preview with `PAYMENTS_MODE=demo`; disable with `PAYMENTS_MODE=off`.
+
+**Stripe (test mode):**
 
 1. Add `STRIPE_SECRET_KEY=sk_test_...` to `.env.local`.
 2. `npm run stripe:setup` — creates Sippa Plus (monthly/yearly), 3 Bean packs and the customer portal (safe to re-run).

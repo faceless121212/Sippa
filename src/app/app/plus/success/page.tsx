@@ -11,12 +11,13 @@ export const metadata: Metadata = { title: "Thank you" };
 export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ session_id?: string }>;
+  searchParams: Promise<{ session_id?: string; demo?: string; beans?: string }>;
 }) {
   const viewer = await requireAdult("/app/plus");
-  const { session_id } = await searchParams;
-  const result =
-    session_id && /^cs_(test|live)_[A-Za-z0-9]+$/.test(session_id) && stripeConfigured()
+  const { session_id, demo, beans } = await searchParams;
+  const result = demo
+    ? demoResult(demo, beans)
+    : session_id && /^cs_(test|live)_[A-Za-z0-9]+$/.test(session_id) && stripeConfigured()
       ? await fulfilCheckout(session_id, viewer.user.id).catch(() => ({ kind: "error" as const }))
       : { kind: "error" as const };
 
@@ -54,4 +55,12 @@ export default async function SuccessPage({
       </div>
     </div>
   );
+}
+
+/** Display-only: the grant already happened in the demo server action. */
+function demoResult(kind: string, beans?: string) {
+  if (kind === "beans") return { kind: "beans" as const, beans: Number(beans) || 0 };
+  if (kind === "plus") return { kind: "plus" as const, active: true };
+  if (kind === "duplicate") return { kind: "pending" as const };
+  return { kind: "error" as const };
 }

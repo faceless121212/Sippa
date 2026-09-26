@@ -3,8 +3,11 @@ import type { Metadata } from "next";
 import { BuyButton } from "@/components/billing/BuyButton";
 import { beanCosts, beanPacks, formatPrice, pricing, siteConfig, yearlySavingsPercent } from "@/config/site";
 import { requireAdult } from "@/lib/auth";
-import { stripeConfigured, syncSubscription } from "@/lib/billing/stripe";
+import { paymentsMode } from "@/lib/billing/mode";
+import { syncSubscription } from "@/lib/billing/stripe";
+import { cancelDemoPlus } from "./actions";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { buttonClass } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Sippa Plus" };
@@ -27,7 +30,7 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
     .eq("id", viewer.user.id)
     .single();
   const isPlus = p?.plan === "plus";
-  const ready = stripeConfigured();
+  const mode = paymentsMode();
   const savings = yearlySavingsPercent(pricing.plusMonthly, pricing.plusYearly);
 
   return (
@@ -52,9 +55,14 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
           Checkout canceled — nothing was charged.
         </p>
       )}
-      {!ready && (
+      {mode === "demo" && (
+        <p role="note" className="bg-primary rounded-xl px-3 py-2 text-sm font-semibold text-black">
+          Demo payments: purchases are simulated — no card, no real money.
+        </p>
+      )}
+      {mode === "off" && (
         <p role="status" className="border-border bg-surface rounded-xl border p-3 text-sm">
-          Payments aren&apos;t connected yet (Stripe test keys missing).
+          Payments aren&apos;t available yet.
         </p>
       )}
 
@@ -75,13 +83,24 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
           {isPlus ? (
             <div className="mt-6 space-y-2">
               <p className="text-muted text-sm">
-                {p?.subscription_status === "active" && p.plus_until
-                  ? `Renews ${new Date(p.plus_until).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.`
+                {(p?.subscription_status === "active" || p?.subscription_status === "demo") && p.plus_until
+                  ? `${p.subscription_status === "demo" ? "Demo Plus until" : "Renews"} ${new Date(p.plus_until).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.`
                   : `Status: ${p?.subscription_status ?? "active"}.`}
               </p>
-              <BuyButton portal variant="secondary">
-                Manage subscription
-              </BuyButton>
+              {p?.subscription_status === "demo" ? (
+                <form action={cancelDemoPlus}>
+                  <button
+                    type="submit"
+                    className={buttonClass({ variant: "secondary", className: "w-full" })}
+                  >
+                    Cancel Plus (demo)
+                  </button>
+                </form>
+              ) : (
+                <BuyButton portal variant="secondary">
+                  Manage subscription
+                </BuyButton>
+              )}
             </div>
           ) : (
             <div className="mt-6 grid gap-2 sm:grid-cols-2">
@@ -157,8 +176,8 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
           ))}
         </ul>
         <p className="text-muted mt-4 text-xs">
-          Test mode — use card 4242 4242 4242 4242, any future date, any CVC. Prices include VAT. Cancel
-          anytime.
+          {mode === "stripe" ? "Test mode — card 4242 4242 4242 4242, any future date, any CVC. " : ""}Prices
+          include VAT. Cancel anytime.
         </p>
       </section>
     </div>
