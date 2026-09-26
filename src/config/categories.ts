@@ -26,6 +26,8 @@ export const categories: Category[] = [
       "Long-distance",
       "Coworkers",
       "Campus (18+)",
+      "K-drama style",
+      "Mystery",
     ],
   },
   {
@@ -42,6 +44,8 @@ export const categories: Category[] = [
       "Travel Buddy",
       "Language Partner",
       "Motivator",
+      "Night Owl",
+      "Foodie",
     ],
   },
   {
@@ -55,6 +59,9 @@ export const categories: Category[] = [
       "Scientists",
       "Philosophers",
       "Artists",
+      "Composers",
+      "Writers",
+      "Rulers & Royals",
       "Legends & Myths",
       "Verified Creators",
     ],

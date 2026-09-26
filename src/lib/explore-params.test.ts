@@ -17,6 +17,7 @@ describe("parseExploreParams", () => {
       gender: "female",
       q: "tea",
       sort: "trending",
+      badge: undefined,
       offset: 0,
     });
   });
@@ -31,6 +32,7 @@ describe("parseExploreParams", () => {
       gender: undefined,
       q: undefined,
       sort: "popular",
+      badge: undefined,
       offset: 0,
     });
   });

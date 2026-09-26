@@ -73,6 +73,18 @@ export default async function ExplorePage({
           >
             All
           </FilterLink>
+          <FilterLink
+            href={exploreHref(params, { badge: params.badge === "pick" ? undefined : "pick" })}
+            active={params.badge === "pick"}
+          >
+            ⭐ Staff picks
+          </FilterLink>
+          <FilterLink
+            href={exploreHref(params, { badge: params.badge === "new" ? undefined : "new" })}
+            active={params.badge === "new"}
+          >
+            ✨ New
+          </FilterLink>
           {visibleCategories.map((c) => (
             <FilterLink
               key={c.id}

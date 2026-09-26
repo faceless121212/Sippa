@@ -15,7 +15,22 @@ export type CharacterSummary = {
   hook: string;
   tags: string[];
   messages: number;
+  badges: Badge[];
 };
+
+export type Badge = "hot" | "trending" | "new" | "pick";
+
+/** Thresholds for the computed badges. */
+const HOT_MESSAGES = 2_000_000;
+const TRENDING_SCORE = 20;
+
+export function computeBadges(curated: string[] | undefined, messages: number, trending: number): Badge[] {
+  const out: Badge[] = [];
+  if (messages >= HOT_MESSAGES) out.push("hot");
+  if (trending >= TRENDING_SCORE) out.push("trending");
+  for (const b of curated ?? []) if (b === "new" || b === "pick") out.push(b);
+  return out;
+}
 
 export type CharacterDetail = CharacterSummary & {
   description: string;
@@ -33,6 +48,8 @@ export type ExploreQuery = {
   gender?: Gender;
   q?: string;
   sort?: Sort;
+  /** Only characters with this curated badge. */
+  badge?: "new" | "pick";
   offset?: number;
   limit?: number;
 };
@@ -49,6 +66,8 @@ type Row = {
   hook: string;
   tags: string[];
   message_count: number;
+  trending_score?: number;
+  badges?: string[];
   description?: string;
   personality?: { traits?: string[] };
   speaking_style?: string;
@@ -56,7 +75,8 @@ type Row = {
   creator_id?: string | null;
 };
 
-const SUMMARY_COLUMNS = "id,name,age,gender,category,famous_type,hook,tags,message_count";
+const SUMMARY_COLUMNS =
+  "id,name,age,gender,category,famous_type,hook,tags,message_count,trending_score,badges";
 
 function fromRow(r: Row): CharacterSummary {
   return {
@@ -69,6 +89,7 @@ function fromRow(r: Row): CharacterSummary {
     hook: r.hook,
     tags: r.tags ?? [],
     messages: Number(r.message_count ?? 0),
+    badges: computeBadges(r.badges, Number(r.message_count ?? 0), r.trending_score ?? 0),
   };
 }
 
@@ -83,6 +104,7 @@ function fromSeed(c: Character): CharacterSummary {
     hook: c.hook,
     tags: c.tags,
     messages: c.messages,
+    badges: computeBadges(c.badges, c.messages, c.trending),
   };
 }
 
@@ -95,6 +117,7 @@ function querySeed(query: ExploreQuery, viewerIsAdult: boolean): CharacterSummar
       (!query.category || c.category === query.category) &&
       (!query.tag || c.tags.includes(query.tag)) &&
       (!query.gender || c.gender === query.gender) &&
+      (!query.badge || (c.badges ?? []).includes(query.badge)) &&
       (!q || `${c.name} ${c.hook} ${c.tags.join(" ")}`.toLowerCase().includes(q)),
   );
   if (query.sort === "trending") list = [...list].sort((a, b) => b.trending - a.trending);
@@ -120,6 +143,7 @@ export async function listCharacters(
   if (query.category) req = req.eq("category", query.category);
   if (query.tag) req = req.contains("tags", [query.tag]);
   if (query.gender) req = req.eq("gender", query.gender);
+  if (query.badge) req = req.contains("badges", [query.badge]);
   if (query.q?.trim()) {
     const term = query.q.trim().replace(/[%_,()]/g, " ");
     req = req.or(`name.ilike.%${term}%,hook.ilike.%${term}%`);

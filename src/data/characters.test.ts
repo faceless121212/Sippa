@@ -6,12 +6,9 @@ import { seedCharacters } from "./characters";
 const THIS_YEAR = new Date().getFullYear();
 
 describe("seed characters (spec §6 rules)", () => {
-  it("has 8 Lover, 8 Friend and 8 Famous with unique ids", () => {
+  it("has at least 8 characters per category with unique ids", () => {
     for (const cat of ["lover", "friend", "famous"]) {
-      expect(
-        seedCharacters.filter((c) => c.category === cat),
-        cat,
-      ).toHaveLength(8);
+      expect(seedCharacters.filter((c) => c.category === cat).length, cat).toBeGreaterThanOrEqual(8);
     }
     expect(new Set(seedCharacters.map((c) => c.id)).size).toBe(seedCharacters.length);
   });

@@ -32,6 +32,7 @@ async function main() {
       status: "approved",
       message_count: c.messages,
       trending_score: c.trending,
+      badges: c.badges ?? [],
     }));
     await sql`
       insert into public.characters ${sql(rows)}
@@ -43,7 +44,7 @@ async function main() {
         first_message = excluded.first_message, example_dialogues = excluded.example_dialogues,
         tags = excluded.tags, avatar_url = excluded.avatar_url, visibility = excluded.visibility,
         status = excluded.status, message_count = excluded.message_count,
-        trending_score = excluded.trending_score, updated_at = now()`;
+        trending_score = excluded.trending_score, badges = excluded.badges, updated_at = now()`;
     const [{ count }] =
       await sql`select count(*)::int as count from public.characters where creator_id is null`;
     console.log(`Seeded ${rows.length} characters (${count} official in DB).`);

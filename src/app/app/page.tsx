@@ -14,14 +14,32 @@ export const metadata: Metadata = { title: "Home" };
 type Collection = { title: string; subtitle: string; query: ExploreQuery; adultsOnly?: boolean };
 
 const COLLECTIONS: Collection[] = [
+  { title: "⭐ Staff picks", subtitle: "Our favourites this week.", query: { badge: "pick" } },
+  { title: "✨ Just added", subtitle: "Fresh from the café.", query: { badge: "new" } },
   {
     title: "Slow burns",
     subtitle: "Take your time.",
     query: { category: "lover", tag: "Slow Burn" },
     adultsOnly: true,
   },
+  {
+    title: "K-drama nights",
+    subtitle: "Fake dates and real feelings.",
+    query: { tag: "K-drama style" },
+    adultsOnly: true,
+  },
   { title: "Comfort corner", subtitle: "For the 2am feelings.", query: { tag: "Comfort" } },
-  { title: "Great minds", subtitle: "History, on call.", query: { category: "famous" } },
+  {
+    title: "Rulers & royals",
+    subtitle: "Emperors, queens and strategists.",
+    query: { tag: "Rulers & Royals" },
+  },
+  {
+    title: "Writers & composers",
+    subtitle: "Austen, Wilde, Chopin, Mozart.",
+    query: { category: "famous", tag: "Writers" },
+  },
+  { title: "Great minds", subtitle: "History, on call.", query: { category: "famous", tag: "Scientists" } },
   {
     title: "Get things done",
     subtitle: "Study, train, level up.",
@@ -46,13 +64,13 @@ export default async function HomePage() {
   return (
     <div className="mx-auto max-w-6xl space-y-10 px-4 py-6 sm:px-6 md:py-8">
       {/* banner */}
-      <section className="bg-text text-bg relative overflow-hidden rounded-2xl p-6 sm:p-8">
+      <section className="relative overflow-hidden rounded-2xl bg-black p-6 text-white ring-1 ring-white/10 sm:p-8">
         <div className="relative z-10 max-w-md">
           <p className="text-primary text-xs font-bold tracking-[0.08em] uppercase">
             {name ? `Welcome back, ${name}` : "Welcome to Sippa"}
           </p>
           <h1 className="mt-2 text-3xl font-extrabold tracking-[-0.03em] sm:text-4xl">Brew someone new.</h1>
-          <p className="mt-2 text-sm opacity-70">Describe them in one line. Chat in seconds.</p>
+          <p className="mt-2 text-sm text-white/70">Describe them in one line. Chat in seconds.</p>
           <Link href="/app/create" className={buttonClass({ className: "mt-5" })}>
             <Sparkles className="h-4 w-4" aria-hidden="true" />
             Create a character

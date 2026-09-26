@@ -7,6 +7,7 @@ export type ExploreParams = {
   gender?: Gender;
   q?: string;
   sort: "popular" | "trending" | "new";
+  badge?: "new" | "pick";
   offset: number;
 };
 
@@ -30,6 +31,7 @@ export function parseExploreParams(raw: Raw): ExploreParams {
   const gender = get(raw, "gender");
   const sort = get(raw, "sort");
   const q = get(raw, "q")?.trim().slice(0, 60);
+  const badge = get(raw, "badge");
   const offset = Math.max(0, Math.min(10_000, Number.parseInt(get(raw, "offset") ?? "0", 10) || 0));
   return {
     category: category && CATEGORY_IDS.includes(category) ? (category as CategoryId) : undefined,
@@ -37,6 +39,7 @@ export function parseExploreParams(raw: Raw): ExploreParams {
     gender: gender && GENDERS.includes(gender) ? (gender as Gender) : undefined,
     q: q || undefined,
     sort: sort && SORTS.includes(sort) ? (sort as ExploreParams["sort"]) : "popular",
+    badge: badge === "new" || badge === "pick" ? badge : undefined,
     offset,
   };
 }
@@ -45,7 +48,7 @@ export function parseExploreParams(raw: Raw): ExploreParams {
 export function exploreHref(base: Partial<ExploreParams>, patch: Partial<ExploreParams> = {}): string {
   const merged = { ...base, ...patch };
   const sp = new URLSearchParams();
-  for (const key of ["category", "tag", "gender", "q", "sort"] as const) {
+  for (const key of ["category", "tag", "gender", "q", "badge", "sort"] as const) {
     const v = merged[key];
     if (v && !(key === "sort" && v === "popular")) sp.set(key, String(v));
   }

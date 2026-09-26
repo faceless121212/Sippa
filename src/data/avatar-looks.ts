@@ -48,26 +48,6 @@ export const avatarLooks: Record<string, AvatarLook> = {
     look: "Latina, long dark wavy hair, gold hoop earrings, white linen shirt, backpack strap, bustling street-food market",
   },
   // Famous — historical, painted as imagined
-  "ada-lovelace": {
-    subject: "woman",
-    ageText: "in her late twenties",
-    look: "depicting Ada Lovelace as imagined in the 1840s, dark hair in a Victorian updo, modest high-collared deep blue velvet gown with lace neckline, study with brass gears and handwritten equations",
-  },
-  "leonardo-da-vinci": {
-    subject: "man",
-    ageText: "elderly",
-    look: "depicting Leonardo da Vinci as imagined in the Renaissance, long flowing white beard and hair, dark red cap and robe, workshop with sketches and wooden flying machines",
-  },
-  "marcus-aurelius": {
-    subject: "man",
-    ageText: "middle-aged",
-    look: "depicting the Roman emperor Marcus Aurelius as imagined, curly brown hair, full beard, laurel wreath, white toga with purple trim, marble colonnade",
-  },
-  cleopatra: {
-    subject: "woman",
-    ageText: "around thirty",
-    look: "depicting Cleopatra VII as imagined, black braided hair, gold diadem, teal and gold ancient Egyptian garments, palace terrace over the Nile at dusk",
-  },
   // Creator demo results
   "elio-marsh": {
     subject: "man",
@@ -117,24 +97,120 @@ export const avatarLooks: Record<string, AvatarLook> = {
     look: "Nigerian, short natural hair with a colourful headwrap, apron over a bright patterned top, big laugh, holding a wooden spoon, warm busy restaurant kitchen",
   },
   // Phase 2 additions — Famous (historical, painted as imagined)
+  // Phase 2b — more Lover women (21+)
+  "yuna-seo": {
+    subject: "woman",
+    ageText: "29-year-old",
+    look: "Korean professional illustrator, sophisticated grown woman, shoulder-length wavy black hair, small gold earrings, soft lipstick, confident warm smile, oatmeal wool blazer over a black turtleneck, holding a coffee cup and a sketchbook, modern loft studio with warm light",
+  },
+  "chloe-martin": {
+    subject: "woman",
+    look: "French, beautiful, wavy chestnut bob, red lipstick, confident amused smile, black turtleneck and a thin gold necklace, elegant Paris art gallery with framed paintings",
+  },
+  "valentina-cruz": {
+    subject: "woman",
+    look: "Latina, beautiful, long dark curly hair with a red flower tucked behind her ear, radiant laugh, red wrap top, warm-lit dance studio with mirrors",
+  },
+  "hana-mori": {
+    subject: "woman",
+    ageText: "28-year-old",
+    look: "Japanese bookshop owner, sophisticated grown woman, shoulder-length wavy brown hair, thin gold glasses, small pearl earrings, soft lipstick, burgundy turtleneck sweater, gentle knowing smile, cosy Kyoto bookshop with warm lamps",
+  },
+  "aria-blake": {
+    subject: "woman",
+    look: "beautiful, sleek platinum-blonde bob, smoky eyes, knowing half-smile, black satin blouse, rooftop bar at night with city lights bokeh",
+  },
+  "nadia-petrova": {
+    subject: "woman",
+    look: "Russian, beautiful, sleek blonde hair in a tight ballet bun, cool grey eyes, poised elegant expression, long-sleeved high-neck black rehearsal sweater, backstage theatre dressing room with mirror lights",
+  },
+  "leila-haddad": {
+    subject: "woman",
+    look: "Lebanese, beautiful, long dark wavy hair tied back, warm brown eyes, reassuring smile, navy scrubs with a stethoscope around her neck, hospital corridor at night",
+  },
+  "sienna-reyes": {
+    subject: "woman",
+    look: "Portuguese, beautiful, mature adult face, sun-kissed skin, long sun-bleached wavy hair, light freckles, bright smile, zipped-up wetsuit top, beach at golden hour with a surfboard",
+  },
+  // Famous — iconic historical likenesses, painted (never photos)
+  "ada-lovelace": {
+    subject: "woman",
+    ageText: "in her late twenties",
+    look: "Ada Lovelace, resembling her famous 1840 portrait by Alfred Chalon: dark hair parted in the middle with soft ringlets, gentle confident gaze, modest high-collared deep blue velvet gown with a lace collar buttoned to the throat, Victorian study with brass gears and handwritten equations",
+  },
+  "leonardo-da-vinci": {
+    subject: "man",
+    ageText: "elderly",
+    look: "Leonardo da Vinci, resembling his famous red-chalk self-portrait: long wavy white hair and a long flowing white beard, deep-set wise eyes, dark red Renaissance robe, workshop with sketches of flying machines",
+  },
+  "marcus-aurelius": {
+    subject: "man",
+    ageText: "middle-aged",
+    look: "the Roman emperor Marcus Aurelius, resembling his famous marble busts: thick curly brown hair, full curly beard, calm heavy-lidded eyes, white toga with purple trim, laurel wreath, marble colonnade",
+  },
+  cleopatra: {
+    subject: "woman",
+    ageText: "around thirty",
+    look: "Cleopatra VII of Egypt, resembling Hellenistic depictions on her coins and busts: black hair braided back into a bun, royal diadem ribbon, gold jewellery, kohl-lined eyes, teal and gold royal garments, palace terrace over the Nile",
+  },
   "nikola-tesla": {
     subject: "man",
-    ageText: "in his forties",
-    look: "depicting Nikola Tesla as imagined in the 1890s, slicked-back dark hair, thin moustache, dark three-piece suit, laboratory with glowing coils and arcs of electricity",
+    ageText: "in his thirties",
+    look: "Nikola Tesla, resembling his famous 1890s photographs: slicked-back dark hair parted in the middle, thin neat moustache, intense deep-set eyes, dark suit with high white collar, laboratory with crackling electric coils",
   },
   "marie-curie": {
     subject: "woman",
     ageText: "in her forties",
-    look: "depicting Marie Curie as imagined in the early 1900s, hair pinned up, modest high-collared black dress, laboratory with glassware and a faint glowing vial",
+    look: "Marie Curie, resembling her famous early-1900s photographs: dark-blonde hair pinned up loosely, serious gentle expression, plain high-collared black dress, laboratory with glassware and a faint glowing vial",
   },
   "william-shakespeare": {
     subject: "man",
     ageText: "in his forties",
-    look: "depicting William Shakespeare as imagined, receding hairline, small beard and moustache, white ruff collar, dark doublet, quill in hand, candlelit writing desk",
+    look: "William Shakespeare, resembling the Chandos portrait: receding hairline, dark hair to the collar, short dark beard and moustache, small gold hoop earring, white falling-band collar, black doublet, candlelit desk with quill",
   },
   "vincent-van-gogh": {
     subject: "man",
     ageText: "in his thirties",
-    look: "depicting Vincent van Gogh as imagined, red beard, short reddish hair, blue work jacket, painting at an easel under a swirling starry night sky",
+    look: "Vincent van Gogh, resembling his famous self-portraits: short cropped red-orange hair, red beard, intense green-blue eyes, blue work jacket, background of swirling bold brushstrokes like his starry night paintings",
+  },
+  "frederic-chopin": {
+    subject: "man",
+    ageText: "in his thirties",
+    look: "Frédéric Chopin, resembling his famous portraits: wavy light-brown hair, clean-shaven slender pale face, soulful eyes, dark tailcoat with a high white cravat, seated at a grand piano in a candlelit Parisian salon",
+  },
+  "nicolaus-copernicus": {
+    subject: "man",
+    ageText: "in his fifties",
+    look: "Nicolaus Copernicus, resembling the famous Toruń portrait: shoulder-length dark hair, clean-shaven, thoughtful gaze, red Renaissance robe, holding a brass armillary sphere, night sky through a window",
+  },
+  "napoleon-bonaparte": {
+    subject: "man",
+    ageText: "in his thirties",
+    look: "Napoleon Bonaparte, resembling Jacques-Louis David's famous portraits: short dark hair combed forward, clean-shaven, piercing eyes, hand tucked into his waistcoat, dark blue military uniform with gold epaulettes and the Légion d'honneur",
+  },
+  "wolfgang-amadeus-mozart": {
+    subject: "man",
+    ageText: "in his thirties",
+    look: "Wolfgang Amadeus Mozart, resembling his famous portraits: powdered white wig tied back, bright playful eyes, red coat with a white lace jabot, harpsichord in a gilded Viennese salon",
+  },
+  "queen-elizabeth-i": {
+    subject: "woman",
+    ageText: "in her fifties",
+    look: "Queen Elizabeth I of England, resembling the famous Armada Portrait: very pale face, curly red hair adorned with pearls, enormous white lace ruff collar, jewel-encrusted gown, regal steady gaze, royal palace",
+  },
+  "jane-austen": {
+    subject: "woman",
+    ageText: "in her thirties",
+    look: "Jane Austen, resembling the famous portrait sketch by her sister Cassandra: brown curls under a white lace cap, bright amused eyes, high-waisted Regency dress, writing desk by a window in a Hampshire cottage",
+  },
+  "oscar-wilde": {
+    subject: "man",
+    ageText: "in his late twenties",
+    look: "Oscar Wilde, resembling his famous 1882 photographs: long wavy dark hair, clean-shaven, heavy-lidded amused eyes, velvet jacket with a green carnation in the lapel, elegant Victorian drawing room",
+  },
+  "abraham-lincoln": {
+    subject: "man",
+    ageText: "in his fifties",
+    look: "Abraham Lincoln, resembling his famous portraits: tall and gaunt, deep-set kind eyes, dark hair, chin beard without a moustache, black frock coat and bow tie, candlelit study",
   },
 };
