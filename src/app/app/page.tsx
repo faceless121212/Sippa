@@ -4,6 +4,7 @@ import Link from "next/link";
 import { CharacterAvatar } from "@/components/CharacterAvatar";
 import { CharacterCard } from "@/components/CharacterCard";
 import { HouseAd } from "@/components/billing/HouseAd";
+import { BrandIcon } from "@/components/BrandIcon";
 import { buttonClass } from "@/components/ui/button";
 import { getViewer, viewerIsAdult } from "@/lib/auth";
 import { listCharacters, type CharacterSummary, type ExploreQuery } from "@/lib/characters";
@@ -64,6 +65,19 @@ export default async function HomePage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-10 px-4 py-6 sm:px-6 md:py-8">
+      {viewer?.profile && (
+        <div className="-mb-6 flex justify-end">
+          <Link
+            href="/app/plus"
+            className="border-border bg-surface hover:bg-surface-2 flex items-center gap-2 rounded-xl border py-1.5 pr-3 pl-1.5 text-sm transition-colors"
+          >
+            <BrandIcon name="flowers" size={28} />
+            <strong className="text-base">{viewer.profile.beans}</strong> Flowers
+            <span className="text-muted text-xs">· Get more</span>
+          </Link>
+        </div>
+      )}
+
       {/* banner */}
       <section className="relative overflow-hidden rounded-2xl bg-black p-6 text-white ring-1 ring-white/10 sm:p-8">
         <div className="relative z-10 max-w-md">

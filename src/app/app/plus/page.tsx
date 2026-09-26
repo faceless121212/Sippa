@@ -46,7 +46,7 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
         <div className="border-border bg-surface flex items-center gap-2 rounded-xl border px-4 py-2.5">
           <BrandIcon name="flowers" size={28} />
           <span className="text-sm">
-            <strong className="text-lg">{p?.beans ?? 0}</strong> Beans
+            <strong className="text-lg">{p?.beans ?? 0}</strong> Flowers
           </span>
         </div>
       </div>
