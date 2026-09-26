@@ -91,21 +91,19 @@ export default async function HomePage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-10 px-4 py-6 sm:px-6 md:py-8">
-      {viewer?.profile && (
-        <div className="-mb-6 flex justify-end">
+      {/* banner */}
+      <section className="relative overflow-hidden rounded-2xl bg-black p-6 pt-16 text-white ring-1 ring-white/10 sm:p-8">
+        {viewer?.profile && (
           <Link
             href="/app/plus"
-            className="border-border bg-surface hover:bg-surface-2 flex items-center gap-2 rounded-xl border py-1.5 pr-3 pl-1.5 text-sm transition-colors"
+            aria-label={`${viewer.profile.beans} Flowers — get more`}
+            className="absolute top-3 right-3 z-20 flex items-center gap-2 rounded-xl bg-black/60 py-1.5 pr-3 pl-1.5 text-sm text-white ring-1 ring-white/15 backdrop-blur-md transition-colors hover:bg-black/75"
           >
-            <BrandIcon name="flowers" size={28} />
-            <strong className="text-base">{viewer.profile.beans}</strong> Flowers
-            <span className="text-muted text-xs">· Get more</span>
+            <BrandIcon name="flowers" size={26} />
+            <strong className="text-base">{viewer.profile.beans}</strong>
+            <span className="text-white/80">Flowers</span>
           </Link>
-        </div>
-      )}
-
-      {/* banner */}
-      <section className="relative overflow-hidden rounded-2xl bg-black p-6 text-white ring-1 ring-white/10 sm:p-8">
+        )}
         <div className="relative z-10 max-w-md">
           <p className="text-primary text-xs font-bold tracking-[0.08em] uppercase">
             {name ? `Welcome back, ${name}` : "Welcome to Sippa"}
