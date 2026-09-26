@@ -21,8 +21,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ cha
     const screened = await screenUserMessage(ctx, content, request.headers);
     if (screened) return screened;
 
-    const remaining = await consumeAllowance(ctx);
-    if (remaining === "limit") return limitResponse(pricing.freeMessagesPerDay);
+    const remaining = await consumeAllowance(ctx, parsed.data.useBeans);
+    if (remaining && typeof remaining === "object")
+      return limitResponse(pricing.freeMessagesPerDay, remaining.beans);
 
     const { data: saved, error } = await ctx.admin
       .from("messages")

@@ -1,6 +1,15 @@
 "use client";
 
-import { Compass, Home, MessageCircle, PanelLeftClose, PanelLeftOpen, Plus, User } from "lucide-react";
+import {
+  Compass,
+  Home,
+  MessageCircle,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Plus,
+  Sparkles,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
@@ -19,7 +28,7 @@ const NAV = [
 
 const MOBILE = ["/app", "/app/chats", "/app/create", "/app/explore", "/app/profile"];
 
-export type ShellViewer = { signedIn: boolean; name: string | null };
+export type ShellViewer = { signedIn: boolean; name: string | null; plan?: "free" | "plus" };
 
 function isActive(pathname: string, href: string) {
   return href === "/app" ? pathname === "/app" : pathname === href || pathname.startsWith(`${href}/`);
@@ -109,6 +118,19 @@ export function AppShell({ viewer, children }: { viewer: ShellViewer; children: 
         </nav>
 
         <div className="mt-auto space-y-2">
+          {viewer.signedIn && viewer.plan !== "plus" && (
+            <Link
+              href="/app/plus"
+              title="Sippa Plus"
+              className={cn(
+                "bg-primary flex h-10 items-center justify-center gap-2 rounded-lg text-sm font-bold text-black",
+                !collapsed && "lg:justify-start lg:px-3",
+              )}
+            >
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
+              <span className={cn(collapsed ? "sr-only" : "sr-only lg:not-sr-only")}>Get Plus</span>
+            </Link>
+          )}
           <div className={cn("flex", collapsed ? "justify-center" : "justify-center lg:justify-start")}>
             <ThemeToggle />
           </div>

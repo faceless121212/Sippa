@@ -24,7 +24,40 @@ export const pricing = {
   plusMonthly: 7.99,
   plusYearly: 59.99,
   freeMessagesPerDay: 30,
+  /** Beans granted with every paid Plus period (monthly, or monthly-equivalent on yearly). */
+  plusMonthlyBeans: 300,
 } as const;
+
+/** What Beans buy (owner decision, Phase 5). */
+export const beanCosts = {
+  /** One character creation after the free ones. */
+  creation: 50,
+  /** One message past the free daily limit (only when the user opts in). */
+  message: 1,
+} as const;
+
+export type BeanPack = {
+  id: "beans_200" | "beans_600" | "beans_1500";
+  beans: number;
+  price: number;
+  label?: string;
+};
+
+export const beanPacks: BeanPack[] = [
+  { id: "beans_200", beans: 200, price: 1.99 },
+  { id: "beans_600", beans: 600, price: 4.99, label: "Popular" },
+  { id: "beans_1500", beans: 1500, price: 9.99, label: "Best value" },
+];
+
+/** Stripe lookup keys for everything sold. `npm run stripe:setup` creates them. */
+export const STRIPE_ITEMS = {
+  plus_monthly: { lookupKey: "sippa_plus_monthly", mode: "subscription" },
+  plus_yearly: { lookupKey: "sippa_plus_yearly", mode: "subscription" },
+  beans_200: { lookupKey: "sippa_beans_200", mode: "payment" },
+  beans_600: { lookupKey: "sippa_beans_600", mode: "payment" },
+  beans_1500: { lookupKey: "sippa_beans_1500", mode: "payment" },
+} as const;
+export type StripeItem = keyof typeof STRIPE_ITEMS;
 
 /** Percentage saved by paying yearly instead of 12 × monthly, rounded down. */
 export function yearlySavingsPercent(monthly: number, yearly: number): number {

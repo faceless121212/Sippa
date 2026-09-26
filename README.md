@@ -12,8 +12,8 @@ Plan and decisions: [`docs/PLAN.md`](docs/PLAN.md), [`docs/DECISIONS.md`](docs/D
 | 2     | App shell: auth + age gate, explore, character page, seed data | ✅ Done |
 | 3     | Chat (streaming, memory, limits, safety)                       | ✅ Done |
 | 4     | AI Character Creator                                           | ✅ Done |
-| 5     | Monetization (Stripe test mode, Plus, Beans, ads)              | Next    |
-| 6     | Admin, moderation, legal, polish                               | —       |
+| 5     | Monetization (Stripe test mode, Plus, Beans, ads)              | ✅ Done |
+| 6     | Admin, moderation, legal, polish                               | Next    |
 
 ## Run it
 
@@ -80,6 +80,14 @@ npm run creator:smoke  # live test: generate, rules, moderation, celebrity refus
 Without Supabase keys the app still runs: Explore and character pages read the local seed data, and sign-in shows "not set up yet".
 
 **Google sign-in** (optional): create an OAuth client in Google Cloud Console, then enable the Google provider in Supabase → Authentication → Providers with its client ID and secret.
+
+## Payments (Stripe, test mode)
+
+1. Add `STRIPE_SECRET_KEY=sk_test_...` to `.env.local`.
+2. `npm run stripe:setup` — creates Sippa Plus (monthly/yearly), 3 Bean packs and the customer portal (safe to re-run).
+3. Buy from `/app/plus` with test card `4242 4242 4242 4242`, any future date, any CVC.
+
+Locally, purchases are confirmed when you return from Checkout (the server re-checks the session with Stripe). In production also add a webhook endpoint `https://<domain>/api/billing/webhook` for `checkout.session.completed`, `invoice.paid` and `customer.subscription.*`, and set `STRIPE_WEBHOOK_SECRET`.
 
 ## Accounts checklist
 

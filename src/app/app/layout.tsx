@@ -19,6 +19,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       viewer={{
         signedIn: Boolean(viewer),
         name: viewer?.profile?.display_name ?? viewer?.user.email ?? null,
+        plan: viewer?.profile?.plan,
       }}
     >
       {children}

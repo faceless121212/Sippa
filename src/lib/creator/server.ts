@@ -1,6 +1,6 @@
 import "server-only";
 import { NextResponse } from "next/server";
-import { siteConfig } from "@/config/site";
+import { beanCosts, siteConfig } from "@/config/site";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -9,6 +9,7 @@ export type Creator = {
   userId: string;
   plan: "free" | "plus";
   creationsUsed: number;
+  beans: number;
   admin: ReturnType<typeof createAdminClient>;
 };
 
@@ -32,12 +33,12 @@ export async function requireCreator(): Promise<Creator> {
   const admin = createAdminClient();
   const { data: p } = await admin
     .from("profiles")
-    .select("is_adult,banned_at,plan,free_creations_used")
+    .select("is_adult,banned_at,plan,free_creations_used,beans")
     .eq("id", user.id)
     .maybeSingle();
   if (!p?.is_adult || p.banned_at)
     throw new CreatorError("Your account can't create characters right now.", 403);
-  return { userId: user.id, plan: p.plan, creationsUsed: p.free_creations_used, admin };
+  return { userId: user.id, plan: p.plan, creationsUsed: p.free_creations_used, beans: p.beans, admin };
 }
 
 /** Free creations left (null = unlimited on Plus). */
@@ -45,13 +46,53 @@ export function creationsLeft(c: Creator): number | null {
   return c.plan === "plus" ? null : Math.max(0, siteConfig.freeCharacterCreations - c.creationsUsed);
 }
 
+/** Free creation, Plus, or enough Beans to pay for one. */
 export function assertCanCreate(c: Creator) {
-  if (creationsLeft(c) === 0) {
+  if (creationsLeft(c) === 0 && c.beans < beanCosts.creation) {
     throw new CreatorError(
-      `You've used your ${siteConfig.freeCharacterCreations} free creations. More with Beans or Sippa Plus — coming very soon.`,
+      `You've used your ${siteConfig.freeCharacterCreations} free creations. Each new one costs ${beanCosts.creation} Beans — or go unlimited with Sippa Plus.`,
       402,
       { paywall: true },
     );
+  }
+}
+
+/** Charges for a creation at save time: free slot first, then Beans. */
+export async function chargeCreation(c: Creator): Promise<"free" | "beans"> {
+  const left = creationsLeft(c);
+  if (left === null || left > 0) {
+    await c.admin
+      .from("profiles")
+      .update({ free_creations_used: c.creationsUsed + 1 })
+      .eq("id", c.userId);
+    return "free";
+  }
+  const { data } = await c.admin.rpc("spend_beans", {
+    p_user: c.userId,
+    p_beans: beanCosts.creation,
+    p_reason: "creation",
+  });
+  if (typeof data !== "number" || data < 0) {
+    throw new CreatorError(`You need ${beanCosts.creation} Beans for another creation.`, 402, {
+      paywall: true,
+    });
+  }
+  return "beans";
+}
+
+/** Gives the charge back if saving failed afterwards. */
+export async function refundCreation(c: Creator, charged: "free" | "beans") {
+  if (charged === "free") {
+    await c.admin.from("profiles").update({ free_creations_used: c.creationsUsed }).eq("id", c.userId);
+  } else {
+    await c.admin.rpc("grant_beans", {
+      p_user: c.userId,
+      p_beans: beanCosts.creation,
+      p_type: "refund",
+      p_stripe_id: null,
+      p_amount_cents: null,
+      p_currency: null,
+    });
   }
 }
 

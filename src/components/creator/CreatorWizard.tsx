@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowUp, Bot, Check, Coffee, ImageIcon, RotateCcw, Sparkles 
 import { useRouter } from "next/navigation";
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { categories, categoryStyles, type CategoryId } from "@/config/categories";
+import { beanCosts } from "@/config/site";
 import { QUIZ, type Dials, type Draft } from "@/lib/creator/schema";
 import type { Helpline } from "@/lib/safety/crisis";
 import { cn } from "@/lib/utils";
@@ -50,11 +51,13 @@ export function CreatorWizard({
   initialCategory,
   adult,
   creationsLeft,
+  beans,
   helplines,
 }: {
   initialCategory?: CategoryId;
   adult: boolean;
   creationsLeft: number | null;
+  beans: number;
   helplines: Helpline[];
 }) {
   const router = useRouter();
@@ -119,7 +122,9 @@ export function CreatorWizard({
         </div>
         {creationsLeft !== null && (
           <span className="bg-surface-2 rounded-lg px-2.5 py-1 text-xs font-semibold">
-            {creationsLeft} free creation{creationsLeft === 1 ? "" : "s"} left
+            {creationsLeft > 0
+              ? `${creationsLeft} free creation${creationsLeft === 1 ? "" : "s"} left`
+              : `${beanCosts.creation} Beans per creation · you have ${beans}`}
           </span>
         )}
       </div>
@@ -129,7 +134,11 @@ export function CreatorWizard({
       {error && (
         <div role="alert" className="border-border bg-surface mt-5 rounded-xl border p-4 text-sm">
           <p className="font-semibold">{error}</p>
-          {paywall && <p className="text-muted mt-1">Beans and Sippa Plus arrive in the next update.</p>}
+          {paywall && (
+            <a href="/app/plus" className={buttonClass({ size: "sm", className: "mt-3" })}>
+              Get Beans or Plus
+            </a>
+          )}
         </div>
       )}
 

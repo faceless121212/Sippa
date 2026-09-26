@@ -158,6 +158,33 @@ async function main() {
           counts.push((await tx`select public.consume_message(${adult}, 3) as n`)[0].n);
         check(`daily limit stops at the cap (got ${counts.join(",")})`, counts.join(",") === "1,2,3,-1");
 
+        // ── billing (Phase 5) ──
+        const g1 = (
+          await tx`select public.grant_beans(${adult}, 200, 'beans_pack', 'cs_test_rlscheck', 199, 'eur') as ok`
+        )[0].ok;
+        const g2 = (
+          await tx`select public.grant_beans(${adult}, 200, 'beans_pack', 'cs_test_rlscheck', 199, 'eur') as ok`
+        )[0].ok;
+        const bal = (await tx`select beans from public.profiles where id = ${adult}`)[0].beans;
+        check(
+          `the same payment can't grant Beans twice (${g1}/${g2}, balance ${bal})`,
+          g1 === true && g2 === false && bal === 200,
+        );
+        const s1 = (await tx`select public.spend_beans(${adult}, 150, 'creation') as n`)[0].n;
+        const s2 = (await tx`select public.spend_beans(${adult}, 100, 'creation') as n`)[0].n;
+        check(`Beans can't go negative (${s1}, then ${s2})`, s1 === 50 && s2 === -1);
+        await denied("users cannot grant themselves Beans", () =>
+          as(adult, () => tx`select public.grant_beans(${adult}, 99999, 'adjustment', 'x', null, null)`),
+        );
+        await denied("users cannot call spend_beans for others", () =>
+          as(teen, () => tx`select public.spend_beans(${adult}, 1, 'x')`),
+        );
+        const ledger = (await as(
+          teen,
+          () => tx`select count(*)::int as n from public.transactions where user_id = ${adult}`,
+        )) as { n: number }[];
+        check("users cannot read other people's purchases", ledger[0].n === 0);
+
         throw new Error("__rollback__");
       })
       .catch((e) => {

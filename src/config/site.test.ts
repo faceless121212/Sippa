@@ -12,3 +12,15 @@ describe("pricing helpers", () => {
     expect(formatPrice(7.99)).toBe("€7.99");
   });
 });
+
+describe("billing config", () => {
+  it("has three Bean packs with better value as they grow", async () => {
+    const { beanPacks, STRIPE_ITEMS } = await import("./site");
+    expect(beanPacks).toHaveLength(3);
+    const perBean = beanPacks.map((p) => p.price / p.beans);
+    expect(perBean[1]).toBeLessThan(perBean[0]);
+    expect(perBean[2]).toBeLessThan(perBean[1]);
+    for (const p of beanPacks) expect(STRIPE_ITEMS[p.id].mode).toBe("payment");
+    expect(STRIPE_ITEMS.plus_monthly.mode).toBe("subscription");
+  });
+});

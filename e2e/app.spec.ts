@@ -45,7 +45,7 @@ test("unknown characters 404", async ({ page }) => {
 });
 
 test("protected pages send signed-out users to login", async ({ page }) => {
-  for (const path of ["/app/chats", "/app/create", "/app/profile"]) {
+  for (const path of ["/app/chats", "/app/create", "/app/profile", "/app/plus"]) {
     await page.goto(path);
     await expect(page).toHaveURL(new RegExp(`/login\\?next=${encodeURIComponent(path).replace(/\//g, "%2F")}`));
     await expect(page.getByRole("heading", { name: "Start sipping" })).toBeVisible();

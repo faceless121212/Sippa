@@ -3,7 +3,14 @@ import { z } from "zod";
 import { moderateDraft } from "@/lib/creator/ai";
 import { checkDraft } from "@/lib/creator/rules";
 import { draftSchema } from "@/lib/creator/schema";
-import { assertCanCreate, creatorError, CreatorError, requireCreator } from "@/lib/creator/server";
+import {
+  assertCanCreate,
+  chargeCreation,
+  creatorError,
+  CreatorError,
+  refundCreation,
+  requireCreator,
+} from "@/lib/creator/server";
 
 export const maxDuration = 60;
 
@@ -54,50 +61,51 @@ export async function POST(request: Request) {
       });
     }
 
-    const img = await fetch(avatarUrl);
-    if (!img.ok) throw new CreatorError("The portrait expired — generate new ones.", 410);
-    const type = img.headers.get("content-type") ?? "image/jpeg";
-    if (!/^image\/(jpeg|png|webp)$/.test(type)) throw new CreatorError("Unsupported image.", 400);
-    const bytes = Buffer.from(await img.arrayBuffer());
-    if (bytes.length > 5 * 1024 * 1024) throw new CreatorError("Image too large.", 400);
-
+    const charged = await chargeCreation(creator);
     const id = slug(draft.name);
-    const path = `${creator.userId}/${id}.${type === "image/png" ? "png" : type === "image/webp" ? "webp" : "jpg"}`;
-    const { error: upErr } = await creator.admin.storage
-      .from("avatars")
-      .upload(path, bytes, { contentType: type });
-    if (upErr) throw upErr;
-    const { data: pub } = creator.admin.storage.from("avatars").getPublicUrl(path);
+    try {
+      const img = await fetch(avatarUrl);
+      if (!img.ok) throw new CreatorError("The portrait expired — generate new ones.", 410);
+      const type = img.headers.get("content-type") ?? "image/jpeg";
+      if (!/^image\/(jpeg|png|webp)$/.test(type)) throw new CreatorError("Unsupported image.", 400);
+      const bytes = Buffer.from(await img.arrayBuffer());
+      if (bytes.length > 5 * 1024 * 1024) throw new CreatorError("Image too large.", 400);
 
-    const { error } = await creator.admin.from("characters").insert({
-      id,
-      creator_id: creator.userId,
-      name: draft.name,
-      category: draft.category,
-      famous_type: draft.category === "famous" ? draft.famousType : null,
-      gender: draft.gender,
-      age: draft.age,
-      hook: draft.hook,
-      description: draft.description,
-      personality: { traits: draft.traits, dials: draft.dials },
-      speaking_style: draft.speakingStyle,
-      backstory: draft.backstory,
-      first_message: draft.firstMessage,
-      example_dialogues: draft.exampleDialogues,
-      tags: draft.tags,
-      avatar_url: pub.publicUrl,
-      visibility,
-      status: "approved",
-    });
-    if (error) {
-      await creator.admin.storage.from("avatars").remove([path]);
-      throw error;
+      const path = `${creator.userId}/${id}.${type === "image/png" ? "png" : type === "image/webp" ? "webp" : "jpg"}`;
+      const { error: upErr } = await creator.admin.storage
+        .from("avatars")
+        .upload(path, bytes, { contentType: type });
+      if (upErr) throw upErr;
+      const { data: pub } = creator.admin.storage.from("avatars").getPublicUrl(path);
+
+      const { error } = await creator.admin.from("characters").insert({
+        id,
+        creator_id: creator.userId,
+        name: draft.name,
+        category: draft.category,
+        famous_type: draft.category === "famous" ? draft.famousType : null,
+        gender: draft.gender,
+        age: draft.age,
+        hook: draft.hook,
+        description: draft.description,
+        personality: { traits: draft.traits, dials: draft.dials },
+        speaking_style: draft.speakingStyle,
+        backstory: draft.backstory,
+        first_message: draft.firstMessage,
+        example_dialogues: draft.exampleDialogues,
+        tags: draft.tags,
+        avatar_url: pub.publicUrl,
+        visibility,
+        status: "approved",
+      });
+      if (error) {
+        await creator.admin.storage.from("avatars").remove([path]);
+        throw error;
+      }
+    } catch (err) {
+      await refundCreation(creator, charged);
+      throw err;
     }
-    await creator.admin
-      .from("profiles")
-      .update({ free_creations_used: creator.creationsUsed + 1 })
-      .eq("id", creator.userId);
-
     return NextResponse.json({ id });
   } catch (e) {
     return creatorError(e);

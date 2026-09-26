@@ -20,8 +20,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ cha
       throw new ChatError("There's no reply to regenerate yet.", 409);
     }
 
-    const remaining = await consumeAllowance(ctx);
-    if (remaining === "limit") return limitResponse(pricing.freeMessagesPerDay);
+    const { useBeans } = ((await request.json().catch(() => ({}))) ?? {}) as { useBeans?: boolean };
+    const remaining = await consumeAllowance(ctx, useBeans === true);
+    if (remaining && typeof remaining === "object")
+      return limitResponse(pricing.freeMessagesPerDay, remaining.beans);
 
     await ctx.admin.from("messages").delete().eq("id", reply.id);
     ctx.chat.message_count -= 1;

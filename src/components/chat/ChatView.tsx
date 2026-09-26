@@ -43,7 +43,11 @@ type Props = {
   helplines: Helpline[];
 };
 
-type Notice = { kind: "limit" } | { kind: "blocked"; text: string } | { kind: "error"; text: string } | null;
+type Notice =
+  | { kind: "limit"; beans: number }
+  | { kind: "blocked"; text: string }
+  | { kind: "error"; text: string }
+  | null;
 
 const CRISIS_MARKER = "[crisis_support]";
 let tempId = -1;
@@ -57,6 +61,8 @@ export function ChatView(props: Props) {
   const [remaining, setRemaining] = useState(props.remaining);
   const [editing, setEditing] = useState<number | null>(null);
   const [panel, setPanel] = useState(false);
+  // Past the free limit, spend Beans only after the user explicitly opts in.
+  const [useBeans, setUseBeans] = useState(false);
   const abort = useRef<AbortController | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const stick = useRef(true);
@@ -124,7 +130,7 @@ export function ChatView(props: Props) {
             dropUser();
             if (optimisticUser) setInput(optimisticUser.content);
             setRemaining(0);
-            setNotice({ kind: "limit" });
+            setNotice({ kind: "limit", beans: e.beans ?? 0 });
           } else if (e.t === "blocked") {
             dropReply();
             dropUser();
@@ -154,7 +160,20 @@ export function ChatView(props: Props) {
     const content = input.trim();
     if (!content || busy) return;
     setInput("");
-    run(`/api/chats/${chatId}/messages`, { content }, { id: tempId--, role: "user", content });
+    run(`/api/chats/${chatId}/messages`, { content, useBeans }, { id: tempId--, role: "user", content });
+  };
+
+  const continueWithBeans = () => {
+    setUseBeans(true);
+    setNotice(null);
+    const content = input.trim();
+    if (!content) return;
+    setInput("");
+    run(
+      `/api/chats/${chatId}/messages`,
+      { content, useBeans: true },
+      { id: tempId--, role: "user", content },
+    );
   };
 
   const onKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -167,7 +186,7 @@ export function ChatView(props: Props) {
   const regenerate = () => {
     if (busy) return;
     setMessages((m) => (m.at(-1)?.role === "assistant" ? m.slice(0, -1) : m));
-    run(`/api/chats/${chatId}/regenerate`, null);
+    run(`/api/chats/${chatId}/regenerate`, { useBeans });
   };
 
   const saveEdit = (content: string) => {
@@ -177,7 +196,7 @@ export function ChatView(props: Props) {
     setMessages((m) => m.slice(0, idx));
     run(
       `/api/chats/${chatId}/edit`,
-      { content: content.trim() },
+      { content: content.trim(), useBeans },
       { id: tempId--, role: "user", content: content.trim() },
     );
   };
@@ -345,11 +364,22 @@ export function ChatView(props: Props) {
                   You&apos;ve used today&apos;s {props.freeLimit} free messages
                 </p>
                 <p className="text-muted mt-1 text-sm">
-                  They refill at midnight (UTC). Sippa Plus with unlimited chat is coming soon.
+                  They refill at midnight (UTC). Keep going with Beans (1 per message) or get unlimited chat
+                  with Sippa Plus.
                 </p>
-                <Link href="/#pricing" className={buttonClass({ className: "mt-4" })}>
-                  See Sippa Plus
-                </Link>
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                  {notice.beans >= 1 ? (
+                    <button type="button" onClick={continueWithBeans} className={buttonClass()}>
+                      Continue with Beans · {notice.beans} left
+                    </button>
+                  ) : null}
+                  <Link
+                    href="/app/plus"
+                    className={buttonClass({ variant: notice.beans >= 1 ? "secondary" : "primary" })}
+                  >
+                    {notice.beans >= 1 ? "Get Plus" : "Get Beans or Plus"}
+                  </Link>
+                </div>
               </div>
             )}
             {(notice?.kind === "blocked" || notice?.kind === "error") && (
@@ -401,7 +431,9 @@ export function ChatView(props: Props) {
           </div>
           {remaining !== null && (
             <p className="text-muted mx-auto mt-1.5 max-w-3xl text-center text-[11px]">
-              {remaining} free message{remaining === 1 ? "" : "s"} left today
+              {useBeans && remaining === 0
+                ? "Using Beans · 1 per message"
+                : `${remaining} free message${remaining === 1 ? "" : "s"} left today`}
             </p>
           )}
         </form>

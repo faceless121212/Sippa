@@ -38,9 +38,12 @@ export default async function ProfilePage() {
           <h1 className="truncate text-2xl font-extrabold tracking-[-0.02em]">{p.display_name ?? "You"}</h1>
           <p className="text-muted truncate text-sm">{p.email}</p>
         </div>
-        <span className="bg-surface-2 rounded-md px-2.5 py-1 text-xs font-bold uppercase">
-          {p.plan === "plus" ? "Sippa Plus" : "Free"}
-        </span>
+        <Link
+          href="/app/plus"
+          className="bg-surface-2 hover:bg-border rounded-md px-2.5 py-1 text-xs font-bold"
+        >
+          {p.plan === "plus" ? "SIPPA PLUS" : "FREE"} · {p.beans} Beans
+        </Link>
       </section>
 
       <section aria-labelledby="mine">

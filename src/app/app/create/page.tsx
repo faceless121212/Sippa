@@ -14,7 +14,7 @@ export default async function CreatePage({ searchParams }: { searchParams: Promi
   const { category } = await searchParams;
   const { data } = await createAdminClient()
     .from("profiles")
-    .select("free_creations_used")
+    .select("free_creations_used,beans")
     .eq("id", viewer.user.id)
     .maybeSingle();
   const plan = viewer.profile!.plan;
@@ -29,6 +29,7 @@ export default async function CreatePage({ searchParams }: { searchParams: Promi
       initialCategory={initial}
       adult={viewer.profile!.is_adult}
       creationsLeft={left}
+      beans={data?.beans ?? 0}
       helplines={helplinesFor(countryFromHeaders(await headers())).lines}
     />
   );

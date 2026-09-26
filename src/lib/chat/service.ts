@@ -1,7 +1,7 @@
 import "server-only";
 import { after } from "next/server";
 import type { CategoryId } from "@/config/categories";
-import { pricing } from "@/config/site";
+import { beanCosts, pricing } from "@/config/site";
 import { complete, LlmUnavailableError, streamChat } from "@/lib/llm";
 import { asksIfHuman, claimsToBeMinor, isMinorSexualContent } from "@/lib/safety/content";
 import { countryFromHeaders, detectCrisis, helplinesFor } from "@/lib/safety/crisis";
@@ -131,7 +131,7 @@ type Event =
       systemId: number;
     }
   | { t: "blocked"; message: string }
-  | { t: "limit"; limit: number }
+  | { t: "limit"; limit: number; beans: number }
   | { t: "error"; message: string };
 
 const encoder = new TextEncoder();
@@ -201,13 +201,29 @@ export async function screenUserMessage(
 }
 
 /** Uses one message from the free daily allowance. Returns remaining, or null for Plus. */
-export async function consumeAllowance(ctx: ChatContext): Promise<number | null | "limit"> {
+/** Remaining free messages (null = Plus), or a limit marker with the Beans balance. */
+export type Allowance = number | null | { limit: true; beans: number };
+
+/**
+ * Uses one message from the free daily allowance. Past the limit, spends
+ * Beans only when the user explicitly opted in (`useBeans`).
+ */
+export async function consumeAllowance(ctx: ChatContext, useBeans = false): Promise<Allowance> {
   if (ctx.plan === "plus") return null;
   const limit = pricing.freeMessagesPerDay;
   const { data, error } = await ctx.admin.rpc("consume_message", { p_user: ctx.userId, p_limit: limit });
   if (error) throw error;
-  if (data === -1) return "limit";
-  return Math.max(0, limit - (data as number));
+  if (data !== -1) return Math.max(0, limit - (data as number));
+  if (useBeans) {
+    const { data: left } = await ctx.admin.rpc("spend_beans", {
+      p_user: ctx.userId,
+      p_beans: beanCosts.message,
+      p_reason: "message",
+    });
+    if (typeof left === "number" && left >= 0) return 0;
+  }
+  const { data: p } = await ctx.admin.from("profiles").select("beans").eq("id", ctx.userId).single();
+  return { limit: true, beans: p?.beans ?? 0 };
 }
 
 export async function remainingToday(userId: string, plan: "free" | "plus"): Promise<number | null> {

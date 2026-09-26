@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CharacterAvatar } from "@/components/CharacterAvatar";
 import { CharacterCard } from "@/components/CharacterCard";
+import { HouseAd } from "@/components/billing/HouseAd";
 import { buttonClass } from "@/components/ui/button";
 import { getViewer, viewerIsAdult } from "@/lib/auth";
 import { listCharacters, type CharacterSummary, type ExploreQuery } from "@/lib/characters";
@@ -111,6 +112,8 @@ export default async function HomePage() {
           />
         </div>
       </section>
+
+      {viewer?.profile?.plan !== "plus" && <HouseAd />}
 
       {/* collections */}
       {collections.map((c) =>
