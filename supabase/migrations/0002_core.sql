@@ -83,8 +83,6 @@ create table if not exists public.characters (
 create index if not exists characters_category_idx on public.characters (category, message_count desc);
 create index if not exists characters_trending_idx on public.characters (trending_score desc);
 create index if not exists characters_tags_idx on public.characters using gin (tags);
-create index if not exists characters_search_idx on public.characters
-  using gin (to_tsvector('simple', name || ' ' || hook || ' ' || array_to_string(tags, ' ')));
 
 alter table public.characters enable row level security;
 
