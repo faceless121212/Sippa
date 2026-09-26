@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+@custom-variant light (&:where(.light, .light *));
+
+/* ------------------------------------------------------------------
+   Sippa design tokens. Dark ("espresso") is the default theme;
+   `.light` on <html> switches to the light ("latte") theme.
+   `*-ink` tokens are text-safe (WCAG AA) versions of accent colours.
+   ------------------------------------------------------------------ */
+:root {
+  --bg: #14100e;
+  --surface: #1f1916;
+  --surface-2: #2a221e;
+  --border: rgb(246 239 233 / 0.1);
+  --text: #f6efe9;
+  --muted: #a89a90;
+
+  --primary: #e8a35c;
+  --primary-hover: #f2b877;
+  --on-primary: #14100e;
+  --primary-ink: #e8a35c;
+
+  --lover: #c4577a;
+  --lover-ink: #ee8fae;
+  --friend: #6fbf8e;
+  --friend-ink: #7fd3a0;
+  --famous: #8fa7f0;
+  --famous-ink: #a9bdf7;
+
+  color-scheme: dark;
+}
+
+.light {
+  --bg: #fbf6f1;
+  --surface: #ffffff;
+  --surface-2: #f3eae2;
+  --border: rgb(20 16 14 / 0.12);
+  --text: #1f1916;
+  --muted: #6b5d55;
+
+  --primary: #e8a35c;
+  --primary-hover: #f2b877;
+  --on-primary: #14100e;
+  --primary-ink: #99561a;
+
+  --lover: #c4577a;
+  --lover-ink: #a3385c;
+  --friend: #6fbf8e;
+  --friend-ink: #2b7248;
+  --famous: #8fa7f0;
+  --famous-ink: #3552b8;
+
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-primary-ink: var(--primary-ink);
+  --color-lover: var(--lover);
+  --color-lover-ink: var(--lover-ink);
+  --color-friend: var(--friend);
+  --color-friend-ink: var(--friend-ink);
+  --color-famous: var(--famous);
+  --color-famous-ink: var(--famous-ink);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  --animate-pour: pour 700ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  --animate-steam: steam 900ms ease-in-out infinite;
+
+  @keyframes pour {
+    from {
+      opacity: 0;
+      transform: translateY(160px) scale(0.35);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes steam {
+    0%,
+    100% {
+      height: 8px;
+      opacity: 0.2;
+    }
+    50% {
+      height: 30px;
+      opacity: 0.9;
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Hide horizontal scrollbar on chip / card rows while keeping them scrollable. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

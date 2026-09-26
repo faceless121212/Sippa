@@ -4,15 +4,17 @@ See `DECISIONS.md` for the choices this plan is based on.
 
 ## Stack
 
-Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · shadcn/ui (Radix) · Framer Motion · lucide-react · Supabase (Postgres, Auth, Storage, RLS) via `@supabase/supabase-js` + `@supabase/ssr` · Anthropic SDK · fal.ai client · Stripe · Upstash Redis (rate limits) · Zod · Vitest · Playwright · ESLint + Prettier. Deploy: Vercel.
+Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · shadcn/ui (Radix) · CSS animations (Framer Motion only if a later phase needs it) · lucide-react · Supabase (Postgres, Auth, Storage, RLS) via `@supabase/supabase-js` + `@supabase/ssr` · Anthropic SDK · fal.ai client · Stripe · Upstash Redis (rate limits) · Zod · Vitest · Playwright · ESLint + Prettier. Deploy: Vercel.
 
 ## Pages
 
 **Marketing**
+
 - `/` landing (header, hero + animated creator mock, pick your vibe, creator showcase, why Sippa, hot this week, pricing, FAQ, waitlist, footer)
 - `/pricing`, `/legal/privacy`, `/legal/terms`, `/legal/guidelines`, `/legal/cookies`
 
 **App** (`/app/...`, auth required except explore + character pages)
+
 - `/login`, `/onboarding` (DOB age gate)
 - `/app` home (banner, Hot / Trending rankings, collections)
 - `/app/explore?category=&tag=&gender=&q=` (grid, infinite scroll)
@@ -56,6 +58,8 @@ Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · shadcn/ui (Radix) ·
 
 ## Dependencies (Phase 1)
 
-`next`, `react`, `react-dom`, `tailwindcss`, `@tailwindcss/postcss`, `framer-motion`, `lucide-react`, `zod`, `clsx`, `tailwind-merge`, `class-variance-authority` (shadcn), `@radix-ui/*` (as shadcn components are added), `next-themes` (theme toggle). Dev: `vitest`, `@playwright/test`, `prettier`, `eslint-config-next`.
+`next`, `react`, `react-dom`, `tailwindcss`, `@tailwindcss/postcss`, `lucide-react`, `zod`, `clsx`, `tailwind-merge`, `next-themes` (theme toggle), `server-only`. Dev: `vitest`, `@playwright/test`, `prettier`, `prettier-plugin-tailwindcss`, `eslint-config-next`.
+
+> Phase 1 note: `framer-motion` was tried and removed — the hero animation is plain CSS, which took mobile Lighthouse performance from 77 to 95+. shadcn/ui components get added in Phase 2 when the app needs dialogs, menus and forms.
 
 Later phases add: `@supabase/supabase-js`, `@supabase/ssr`, `@anthropic-ai/sdk`, `@fal-ai/client`, `stripe`, `@upstash/redis`, `@upstash/ratelimit`.
