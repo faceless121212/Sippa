@@ -19,19 +19,8 @@ export default function OpengraphImage() {
         color: "#FFFFFF",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-        <svg width="96" height="96" viewBox="0 0 32 32">
-          <path
-            d="M12 4 q-2 2.5 0 5 M16.5 3.5 q-2 3 0 6"
-            stroke="#C3FF00"
-            strokeWidth="1.8"
-            fill="none"
-            strokeLinecap="round"
-          />
-          <path d="M6 12 h17 v6 a7 7 0 0 1 -7 7 h-3 a7 7 0 0 1 -7 -7 z" fill="#C3FF00" />
-          <path d="M23 14 h1.3 a3 3 0 0 1 0 6 H22.5" stroke="#C3FF00" strokeWidth="2.2" fill="none" />
-        </svg>
-        <div style={{ fontSize: 96, fontWeight: 700 }}>{siteConfig.name}</div>
+      <div style={{ display: "flex", fontSize: 140, fontWeight: 800, letterSpacing: "-0.05em" }}>
+        sippa<span style={{ color: "#C3FF00" }}>.</span>
       </div>
       <div style={{ marginTop: 32, fontSize: 56, color: "#C3FF00" }}>{siteConfig.tagline}</div>
       <div style={{ marginTop: 24, fontSize: 32, color: "#B3B3B3" }}>

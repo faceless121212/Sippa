@@ -1,4 +1,4 @@
-/** Shared JSX for generated PNGs (PWA icons). Rendered by next/og. */
+/** Shared JSX for generated PNGs (PWA / Apple icons). Rendered by next/og. */
 export function CupIcon({ size }: { size: number }) {
   return (
     <div
@@ -9,19 +9,13 @@ export function CupIcon({ size }: { size: number }) {
         alignItems: "center",
         justifyContent: "center",
         background: "#000000",
+        color: "#C3FF00",
+        fontSize: size * 0.66,
+        fontWeight: 800,
+        letterSpacing: "-0.04em",
       }}
     >
-      <svg width={size * 0.66} height={size * 0.66} viewBox="0 0 32 32">
-        <path
-          d="M12 4 q-2 2.5 0 5 M16.5 3.5 q-2 3 0 6"
-          stroke="#C3FF00"
-          strokeWidth="1.8"
-          fill="none"
-          strokeLinecap="round"
-        />
-        <path d="M6 12 h17 v6 a7 7 0 0 1 -7 7 h-3 a7 7 0 0 1 -7 -7 z" fill="#C3FF00" />
-        <path d="M23 14 h1.3 a3 3 0 0 1 0 6 H22.5" stroke="#C3FF00" strokeWidth="2.2" fill="none" />
-      </svg>
+      S
     </div>
   );
 }

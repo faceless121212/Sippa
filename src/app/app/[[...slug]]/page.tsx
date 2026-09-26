@@ -13,7 +13,7 @@ export default function AppPlaceholder() {
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center px-4 text-center">
       <LogoMark className="h-14 w-14" />
-      <h1 className="font-display mt-6 text-4xl font-semibold tracking-tight">The app is still brewing</h1>
+      <h1 className="font-display mt-6 text-4xl font-bold tracking-tight">The app is still brewing</h1>
       <p className="text-muted mt-3 max-w-md">
         Chatting and the character creator open soon. Join the waitlist and you&apos;ll be first in line.
       </p>

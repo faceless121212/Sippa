@@ -73,7 +73,7 @@ export function CreatorMock() {
           {phase === "poured" && (
             <div
               key={example.character.id}
-              className={cn("absolute top-0 z-20 w-[58%] max-w-[220px]", animate && "animate-pour")}
+              className={cn("absolute top-0 z-20 w-[66%] max-w-[260px]", animate && "animate-pour")}
             >
               <CharacterCard character={example.character} className="shadow-xl" priority={index === 0} />
             </div>

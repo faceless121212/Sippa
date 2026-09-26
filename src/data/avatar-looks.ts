@@ -33,7 +33,7 @@ export const avatarLooks: Record<string, AvatarLook> = {
   // Friend
   "pip-marlow": {
     subject: "woman",
-    look: "ginger hair in a messy bun, round glasses, green hoodie, excited expression, library desk covered in colour-coded sticky notes",
+    look: "mature adult face, ginger hair in a messy bun, round glasses, green hoodie over a collared shirt, confident grin, library desk covered in colour-coded sticky notes",
   },
   "nora-quill": {
     subject: "woman",
@@ -41,7 +41,7 @@ export const avatarLooks: Record<string, AvatarLook> = {
   },
   "dex-okafor": {
     subject: "man",
-    look: "Black, short twists, headphones around his neck, black graphic tee, playful grin, gaming room with soft RGB glow",
+    look: "Black, mature adult face with a short beard, short twists, headphones around his neck, black graphic tee, playful grin, gaming room with soft RGB glow",
   },
   "lina-vasquez": {
     subject: "woman",
@@ -51,7 +51,7 @@ export const avatarLooks: Record<string, AvatarLook> = {
   "ada-lovelace": {
     subject: "woman",
     ageText: "in her late twenties",
-    look: "depicting Ada Lovelace as imagined in the 1840s, dark hair in a Victorian updo, deep blue velvet gown, study with brass gears and handwritten equations",
+    look: "depicting Ada Lovelace as imagined in the 1840s, dark hair in a Victorian updo, modest high-collared deep blue velvet gown with lace neckline, study with brass gears and handwritten equations",
   },
   "leonardo-da-vinci": {
     subject: "man",

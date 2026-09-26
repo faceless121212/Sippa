@@ -44,7 +44,7 @@ export function CreatorShowcase() {
           </p>
           <h2
             id="creator-title"
-            className="font-display mt-2 text-3xl font-semibold tracking-tight sm:text-4xl"
+            className="font-display mt-2 text-3xl font-extrabold tracking-[-0.03em] sm:text-[44px] sm:leading-[1.05]"
           >
             Describe it. We brew it. You chat.
           </h2>
@@ -57,7 +57,7 @@ export function CreatorShowcase() {
                 <span className="bg-primary text-on-primary flex h-9 w-9 items-center justify-center rounded-lg">
                   <s.icon className="h-4 w-4" aria-hidden="true" />
                 </span>
-                <span className="font-display text-lg font-semibold">
+                <span className="font-display text-lg font-bold">
                   <span className="sr-only">Step {i + 1}: </span>
                   {s.title}
                 </span>
@@ -69,7 +69,7 @@ export function CreatorShowcase() {
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
           <form onSubmit={brew} className="border-border bg-surface rounded-xl border p-5 sm:p-6">
-            <label htmlFor="creator-input" className="font-display text-lg font-semibold">
+            <label htmlFor="creator-input" className="font-display text-lg font-bold">
               Who do you want to talk to?
             </label>
             <textarea
@@ -142,7 +142,7 @@ function BrewResult({ example }: { example: CreatorExample }) {
         <CharacterAvatar id={c.id} name={c.name} priority />
       </div>
       <div className="min-w-0 flex-1">
-        <h3 className="font-display text-2xl font-semibold">
+        <h3 className="font-display text-2xl font-bold">
           {c.name}
           {c.age ? <span className="text-muted font-sans text-base font-normal">, {c.age}</span> : null}
         </h3>

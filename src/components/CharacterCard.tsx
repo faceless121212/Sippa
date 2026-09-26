@@ -4,6 +4,7 @@ import type { SampleCharacter } from "@/data/landing";
 import { cn, formatCount } from "@/lib/utils";
 import { CharacterAvatar } from "./CharacterAvatar";
 
+/** Tall portrait card: full-bleed image with name, hook and tags over a gradient. */
 export function CharacterCard({
   character,
   className,
@@ -14,51 +15,60 @@ export function CharacterCard({
   priority?: boolean;
 }) {
   const style = categoryStyles[character.category];
+  const badge =
+    character.famousType === "historical"
+      ? "Historical"
+      : character.famousType === "inspired"
+        ? "Inspired-by"
+        : null;
+
   return (
     <article
       className={cn(
-        "group border-border bg-surface flex flex-col overflow-hidden rounded-xl border",
+        "group bg-surface-2 relative isolate aspect-[3/4] overflow-hidden rounded-xl ring-1 ring-black/5 dark:ring-white/10",
         className,
       )}
     >
-      <div className="relative aspect-[3/4] overflow-hidden">
-        <CharacterAvatar
-          id={character.id}
-          name={character.name}
-          priority={priority}
-          className="transition-transform duration-500 group-hover:scale-105"
-        />
-        {character.messages > 0 && (
-          <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-xs font-medium text-white">
+      <CharacterAvatar
+        id={character.id}
+        name={character.name}
+        priority={priority}
+        className="absolute inset-0 -z-10 transition-transform duration-500 group-hover:scale-105"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 bg-gradient-to-t from-black/90 via-black/30 via-45% to-transparent"
+      />
+
+      <div className="flex items-start justify-between gap-2 p-2.5">
+        {character.messages > 0 ? (
+          <span className="inline-flex items-center gap-1 rounded-md bg-black/55 px-1.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur-sm">
             <MessageCircle className="h-3 w-3" aria-hidden="true" />
             {formatCount(character.messages)}
             <span className="sr-only"> messages</span>
           </span>
+        ) : (
+          <span />
         )}
-        {character.famousType === "historical" && (
-          <span className="absolute top-2 right-2 rounded-full bg-black/60 px-2 py-0.5 text-[11px] font-medium text-white">
-            Historical
-          </span>
-        )}
-        {character.famousType === "inspired" && (
-          <span className="absolute top-2 right-2 rounded-full bg-black/60 px-2 py-0.5 text-[11px] font-medium text-white">
-            Inspired-by
+        {badge && (
+          <span className="rounded-md bg-black/55 px-1.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur-sm">
+            {badge}
           </span>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-2 p-3">
-        <h3 className="font-display text-base leading-tight font-semibold">
-          {character.name}
-          {character.age ? (
-            <span className="text-muted font-sans text-sm font-normal">, {character.age}</span>
-          ) : null}
+
+      <div className="absolute inset-x-0 bottom-0 p-3 text-white">
+        <h3 className="flex items-center gap-1.5 text-[15px] leading-tight font-bold">
+          <span className={cn("h-2 w-2 shrink-0 rounded-full", style.fill)} aria-hidden="true" />
+          <span className="truncate">{character.name}</span>
+          {character.age ? <span className="font-medium text-white/70">{character.age}</span> : null}
         </h3>
-        <p className="text-muted line-clamp-2 text-sm">{character.hook}</p>
-        <ul className="mt-auto flex flex-wrap gap-1.5" aria-label="Tags">
-          {character.tags.slice(0, 3).map((tag) => (
+        <p className="mt-1 line-clamp-2 text-xs leading-snug text-white/80">{character.hook}</p>
+        <ul className="mt-2 flex flex-wrap gap-1" aria-label="Tags">
+          {character.tags.slice(0, 2).map((tag) => (
             <li
               key={tag}
-              className={cn("rounded-full px-2 py-0.5 text-[11px] font-medium", style.softBg, style.ink)}
+              className="rounded-md bg-white/15 px-1.5 py-0.5 text-[10px] font-semibold backdrop-blur-sm"
             >
               {tag}
             </li>

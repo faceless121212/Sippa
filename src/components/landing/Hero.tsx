@@ -1,22 +1,28 @@
+import { sampleCharacters } from "@/data/landing";
+import { CharacterAvatar } from "../CharacterAvatar";
 import { buttonClass } from "../ui/button";
 import { CreatorMock } from "./CreatorMock";
 
+const faces = ["mara-vellin", "ren-kaito", "ada-lovelace", "dex-okafor", "marcus-aurelius"].map((id) =>
+  sampleCharacters.find((c) => c.id === id)!,
+);
+
 export function Hero() {
   return (
-    <section className="relative overflow-clip" aria-labelledby="hero-title">
+    <section className="border-border relative border-b" aria-labelledby="hero-title">
       <div
         aria-hidden="true"
-        className="bg-primary/20 dark:bg-primary/10 pointer-events-none absolute -top-40 left-1/2 h-[480px] w-[900px] -translate-x-1/2 rounded-full blur-3xl"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--border)_1px,transparent_1px)] [mask-image:linear-gradient(to_bottom,black,transparent_75%)] bg-[size:22px_22px]"
       />
-      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-2 lg:gap-16">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
         <div>
-          <p className="border-border bg-surface text-muted mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium">
-            <span className="bg-primary h-1.5 w-1.5 rounded-full" aria-hidden="true" />
-            Brew your perfect companion
+          <p className="border-border bg-bg text-muted mb-5 inline-flex items-center gap-2 rounded-lg border px-2.5 py-1 text-xs font-medium">
+            <span className="bg-primary h-2 w-2 rounded-full ring-2 ring-black/10" aria-hidden="true" />
+            AI Character Creator — now brewing
           </p>
           <h1
             id="hero-title"
-            className="font-display text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl"
+            className="text-[40px] leading-[1.02] font-extrabold tracking-[-0.035em] text-balance sm:text-6xl lg:text-[68px]"
           >
             Chat with characters who feel real — or{" "}
             <span className="bg-primary text-on-primary rounded-lg box-decoration-clone px-2">
@@ -24,7 +30,7 @@ export function Hero() {
             </span>{" "}
             in seconds.
           </h1>
-          <p className="text-muted mt-5 max-w-xl text-lg">
+          <p className="text-muted mt-6 max-w-xl text-lg leading-relaxed">
             Describe anyone in one sentence and Sippa pours out a full character — name, look, personality and
             backstory. Then just start talking.
           </p>
@@ -36,9 +42,20 @@ export function Hero() {
               Explore characters
             </a>
           </div>
-          <p className="text-muted mt-4 text-xs">
-            Free to start · 18+ only · You&apos;re always chatting with an AI
-          </p>
+          <div className="mt-8 flex items-center gap-3">
+            <ul className="flex -space-x-2" aria-label="Some of the characters on Sippa">
+              {faces.map((c) => (
+                <li key={c.id} className="ring-bg h-9 w-9 overflow-hidden rounded-full ring-2">
+                  <CharacterAvatar id={c.id} name={c.name} sizes="36px" />
+                </li>
+              ))}
+            </ul>
+            <p className="text-muted text-xs leading-snug">
+              Lovers, friends &amp; famous minds.
+              <br />
+              Free to start · 18+ · Always an AI
+            </p>
+          </div>
         </div>
         <CreatorMock />
       </div>

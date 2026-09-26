@@ -28,7 +28,7 @@ export default async function LegalPage({ params }: Props) {
       <Link href="/" aria-label="Back to Sippa home">
         <Logo />
       </Link>
-      <h1 className="font-display mt-10 text-4xl font-semibold tracking-tight">{page.title}</h1>
+      <h1 className="font-display mt-10 text-4xl font-bold tracking-tight">{page.title}</h1>
       <p role="note" className="border-border bg-surface-2 mt-4 rounded-xl border p-4 text-sm">
         <strong>Draft placeholder.</strong> This page has not been reviewed by a lawyer yet and is not legally
         binding.
@@ -36,7 +36,7 @@ export default async function LegalPage({ params }: Props) {
       <div className="mt-8 space-y-8">
         {page.sections.map((s) => (
           <section key={s.heading}>
-            <h2 className="font-display text-xl font-semibold">{s.heading}</h2>
+            <h2 className="font-display text-xl font-bold">{s.heading}</h2>
             <p className="text-muted mt-2">{s.body}</p>
           </section>
         ))}

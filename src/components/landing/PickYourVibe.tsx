@@ -36,7 +36,6 @@ export function PickYourVibe() {
   };
 
   const current = categories.find((c) => c.id === active)!;
-  const style = categoryStyles[active];
 
   return (
     <section
@@ -45,7 +44,14 @@ export function PickYourVibe() {
       className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24"
     >
       <div className="max-w-2xl">
-        <h2 id="vibes-title" className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+        <p className="text-muted mb-3 inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.08em] uppercase">
+          <span className="bg-primary h-1.5 w-1.5 rounded-full ring-1 ring-black/20" aria-hidden="true" />
+          Characters
+        </p>
+        <h2
+          id="vibes-title"
+          className="font-display text-3xl font-extrabold tracking-[-0.03em] sm:text-[44px] sm:leading-[1.05]"
+        >
           Pick your vibe
         </h2>
         <p className="text-muted mt-3">Three ways to sip. Choose one to see who&apos;s waiting.</p>
@@ -69,18 +75,22 @@ export function PickYourVibe() {
               onClick={() => setActive(cat.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
-                "bg-surface relative overflow-hidden rounded-xl border p-5 text-left transition-all",
-                selected ? cn("border-transparent ring-2", s.ring) : "border-border hover:bg-surface-2",
+                "relative rounded-xl border p-5 text-left transition-colors",
+                selected
+                  ? "border-text bg-surface shadow-[0_0_0_1px_var(--text)]"
+                  : "border-border bg-bg hover:bg-surface",
               )}
             >
-              <span aria-hidden="true" className={cn("absolute inset-x-0 top-0 h-1", s.fill)} />
               <span className="flex items-center gap-2">
-                <span className="text-2xl" aria-hidden="true">
+                <span
+                  className={cn("flex h-9 w-9 items-center justify-center rounded-lg text-lg", s.softBg)}
+                  aria-hidden="true"
+                >
                   {cat.emoji}
                 </span>
-                <span className={cn("font-display text-xl font-semibold", s.ink)}>{cat.label}</span>
+                <span className={cn("font-display text-xl font-bold", s.ink)}>{cat.label}</span>
                 {cat.adultsOnly && (
-                  <span className="border-border text-muted ml-auto rounded-full border px-2 py-0.5 text-[11px] font-medium">
+                  <span className="border-border text-muted ml-auto rounded-md border px-1.5 py-0.5 text-[11px] font-medium">
                     18+
                   </span>
                 )}
@@ -109,7 +119,9 @@ export function PickYourVibe() {
           {current.subTags.map((t) => (
             <li
               key={t}
-              className={cn("shrink-0 rounded-full px-3 py-1 text-xs font-medium", style.softBg, style.ink)}
+              className={cn(
+                "border-border text-muted shrink-0 rounded-md border px-2.5 py-1 text-xs font-medium",
+              )}
             >
               {t}
             </li>

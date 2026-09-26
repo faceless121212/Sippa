@@ -4,9 +4,13 @@ import { faqs } from "@/data/landing";
 export function Faq() {
   return (
     <section id="faq" aria-labelledby="faq-title" className="mx-auto max-w-3xl px-4 py-16 sm:px-6 md:py-24">
+      <p className="text-muted mb-3 inline-flex w-full items-center justify-center gap-1.5 text-xs font-semibold tracking-[0.08em] uppercase">
+        <span className="bg-primary h-1.5 w-1.5 rounded-full ring-1 ring-black/20" aria-hidden="true" />
+        FAQ
+      </p>
       <h2
         id="faq-title"
-        className="font-display text-center text-3xl font-semibold tracking-tight sm:text-4xl"
+        className="font-display text-center text-3xl font-extrabold tracking-[-0.03em] sm:text-[44px] sm:leading-[1.05]"
       >
         Questions, answered
       </h2>

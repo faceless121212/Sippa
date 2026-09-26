@@ -47,7 +47,10 @@ export function Waitlist() {
           className="bg-primary/30 dark:bg-primary/10 pointer-events-none absolute -right-24 -bottom-24 h-72 w-72 rounded-full blur-3xl"
         />
         <div className="relative max-w-xl">
-          <h2 id="waitlist-title" className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2
+            id="waitlist-title"
+            className="font-display text-3xl font-extrabold tracking-[-0.03em] sm:text-[44px] sm:leading-[1.05]"
+          >
             Save your seat at the counter
           </h2>
           <p className="text-muted mt-3">
