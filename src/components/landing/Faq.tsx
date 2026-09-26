@@ -12,7 +12,7 @@ export function Faq() {
         id="faq-title"
         className="font-display text-center text-3xl font-extrabold tracking-[-0.03em] sm:text-[44px] sm:leading-[1.05]"
       >
-        Questions, answered
+        Questions
       </h2>
       <div className="divide-border border-border bg-surface mt-10 divide-y rounded-xl border">
         {faqs.map((f) => (

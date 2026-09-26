@@ -53,7 +53,7 @@ test("pricing toggle shows yearly price", async ({ page }) => {
 test("FAQ answers expand", async ({ page }) => {
   await page.goto("/");
   await page.getByText("Who can use Sippa?").click();
-  await expect(page.getByText(/you must be 18 or older/)).toBeVisible();
+  await expect(page.getByText(/Adults 18\+/)).toBeVisible();
 });
 
 test("waitlist requires consent, then succeeds", async ({ page }, testInfo) => {

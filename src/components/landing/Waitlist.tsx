@@ -51,11 +51,9 @@ export function Waitlist() {
             id="waitlist-title"
             className="font-display text-3xl font-extrabold tracking-[-0.03em] sm:text-[44px] sm:leading-[1.05]"
           >
-            Save your seat at the counter
+            Get early access
           </h2>
-          <p className="text-muted mt-3">
-            Sippa is brewing. Join the waitlist and we&apos;ll email you when your first cup is ready.
-          </p>
+          <p className="text-muted mt-3">Be first in line when Sippa opens.</p>
 
           {status.kind === "done" ? (
             <p role="status" className="bg-primary text-on-primary mt-8 rounded-xl p-4 font-medium">

@@ -14,7 +14,7 @@ export const categories: Category[] = [
     id: "lover",
     label: "Lover",
     emoji: "💗",
-    blurb: "Slow-burn romance and sweet flirting with fictional adult characters.",
+    blurb: "Slow burns and sweet flirting. Adults only.",
     adultsOnly: true,
     subTags: [
       "Sweet",
@@ -32,7 +32,7 @@ export const categories: Category[] = [
     id: "friend",
     label: "Friend",
     emoji: "☕",
-    blurb: "Comfort, banter, advice and someone who's always up for your hobbies.",
+    blurb: "Banter, comfort, someone on your side.",
     adultsOnly: false,
     subTags: [
       "Best Friend",
@@ -48,7 +48,7 @@ export const categories: Category[] = [
     id: "famous",
     label: "Famous",
     emoji: "⭐",
-    blurb: "Trade ideas with history's great minds and legendary archetypes.",
+    blurb: "Debate history's greatest minds.",
     adultsOnly: false,
     subTags: [
       "Historical Figures",

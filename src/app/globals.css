@@ -75,17 +75,28 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  --animate-pour: pour 700ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
-  --animate-steam: steam 900ms ease-in-out infinite;
+  --animate-pour: pour 800ms cubic-bezier(0.22, 1.2, 0.36, 1) both;
+  --animate-steam: steam 1100ms ease-in-out infinite;
+  --animate-shine: shine 1100ms 250ms ease-out both;
+  --animate-pop: pop 350ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-fill: fill 1400ms ease-in-out both;
+  --animate-drain: drain 700ms ease-in both;
+  --animate-wobble: wobble 700ms ease-in-out 2;
+  --animate-rise: rise 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
 
   @keyframes pour {
-    from {
+    0% {
       opacity: 0;
-      transform: translateY(160px) scale(0.35);
+      transform: translateY(190px) scale(0.2) rotate(-6deg);
+      filter: blur(12px);
     }
-    to {
+    60% {
+      filter: blur(0);
+    }
+    100% {
       opacity: 1;
       transform: none;
+      filter: none;
     }
   }
 
@@ -93,11 +104,77 @@
     0%,
     100% {
       height: 8px;
-      opacity: 0.2;
+      opacity: 0.15;
+      transform: translateY(0);
     }
     50% {
-      height: 30px;
-      opacity: 0.9;
+      height: 34px;
+      opacity: 0.7;
+      transform: translateY(-6px);
+    }
+  }
+
+  @keyframes shine {
+    from {
+      background: linear-gradient(110deg, transparent 30%, rgb(195 255 0 / 0.55) 50%, transparent 70%) -150%
+        0 / 250% 100% no-repeat;
+    }
+    to {
+      background: linear-gradient(110deg, transparent 30%, rgb(195 255 0 / 0.55) 50%, transparent 70%) 150%
+        0 / 250% 100% no-repeat;
+    }
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.85);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes fill {
+    from {
+      transform: translateY(44px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes drain {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(44px);
+    }
+  }
+
+  @keyframes wobble {
+    0%,
+    100% {
+      transform: rotate(0);
+    }
+    25% {
+      transform: rotate(-2deg);
+    }
+    75% {
+      transform: rotate(2deg);
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
     }
   }
 }
@@ -139,4 +216,18 @@ body {
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Scroll reveal (see components/Reveal.tsx). Only elements that start below
+   the fold are hidden, and only after JS runs — no-JS users see everything. */
+[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+[data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }

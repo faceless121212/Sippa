@@ -22,9 +22,7 @@ export function WhySippa() {
       >
         Why sip with Sippa
       </h2>
-      <p className="text-muted mt-3 max-w-2xl">
-        We built Sippa around the things people complain about most in AI chat apps.
-      </p>
+      <p className="text-muted mt-3 max-w-2xl">Everything other AI chat apps get wrong, fixed.</p>
       <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {whySippa.map((item) => {
           const Icon = icons[item.icon];

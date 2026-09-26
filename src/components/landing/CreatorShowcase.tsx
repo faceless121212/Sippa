@@ -8,9 +8,9 @@ import { CharacterAvatar } from "../CharacterAvatar";
 import { buttonClass } from "../ui/button";
 
 const steps = [
-  { icon: PenLine, title: "Describe", body: "One sentence, or answer five playful questions." },
-  { icon: Coffee, title: "Sippa brews", body: "Name, look, personality, backstory and a first message." },
-  { icon: MessageCircle, title: "Chat", body: "Tweak anything you like, then start talking right away." },
+  { icon: PenLine, title: "Describe", body: "One line — or 5 quick questions." },
+  { icon: Coffee, title: "Sippa brews", body: "Face, personality, backstory." },
+  { icon: MessageCircle, title: "Chat", body: "Tweak it and start talking." },
 ];
 
 const suggestions = creatorExamples.map((e) => e.prompt);
@@ -103,9 +103,7 @@ export function CreatorShowcase() {
               <Coffee className="h-4 w-4" aria-hidden="true" />
               {brewing ? "Brewing…" : "Brew"}
             </button>
-            <p className="text-muted mt-3 text-xs">
-              Demo preview with a pre-made example. The real creator builds yours from scratch.
-            </p>
+            <p className="text-muted mt-3 text-xs">Demo — shows a pre-made example.</p>
           </form>
 
           <div
@@ -122,9 +120,7 @@ export function CreatorShowcase() {
               <BrewResult example={result} />
             ) : (
               <p className="text-muted m-auto max-w-xs text-center text-sm">
-                {brewing
-                  ? "Steeping personality, frothing a backstory…"
-                  : "Your character will pour out here."}
+                {brewing ? "Brewing…" : "Your character pours out here."}
               </p>
             )}
           </div>

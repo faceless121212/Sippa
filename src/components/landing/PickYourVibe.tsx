@@ -54,7 +54,7 @@ export function PickYourVibe() {
         >
           Pick your vibe
         </h2>
-        <p className="text-muted mt-3">Three ways to sip. Choose one to see who&apos;s waiting.</p>
+        <p className="text-muted mt-3">Three ways to sip.</p>
       </div>
 
       <div role="tablist" aria-label="Character categories" className="mt-8 grid gap-3 sm:grid-cols-3">
@@ -109,8 +109,8 @@ export function PickYourVibe() {
         className="mt-8 rounded-xl"
       >
         <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          {charactersByCategory(active).map((c) => (
-            <li key={c.id}>
+          {charactersByCategory(active).map((c, i) => (
+            <li key={c.id} className="animate-rise" style={{ animationDelay: `${i * 70}ms` }}>
               <CharacterCard character={c} className="h-full" />
             </li>
           ))}

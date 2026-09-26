@@ -12,16 +12,16 @@ const freeFeatures = [
   `${pricing.freeMessagesPerDay} messages a day`,
   `${siteConfig.freeCharacterCreations} free character creations`,
   "Standard memory",
-  "Light ads — never inside your chats",
+  "Light ads, never mid-chat",
 ];
 
 const plusFeatures = [
   "Unlimited messages",
-  "Long-term memory that remembers more",
-  "Faster, smarter model",
-  "No ads at all",
-  "Monthly Beans bonus for extra creations",
-  "Voice messages (coming soon)",
+  "Longer memory",
+  "Faster, smarter replies",
+  "No ads",
+  "Monthly Beans bonus",
+  "Voice (soon)",
 ];
 
 export function Pricing() {
@@ -41,9 +41,9 @@ export function Pricing() {
             id="pricing-title"
             className="font-display text-3xl font-extrabold tracking-[-0.03em] sm:text-[44px] sm:leading-[1.05]"
           >
-            Simple pricing
+            Free to start
           </h2>
-          <p className="text-muted mt-3">Start free. Upgrade to Sippa Plus when you want more.</p>
+          <p className="text-muted mt-3">Go Plus when you want more.</p>
 
           <fieldset className="border-border bg-surface mt-6 inline-flex rounded-lg border p-1">
             <legend className="sr-only">Billing period</legend>
@@ -91,9 +91,7 @@ export function Pricing() {
             highlight
           />
         </div>
-        <p className="text-muted mt-6 text-center text-xs">
-          Prices include VAT where applicable. Cancel any time.
-        </p>
+        <p className="text-muted mt-6 text-center text-xs">Incl. VAT. Cancel anytime.</p>
       </div>
     </section>
   );

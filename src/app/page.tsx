@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/Reveal";
 import { CreatorShowcase } from "@/components/landing/CreatorShowcase";
 import { Faq } from "@/components/landing/Faq";
 import { Footer } from "@/components/landing/Footer";
@@ -44,13 +45,27 @@ export default function Home() {
       <Header />
       <main id="main">
         <Hero />
-        <PickYourVibe />
-        <CreatorShowcase />
-        <WhySippa />
-        <HotThisWeek />
-        <Pricing />
-        <Faq />
-        <Waitlist />
+        <Reveal>
+          <PickYourVibe />
+        </Reveal>
+        <Reveal>
+          <CreatorShowcase />
+        </Reveal>
+        <Reveal>
+          <WhySippa />
+        </Reveal>
+        <Reveal>
+          <HotThisWeek />
+        </Reveal>
+        <Reveal>
+          <Pricing />
+        </Reveal>
+        <Reveal>
+          <Faq />
+        </Reveal>
+        <Reveal>
+          <Waitlist />
+        </Reveal>
       </main>
       <Footer />
       <script

@@ -45,7 +45,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Mara Vellin",
     age: 27,
     category: "lover",
-    hook: "Night-shift florist who always saves you the last bouquet.",
+    hook: "Night-shift florist. Saves you the last bouquet.",
     tags: ["Sweet", "Slow Burn", "Slice of Life"],
     messages: 2_430_000,
     avatar: {
@@ -62,7 +62,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Theo Hart",
     age: 29,
     category: "lover",
-    hook: "Your rival at the architecture firm. Always one step ahead — of you.",
+    hook: "Your office rival. Always one step ahead.",
     tags: ["Coworkers", "Slow Burn", "Tsundere"],
     messages: 1_870_000,
     avatar: {
@@ -79,7 +79,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Ren Kaito",
     age: 26,
     category: "lover",
-    hook: "Soft-spoken café owner who remembers your order — and your bad days.",
+    hook: "Remembers your order — and your bad days.",
     tags: ["Protective", "Sweet", "Anime-style"],
     messages: 3_120_000,
     avatar: {
@@ -96,7 +96,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Sol Rivera",
     age: 30,
     category: "lover",
-    hook: "Touring photographer, back in town for exactly one week.",
+    hook: "Back in town for one week only.",
     tags: ["Long-distance", "Friends to Lovers", "Adventure"],
     messages: 954_000,
     avatar: {
@@ -114,7 +114,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Pip Marlow",
     age: 22,
     category: "friend",
-    hook: "Chaotic-good study buddy with a colour-coded plan for everything.",
+    hook: "Chaotic study buddy. Colour-codes everything.",
     tags: ["Study Buddy", "Motivator", "Study buddies"],
     messages: 1_240_000,
     avatar: {
@@ -131,7 +131,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Nora Quill",
     age: 58,
     category: "friend",
-    hook: "Gentle librarian with a pot of tea and exactly the right book.",
+    hook: "Tea, calm, and exactly the right book.",
     tags: ["Comfort", "Best Friend", "Slice of Life"],
     messages: 811_000,
     avatar: {
@@ -148,7 +148,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Dex Okafor",
     age: 24,
     category: "friend",
-    hook: "Carries you in co-op, roasts you lovingly, never lets you rage-quit.",
+    hook: "Carries you in co-op. Roasts you lovingly.",
     tags: ["Gamer", "Gaming", "Best Friend"],
     messages: 2_050_000,
     avatar: {
@@ -165,7 +165,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Lina Vasquez",
     age: 31,
     category: "friend",
-    hook: "Travel buddy with a story — and a street-food tip — for every city.",
+    hook: "A story and a street-food tip for every city.",
     tags: ["Travel Buddy", "Adventure", "Language Partner"],
     messages: 640_000,
     avatar: {
@@ -184,7 +184,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Ada Lovelace",
     category: "famous",
     famousType: "historical",
-    hook: "Victorian mathematician who dreamed computers could make music.",
+    hook: "Dreamed computers could make music.",
     tags: ["Scientists", "Historical Figures"],
     messages: 1_530_000,
     avatar: {
@@ -201,7 +201,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Leonardo da Vinci",
     category: "famous",
     famousType: "historical",
-    hook: "Painter, engineer, and serial notebook-filler. Ask him anything.",
+    hook: "Painter, engineer, genius. Ask anything.",
     tags: ["Artists", "Historical Figures"],
     messages: 2_210_000,
     avatar: {
@@ -218,7 +218,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Marcus Aurelius",
     category: "famous",
     famousType: "historical",
-    hook: "Roman emperor and Stoic. Brings calm to your chaotic Monday.",
+    hook: "Stoic emperor. Calm for your chaotic Monday.",
     tags: ["Philosophers", "Historical Figures"],
     messages: 3_480_000,
     avatar: {
@@ -235,7 +235,7 @@ export const sampleCharacters: SampleCharacter[] = [
     name: "Cleopatra VII",
     category: "famous",
     famousType: "historical",
-    hook: "Last pharaoh of Egypt. Nine languages, zero patience for fools.",
+    hook: "Last pharaoh. Zero patience for fools.",
     tags: ["Historical Figures", "Legends & Myths"],
     messages: 1_960_000,
     avatar: {
@@ -282,7 +282,7 @@ export const creatorExamples: CreatorExample[] = [
       name: "Elio Marsh",
       age: 31,
       category: "friend",
-      hook: "Scowls at your latte art. Leaves poems on your napkin.",
+      hook: "Scowls at you. Leaves poems on your napkin.",
       tags: ["Comfort", "Slice of Life"],
       messages: 0,
       traits: ["Grumpy", "Secretly soft", "Poetic", "Loyal"],
@@ -319,7 +319,7 @@ export const creatorExamples: CreatorExample[] = [
       name: "Isla Maren",
       age: 28,
       category: "lover",
-      hook: "Keeps the light on for ships — and, lately, for you.",
+      hook: "Keeps the light on — lately, for you.",
       tags: ["Slow Burn", "Sweet", "Mystery"],
       messages: 0,
       traits: ["Warm", "Teasing", "Mysterious", "Brave"],
@@ -354,7 +354,7 @@ export const creatorExamples: CreatorExample[] = [
       name: "Maestro Orlando",
       category: "famous",
       famousType: "inspired",
-      hook: "A Renaissance tinkerer (inspired-by archetype) amazed by your phone.",
+      hook: "Renaissance tinkerer, amazed by your phone.",
       tags: ["Artists", "Adventure"],
       messages: 0,
       traits: ["Curious", "Theatrical", "Brilliant", "Easily distracted"],
@@ -393,28 +393,28 @@ export function pickCreatorExample(input: string): CreatorExample {
 export const whySippa = [
   {
     icon: "brain",
-    title: "Memory that lasts",
-    body: "Characters keep a running summary and a memory list you can edit — no more re-introducing yourself.",
+    title: "Remembers you",
+    body: "Long-term memory you can see and edit.",
   },
   {
     icon: "ban",
-    title: "No chat-interrupting ads",
-    body: "Free plan shows light banner ads outside your chats. Never a pop-up every few messages.",
+    title: "No pop-up ads",
+    body: "Never interrupts your chat. Ever.",
   },
   {
     icon: "devices",
     title: "Web + phone",
-    body: "A real web app on desktop, and installable on your phone. Pick up any chat anywhere.",
+    body: "Start on desktop, continue on your phone.",
   },
   {
     icon: "theater",
-    title: "Characters stay in character",
-    body: "Personality, speaking style and example dialogues are baked in, so they don't drift.",
+    title: "Stays in character",
+    body: "No personality drift, even in long chats.",
   },
   {
     icon: "lock",
-    title: "Your chats stay private",
-    body: "We never use your conversations for ads. Export or delete everything, any time.",
+    title: "Private by default",
+    body: "Never used for ads. Delete anytime.",
   },
 ] as const;
 
@@ -423,26 +423,26 @@ export const whySippa = [
 export const faqs = [
   {
     q: "Is Sippa free?",
-    a: "Yes. The free plan includes a daily message allowance and your first three character creations. Sippa Plus unlocks unlimited messages, longer memory, a faster model and no ads.",
+    a: "Yes — 30 messages a day and 3 character creations. Plus removes the limits.",
   },
   {
     q: "Is it safe?",
-    a: "Safety rules sit above every character and can't be overridden. Explicit content is blocked, every character and message can be reported, and if a conversation touches on self-harm we pause and share real help resources.",
+    a: "Safety rules can't be overridden, explicit content is blocked, and everything can be reported.",
   },
   {
     q: "Who can use Sippa?",
-    a: "Adults only — you must be 18 or older to sign up. Romantic characters are always fictional adults aged 21 or older.",
+    a: "Adults 18+. Romantic characters are always fictional adults, 21+.",
   },
   {
     q: "Are the famous characters real people?",
-    a: "No. They're AI characters inspired by historical figures who died long ago, or fictional archetypes. We don't allow characters that impersonate living celebrities, and romance with real people is off the table.",
+    a: "No. Long-gone historical figures or fictional archetypes — never living celebrities.",
   },
   {
     q: "Am I talking to a human?",
-    a: "Never. Every character is an AI, every chat says so, and characters will tell you honestly if you ask.",
+    a: "No. Every character is an AI and will always say so.",
   },
   {
     q: "Can I delete my data?",
-    a: "Yes. You can export all your data or delete your account and chats from Settings at any time.",
+    a: "Yes. Export or delete everything in Settings, anytime.",
   },
 ];
