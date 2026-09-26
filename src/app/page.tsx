@@ -7,7 +7,7 @@ import { Hero } from "@/components/landing/Hero";
 import { HotThisWeek } from "@/components/landing/HotThisWeek";
 import { PickYourVibe } from "@/components/landing/PickYourVibe";
 import { Pricing } from "@/components/landing/Pricing";
-import { Waitlist } from "@/components/landing/Waitlist";
+import { SignupCta } from "@/components/landing/SignupCta";
 import { WhySippa } from "@/components/landing/WhySippa";
 import { faqs } from "@/data/landing";
 import { siteConfig } from "@/config/site";
@@ -64,7 +64,7 @@ export default function Home() {
           <Faq />
         </Reveal>
         <Reveal>
-          <Waitlist />
+          <SignupCta />
         </Reveal>
       </main>
       <Footer />

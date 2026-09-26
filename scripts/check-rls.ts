@@ -185,6 +185,38 @@ async function main() {
         )) as { n: number }[];
         check("users cannot read other people's purchases", ledger[0].n === 0);
 
+        // ── moderation & nudges (Phase 6) ──
+        await tx`insert into public.audit_log (action, target_type, target_id) values ('test', 'user', ${adult})`;
+        const auditSeen = (await as(adult, () => tx`select count(*)::int as n from public.audit_log`)) as {
+          n: number;
+        }[];
+        check("users cannot read the moderation audit log", auditSeen[0].n === 0);
+        await denied("users cannot make themselves admin", () =>
+          as(teen, () => tx`update public.profiles set is_admin = true where id = ${teen}`),
+        );
+        const toggled = await as(
+          teen,
+          () => tx`update public.profiles set nudges_enabled = false where id = ${teen} returning id`,
+        );
+        check("users can switch character messages off themselves", (toggled as unknown[]).length === 1);
+        await tx`insert into public.nudges (user_id, character_id, text) values (${adult}, 'ada-lovelace', 'hi')`;
+        const nudgePeek = (await as(
+          teen,
+          () => tx`select count(*)::int as n from public.nudges where user_id = ${adult}`,
+        )) as { n: number }[];
+        check("users cannot see other people's character messages", nudgePeek[0].n === 0);
+        await denied("users cannot resolve reports themselves", () =>
+          as(adult, () => tx`update public.reports set status = 'dismissed'`).then((r) => {
+            if ((r as unknown[]).length === 0) throw new Error("no rows");
+          }),
+        );
+        await tx`update public.characters set status = 'pending' where id = 'ada-lovelace'`;
+        const pendingSeen = (await as(
+          teen,
+          () => tx`select count(*)::int as n from public.characters where id = 'ada-lovelace'`,
+        )) as { n: number }[];
+        check("pending (unapproved) characters are invisible to others", pendingSeen[0].n === 0);
+
         throw new Error("__rollback__");
       })
       .catch((e) => {

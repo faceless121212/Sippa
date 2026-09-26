@@ -3,6 +3,7 @@
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { signupHref } from "@/lib/signup";
 import { Logo } from "../Logo";
 import { ThemeToggle } from "../ThemeToggle";
 import { buttonClass } from "../ui/button";
@@ -47,9 +48,12 @@ export function Header() {
           >
             Log in
           </Link>
-          <a href="#waitlist" className={buttonClass({ size: "sm", className: "hidden sm:inline-flex" })}>
+          <Link
+            href={signupHref()}
+            className={buttonClass({ size: "sm", className: "hidden sm:inline-flex" })}
+          >
             Start sipping — free
-          </a>
+          </Link>
           <button
             type="button"
             className="hover:bg-surface-2 inline-flex h-9 w-9 items-center justify-center rounded-lg md:hidden"
@@ -87,9 +91,13 @@ export function Header() {
               </Link>
             </li>
           </ul>
-          <a href="#waitlist" onClick={() => setOpen(false)} className={buttonClass({ className: "w-full" })}>
+          <Link
+            href={signupHref()}
+            onClick={() => setOpen(false)}
+            className={buttonClass({ className: "w-full" })}
+          >
             Start sipping — free
-          </a>
+          </Link>
         </nav>
       )}
     </header>

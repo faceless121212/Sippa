@@ -65,6 +65,16 @@ Answers to the kickoff questions (spec §11), recorded 2026-09-26.
 - **Fulfilment** is idempotent (ledger keyed by Checkout Session / invoice id), via the webhook and by re-checking the session on the success page. All plan/Beans changes are server-only (verified by `npm run db:check`).
 - **Ads**: a single "house ad" slot for free users on Home promoting Plus; no third-party ad network or tracking yet (still flagged below). Never inside chats.
 
+## Phase 6 implementation notes (owner decisions 2026-09-26)
+
+- **Currency renamed to Flowers** (was Beans). Code/database names still say `beans`; only user-facing text and the icon changed.
+- **Characters write to you**: a popup every 3–4 minutes (server enforces ≥170 s, max 40/day) from a character in the user's recent chats (or a popular one). Light, no guilt or pressure; stored only if the user taps Reply; switch in Settings.
+- **Account deletion deletes everything** (owner choice): profile, chats, messages, memories, favourites, ledger, the user's created characters (and other users' chats with them) and their portraits; Stripe subscription cancelled.
+- **Admin**: iladyga98@gmail.com. Automated-first moderation (Haiku review on each report; auto-hide on violation or 3+ open reports; official characters are never auto-hidden), human decisions in `/app/admin`, every action in `audit_log`.
+- **Public publishing** is on: public characters pass automated review at save, then wait for admin approval before appearing in Explore. Rejected ones become Unlisted.
+- **Google sign-in** is implemented; it needs the Google provider enabled in Supabase (see README). Until then the button explains it's not enabled.
+- **Wellbeing**: gentle break reminder after an hour in a chat.
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.

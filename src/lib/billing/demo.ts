@@ -12,7 +12,7 @@ export type DemoResult = { kind: "beans"; beans: number } | { kind: "plus" } | {
 export function describeItem(item: StripeItem) {
   const pack = beanPacks.find((p) => p.id === item);
   if (pack)
-    return { title: `${pack.beans} Beans`, price: pack.price, recurring: null as null | "month" | "year" };
+    return { title: `${pack.beans} Flowers`, price: pack.price, recurring: null as null | "month" | "year" };
   const yearly = item === "plus_yearly";
   return {
     title: `Sippa Plus — ${yearly ? "yearly" : "monthly"}`,

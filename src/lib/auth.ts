@@ -1,6 +1,6 @@
 import "server-only";
 import type { User } from "@supabase/supabase-js";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { supabaseConfigured } from "./supabase/config";
 import { createClient } from "./supabase/server";
 
@@ -14,6 +14,7 @@ export type Profile = {
   beans: number;
   is_admin: boolean;
   banned_at: string | null;
+  nudges_enabled: boolean;
 };
 
 export type Viewer = { user: User; profile: Profile | null } | null;
@@ -28,7 +29,7 @@ export async function getViewer(): Promise<Viewer> {
   if (!user) return null;
   const { data } = await supabase
     .from("profiles")
-    .select("id,email,display_name,dob,is_adult,plan,beans,is_admin,banned_at")
+    .select("id,email,display_name,dob,is_adult,plan,beans,is_admin,banned_at,nudges_enabled")
     .eq("id", user.id)
     .maybeSingle();
   return { user, profile: (data as Profile | null) ?? null };
@@ -42,5 +43,12 @@ export async function requireAdult(next: string) {
   if (!viewer) redirect(`/login?next=${encodeURIComponent(next)}`);
   if (!viewer.profile?.dob) redirect(`/onboarding?next=${encodeURIComponent(next)}`);
   if (!viewer.profile.is_adult) redirect("/onboarding/blocked");
+  return viewer;
+}
+
+/** For admin pages and actions. Non-admins get a 404 so the area isn't discoverable. */
+export async function requireAdmin() {
+  const viewer = await requireAdult("/app/admin");
+  if (!viewer.profile?.is_admin) notFound();
   return viewer;
 }

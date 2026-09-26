@@ -16,18 +16,25 @@ export const legalPages = {
       },
       {
         heading: "Your rights (GDPR)",
-        body: "You can access, export, correct or delete your data at any time from Settings, or by contacting us. You can withdraw consent to emails with one click.",
+        body: "You can export all your data (Settings → Export) and permanently delete your account and everything in it (Settings → Delete account) at any time. You can withdraw consent to emails with one click and turn off character messages in Settings.",
       },
       {
         heading: "Processors",
-        body: "Hosting, database, AI model and payment providers process data on our behalf under data-processing agreements. A full list will be published here.",
+        body: "Vercel (hosting), Supabase (database, sign-in and file storage, EU region), Anthropic (AI replies and safety review), fal.ai (character portraits) and Stripe (payments) process data on our behalf under data-processing agreements. Chat content is sent to the AI provider only to generate replies and is never used for advertising.",
       },
     ],
   },
   terms: {
     title: "Terms of Service",
     sections: [
-      { heading: "Who can use Sippa", body: "You must be 18 or older." },
+      {
+        heading: "Who can use Sippa",
+        body: "You must be 18 or older. Accounts that give an under-18 date of birth are deleted immediately.",
+      },
+      {
+        heading: "Flowers and Sippa Plus",
+        body: "Flowers are an in-app currency for extra creations and messages. They have no cash value and can't be transferred. Sippa Plus renews until cancelled; you can cancel any time and keep access until the end of the paid period.",
+      },
       {
         heading: "AI characters",
         body: "All characters are AI. They can be wrong, and they are not a substitute for professional, medical, legal or financial advice.",

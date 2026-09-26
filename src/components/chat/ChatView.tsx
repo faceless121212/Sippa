@@ -72,6 +72,12 @@ export function ChatView(props: Props) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const stick = useRef(true);
   const [showJump, setShowJump] = useState(false);
+  // Wellbeing (spec §6.6): a gentle nudge after an hour in one sitting.
+  const [breakHint, setBreakHint] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setBreakHint(true), 60 * 60_000);
+    return () => clearTimeout(t);
+  }, []);
 
   // Keep pinned to the bottom unless the user scrolled up to read.
   const onScroll = () => {
@@ -402,20 +408,20 @@ export function ChatView(props: Props) {
                     You&apos;ve used today&apos;s {props.freeLimit} free messages
                   </p>
                   <p className="text-muted mt-1 text-sm">
-                    They refill at midnight (UTC). Keep going with Beans (1 per message) or get unlimited chat
-                    with Sippa Plus.
+                    They refill at midnight (UTC). Keep going with Flowers (1 per message) or get unlimited
+                    chat with Sippa Plus.
                   </p>
                   <div className="mt-4 flex flex-wrap justify-center gap-2">
                     {notice.beans >= 1 ? (
                       <button type="button" onClick={continueWithBeans} className={buttonClass()}>
-                        Continue with Beans · {notice.beans} left
+                        Continue with Flowers · {notice.beans} left
                       </button>
                     ) : null}
                     <Link
                       href="/app/plus"
                       className={buttonClass({ variant: notice.beans >= 1 ? "secondary" : "primary" })}
                     >
-                      {notice.beans >= 1 ? "Get Plus" : "Get Beans or Plus"}
+                      {notice.beans >= 1 ? "Get Plus" : "Get Flowers or Plus"}
                     </Link>
                   </div>
                 </div>
@@ -438,6 +444,24 @@ export function ChatView(props: Props) {
             </button>
           )}
         </div>
+
+        {breakHint && (
+          <div
+            role="status"
+            className="border-border bg-surface mx-3 mb-2 flex items-center gap-3 rounded-xl border px-3 py-2 text-sm sm:mx-auto sm:w-full sm:max-w-3xl"
+          >
+            <span className="flex-1">
+              You&apos;ve been chatting for an hour — maybe stretch or grab some water? 🌿
+            </span>
+            <button
+              type="button"
+              onClick={() => setBreakHint(false)}
+              className="text-muted hover:text-text text-xs font-semibold"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
 
         {/* composer */}
         <form
@@ -482,7 +506,7 @@ export function ChatView(props: Props) {
           {remaining !== null && (
             <p className="text-muted mx-auto mt-1.5 max-w-3xl text-center text-[11px]">
               {useBeans && remaining === 0
-                ? "Using Beans · 1 per message"
+                ? "Using Flowers · 1 per message"
                 : `${remaining} free message${remaining === 1 ? "" : "s"} left today`}
             </p>
           )}

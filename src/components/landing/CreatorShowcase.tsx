@@ -1,9 +1,11 @@
 "use client";
 
 import { Coffee, MessageCircle, PenLine } from "lucide-react";
+import Link from "next/link";
 import { useRef, useState, type FormEvent } from "react";
 import { creatorExamples, pickCreatorExample, type CreatorExample } from "@/data/landing";
 import { cn } from "@/lib/utils";
+import { signupHref } from "@/lib/signup";
 import { CharacterAvatar } from "../CharacterAvatar";
 import { buttonClass } from "../ui/button";
 
@@ -103,7 +105,7 @@ export function CreatorShowcase() {
               <Coffee className="h-4 w-4" aria-hidden="true" />
               {brewing ? "Brewing…" : "Brew"}
             </button>
-            <p className="text-muted mt-3 text-xs">Demo — shows a pre-made example.</p>
+            <p className="text-muted mt-3 text-xs">Demo — sign up to brew your own for real.</p>
           </form>
 
           <div
@@ -160,9 +162,9 @@ function BrewResult({ example }: { example: CreatorExample }) {
         <blockquote className="bg-surface-2 mt-3 rounded-xl rounded-tl-sm p-3 text-sm">
           {c.firstMessage}
         </blockquote>
-        <a href="#waitlist" className={buttonClass({ size: "sm", className: "mt-4" })}>
-          Brew mine at launch
-        </a>
+        <Link href={signupHref("/app/create")} className={buttonClass({ size: "sm", className: "mt-4" })}>
+          Brew mine now
+        </Link>
       </div>
     </div>
   );

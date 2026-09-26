@@ -1,11 +1,21 @@
 "use client";
 
-import { Compass, Home, MessageCircle, PanelLeftClose, PanelLeftOpen, Plus, User } from "lucide-react";
+import {
+  Compass,
+  Home,
+  MessageCircle,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Plus,
+  ShieldCheck,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { BrandIcon } from "../BrandIcon";
+import { NudgePopup } from "./NudgePopup";
 import { Logo, LogoMark } from "../Logo";
 import { ThemeToggle } from "../ThemeToggle";
 import { buttonClass } from "../ui/button";
@@ -20,7 +30,13 @@ const NAV = [
 
 const MOBILE = ["/app", "/app/chats", "/app/create", "/app/explore", "/app/profile"];
 
-export type ShellViewer = { signedIn: boolean; name: string | null; plan?: "free" | "plus" };
+export type ShellViewer = {
+  signedIn: boolean;
+  name: string | null;
+  plan?: "free" | "plus";
+  isAdmin?: boolean;
+  nudges?: boolean;
+};
 
 function isActive(pathname: string, href: string) {
   return href === "/app" ? pathname === "/app" : pathname === href || pathname.startsWith(`${href}/`);
@@ -110,6 +126,20 @@ export function AppShell({ viewer, children }: { viewer: ShellViewer; children: 
         </nav>
 
         <div className="mt-auto space-y-2">
+          {viewer.isAdmin && (
+            <Link
+              href="/app/admin"
+              title="Moderation"
+              aria-current={isActive(pathname, "/app/admin") ? "page" : undefined}
+              className={cn(
+                "text-muted hover:bg-surface hover:text-text flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-semibold",
+                isActive(pathname, "/app/admin") && "bg-surface-2 text-text",
+              )}
+            >
+              <ShieldCheck className="h-[18px] w-[18px] shrink-0" aria-hidden="true" />
+              <span className={cn(collapsed ? "sr-only" : "sr-only lg:not-sr-only")}>Moderation</span>
+            </Link>
+          )}
           {viewer.signedIn && viewer.plan !== "plus" && (
             <Link
               href="/app/plus"
@@ -222,6 +252,7 @@ export function AppShell({ viewer, children }: { viewer: ShellViewer; children: 
           })}
         </ul>
       </nav>
+      {viewer.signedIn && viewer.nudges && <NudgePopup />}
     </div>
   );
 }

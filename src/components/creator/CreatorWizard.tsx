@@ -124,7 +124,7 @@ export function CreatorWizard({
           <span className="bg-surface-2 rounded-lg px-2.5 py-1 text-xs font-semibold">
             {creationsLeft > 0
               ? `${creationsLeft} free creation${creationsLeft === 1 ? "" : "s"} left`
-              : `${beanCosts.creation} Beans per creation · you have ${beans}`}
+              : `${beanCosts.creation} Flowers per creation · you have ${beans}`}
           </span>
         )}
       </div>
@@ -136,7 +136,7 @@ export function CreatorWizard({
           <p className="font-semibold">{error}</p>
           {paywall && (
             <a href="/app/plus" className={buttonClass({ size: "sm", className: "mt-3" })}>
-              Get Beans or Plus
+              Get Flowers or Plus
             </a>
           )}
         </div>
@@ -438,7 +438,7 @@ function TuneStep(props: TuneProps) {
   const { draft, setDraft } = props;
   const [busyField, setBusyField] = useState<string | null>(null);
   const [tab, setTab] = useState<"edit" | "test">("edit");
-  const [visibility, setVisibility] = useState<"private" | "unlisted">("private");
+  const [visibility, setVisibility] = useState<"private" | "unlisted" | "public">("private");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -700,10 +700,12 @@ function TuneStep(props: TuneProps) {
                 title="Unlisted"
                 body="Anyone with the link"
               />
-              <div className="border-border text-muted rounded-xl border border-dashed p-3 text-sm opacity-60">
-                <span className="block font-semibold">Public</span>
-                <span className="text-xs">After review — soon</span>
-              </div>
+              <Choice
+                active={visibility === "public"}
+                onClick={() => setVisibility("public")}
+                title="Public"
+                body="In Explore after review"
+              />
             </div>
             {saveError && (
               <p role="alert" className="text-lover-ink mt-3 text-sm font-medium">

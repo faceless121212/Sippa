@@ -40,6 +40,7 @@ export async function sendMagicLink(_prev: LoginState, form: FormData): Promise<
 export async function signInWithGoogle(form: FormData) {
   if (!supabaseConfigured) redirect("/login?error=config");
   const next = safeNext(String(form.get("next") ?? ""));
+  if (!(await googleEnabled())) redirect("/login?error=google-off");
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
@@ -47,4 +48,18 @@ export async function signInWithGoogle(form: FormData) {
   });
   if (error || !data.url) redirect("/login?error=google");
   redirect(data.url);
+}
+
+/** Is the Google provider switched on in Supabase? (Cached for a minute.) */
+async function googleEnabled(): Promise<boolean> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/settings`, {
+      headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "" },
+      next: { revalidate: 60 },
+    });
+    const data = (await res.json()) as { external?: { google?: boolean } };
+    return Boolean(data.external?.google);
+  } catch {
+    return true; // let Supabase report the real problem
+  }
 }

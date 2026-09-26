@@ -17,8 +17,8 @@ export const maxDuration = 60;
 const body = z.object({
   draft: draftSchema,
   avatarUrl: z.string().url(),
-  // Public publishing opens with the moderation queue (DECISIONS #13).
-  visibility: z.enum(["private", "unlisted"]),
+  // Public characters are listed in Explore only after an admin approves them.
+  visibility: z.enum(["private", "unlisted", "public"]),
 });
 
 /** Only accept portraits we generated (fal.ai CDN) — never arbitrary URLs. */
@@ -96,7 +96,7 @@ export async function POST(request: Request) {
         tags: draft.tags,
         avatar_url: pub.publicUrl,
         visibility,
-        status: "approved",
+        status: visibility === "public" ? "pending" : "approved",
       });
       if (error) {
         await creator.admin.storage.from("avatars").remove([path]);
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
       await refundCreation(creator, charged);
       throw err;
     }
-    return NextResponse.json({ id });
+    return NextResponse.json({ id, pending: visibility === "public" });
   } catch (e) {
     return creatorError(e);
   }

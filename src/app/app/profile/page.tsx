@@ -7,6 +7,8 @@ import { buttonClass } from "@/components/ui/button";
 import { requireAdult, viewerIsAdult } from "@/lib/auth";
 import { listCharacters } from "@/lib/characters";
 import { createClient } from "@/lib/supabase/server";
+import { cn } from "@/lib/utils";
+import { deleteAccount, setNudges } from "./actions";
 
 export const metadata: Metadata = { title: "Profile" };
 
@@ -42,7 +44,7 @@ export default async function ProfilePage() {
           href="/app/plus"
           className="bg-surface-2 hover:bg-border rounded-md px-2.5 py-1 text-xs font-bold"
         >
-          {p.plan === "plus" ? "SIPPA PLUS" : "FREE"} · {p.beans} Beans
+          {p.plan === "plus" ? "SIPPA PLUS" : "FREE"} · {p.beans} Flowers
         </Link>
       </section>
 
@@ -113,10 +115,65 @@ export default async function ProfilePage() {
             <span>Theme</span>
             <ThemeToggle />
           </div>
-          <div className="text-muted flex items-center justify-between px-5 py-3 text-sm">
-            <span>Export data · Delete account</span>
-            <span className="text-xs">Coming soon</span>
+          <form action={setNudges} className="flex items-center justify-between gap-3 px-5 py-3 text-sm">
+            <span>
+              Characters can message me
+              <span className="text-muted block text-xs">
+                A short popup every few minutes from someone you chat with.
+              </span>
+            </span>
+            <input type="hidden" name="on" value={p.nudges_enabled ? "0" : "1"} />
+            <button
+              type="submit"
+              role="switch"
+              aria-checked={p.nudges_enabled}
+              aria-label="Characters can message me"
+              className={cn(
+                "relative h-6 w-11 shrink-0 rounded-full transition-colors",
+                p.nudges_enabled ? "bg-primary" : "bg-surface-2",
+              )}
+            >
+              <span
+                className={cn(
+                  "absolute top-0.5 h-5 w-5 rounded-full shadow transition-all",
+                  p.nudges_enabled ? "left-[22px] bg-black" : "left-0.5 bg-white",
+                )}
+              />
+            </button>
+          </form>
+          <div className="flex items-center justify-between px-5 py-3 text-sm">
+            <span>Your data</span>
+            <a href="/api/account/export" className={buttonClass({ variant: "secondary", size: "sm" })}>
+              Export (JSON)
+            </a>
           </div>
+          <details className="px-5 py-3 text-sm">
+            <summary className="text-lover-ink cursor-pointer font-semibold">Delete account</summary>
+            <form action={deleteAccount} className="mt-3 space-y-2">
+              <p className="text-muted">
+                This permanently erases your account, chats, memories, characters you created (including other
+                people&apos;s chats with them) and purchase history. It can&apos;t be undone.
+              </p>
+              <label htmlFor="confirm-delete" className="block font-semibold">
+                Type DELETE to confirm
+              </label>
+              <div className="flex gap-2">
+                <input
+                  id="confirm-delete"
+                  name="confirm"
+                  required
+                  pattern="[Dd][Ee][Ll][Ee][Tt][Ee]"
+                  autoComplete="off"
+                  className="border-border bg-bg h-9 rounded-lg border px-3"
+                />
+                <button
+                  className={buttonClass({ size: "sm", className: "bg-lover hover:bg-lover text-white" })}
+                >
+                  Delete forever
+                </button>
+              </div>
+            </form>
+          </details>
           <form action="/auth/signout" method="post" className="px-5 py-3">
             <button
               type="submit"

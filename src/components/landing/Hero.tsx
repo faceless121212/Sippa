@@ -1,4 +1,6 @@
 import { sampleCharacters } from "@/data/landing";
+import Link from "next/link";
+import { signupHref } from "@/lib/signup";
 import { CharacterAvatar } from "../CharacterAvatar";
 import { buttonClass } from "../ui/button";
 import { CreatorMock } from "./CreatorMock";
@@ -24,23 +26,24 @@ export function Hero() {
             id="hero-title"
             className="text-[40px] leading-[1.02] font-extrabold tracking-[-0.035em] text-balance sm:text-6xl lg:text-[68px]"
           >
-            Talk to anyone.
-            <br />
-            Or{" "}
+            Speak with different characters — or{" "}
             <span className="bg-primary text-on-primary rounded-lg box-decoration-clone px-2">
-              brew your own.
+              create your own.
             </span>
           </h1>
           <p className="text-muted mt-6 max-w-xl text-lg leading-relaxed">
             One sentence in. A whole character out — face, voice and backstory.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a href="#creator" className={buttonClass({ size: "lg" })}>
+            <Link href={signupHref("/app/create")} className={buttonClass({ size: "lg" })}>
               Create your character
-            </a>
-            <a href="#vibes" className={buttonClass({ variant: "secondary", size: "lg" })}>
-              Explore characters
-            </a>
+            </Link>
+            <Link
+              href={signupHref("/app/explore")}
+              className={buttonClass({ variant: "secondary", size: "lg" })}
+            >
+              Start chatting
+            </Link>
           </div>
           <div className="mt-8 flex items-center gap-3">
             <ul className="flex -space-x-2" aria-label="Some of the characters on Sippa">

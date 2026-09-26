@@ -20,6 +20,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         signedIn: Boolean(viewer),
         name: viewer?.profile?.display_name ?? viewer?.user.email ?? null,
         plan: viewer?.profile?.plan,
+        isAdmin: viewer?.profile?.is_admin ?? false,
+        nudges: viewer?.profile?.nudges_enabled ?? false,
       }}
     >
       {children}

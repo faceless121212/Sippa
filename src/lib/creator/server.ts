@@ -50,7 +50,7 @@ export function creationsLeft(c: Creator): number | null {
 export function assertCanCreate(c: Creator) {
   if (creationsLeft(c) === 0 && c.beans < beanCosts.creation) {
     throw new CreatorError(
-      `You've used your ${siteConfig.freeCharacterCreations} free creations. Each new one costs ${beanCosts.creation} Beans — or go unlimited with Sippa Plus.`,
+      `You've used your ${siteConfig.freeCharacterCreations} free creations. Each new one costs ${beanCosts.creation} Flowers — or go unlimited with Sippa Plus.`,
       402,
       { paywall: true },
     );
@@ -73,7 +73,7 @@ export async function chargeCreation(c: Creator): Promise<"free" | "beans"> {
     p_reason: "creation",
   });
   if (typeof data !== "number" || data < 0) {
-    throw new CreatorError(`You need ${beanCosts.creation} Beans for another creation.`, 402, {
+    throw new CreatorError(`You need ${beanCosts.creation} Flowers for another creation.`, 402, {
       paywall: true,
     });
   }

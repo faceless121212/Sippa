@@ -2,6 +2,7 @@ import { Bot, Heart, MessageCircle } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { OwnerPanel } from "@/components/app/OwnerPanel";
 import { ReportButton } from "@/components/app/ReportButton";
 import { CharacterAvatar } from "@/components/CharacterAvatar";
 import { buttonClass } from "@/components/ui/button";
@@ -143,6 +144,15 @@ export default async function CharacterPage({ params }: Props) {
             <Bot className="h-3.5 w-3.5" aria-hidden="true" />
             You&apos;re chatting with an AI character. They aren&apos;t a real person.
           </p>
+
+          {viewer && character.creatorId === viewer.user.id && (
+            <OwnerPanel
+              id={character.id}
+              visibility={character.visibility}
+              status={character.status}
+              note={character.moderationNote}
+            />
+          )}
 
           <section className="border-border mt-8 space-y-5 border-t pt-6">
             <div>

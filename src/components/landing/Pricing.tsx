@@ -4,6 +4,7 @@ import { Check } from "lucide-react";
 import { useState } from "react";
 import { formatPrice, pricing, siteConfig, yearlySavingsPercent } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { signupHref } from "@/lib/signup";
 import { buttonClass } from "../ui/button";
 
 type Billing = "monthly" | "yearly";
@@ -20,7 +21,7 @@ const plusFeatures = [
   "Longer memory",
   "Faster, smarter replies",
   "No ads",
-  "Monthly Beans bonus",
+  "Monthly Flowers bonus",
   "Voice (soon)",
 ];
 
@@ -75,7 +76,7 @@ export function Pricing() {
             price={formatPrice(0)}
             period="forever"
             features={freeFeatures}
-            cta="Join the waitlist"
+            cta="Start free"
           />
           <PlanCard
             name="Sippa Plus"
@@ -87,7 +88,7 @@ export function Pricing() {
                 : undefined
             }
             features={plusFeatures}
-            cta="Get Plus at launch"
+            cta="Get Plus"
             highlight
           />
         </div>
@@ -136,7 +137,7 @@ function PlanCard({
         ))}
       </ul>
       <a
-        href="#waitlist"
+        href={highlight ? signupHref("/app/plus") : signupHref()}
         className={buttonClass({ variant: highlight ? "primary" : "secondary", className: "mt-8" })}
       >
         {cta}

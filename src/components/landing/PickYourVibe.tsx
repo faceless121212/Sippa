@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { categories, categoryStyles, type CategoryId } from "@/config/categories";
 import { charactersByCategory } from "@/data/landing";
+import { signupHref } from "@/lib/signup";
 import { cn } from "@/lib/utils";
 import { CharacterCard } from "../CharacterCard";
 import { buttonClass } from "../ui/button";
@@ -128,10 +129,13 @@ export function PickYourVibe() {
           ))}
         </ul>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Link href={`/app/explore?category=${active}`} className={buttonClass()}>
+          <Link href={signupHref(`/app/explore?category=${active}`)} className={buttonClass()}>
             Start chatting with a {current.label.toLowerCase()}
           </Link>
-          <Link href={`/app/create?category=${active}`} className={buttonClass({ variant: "secondary" })}>
+          <Link
+            href={signupHref(`/app/create?category=${active}`)}
+            className={buttonClass({ variant: "secondary" })}
+          >
             Create your own
           </Link>
         </div>

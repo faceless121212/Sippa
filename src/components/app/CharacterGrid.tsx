@@ -58,10 +58,11 @@ export function CharacterGrid({
 
   return (
     <>
+      <h2 className="sr-only">Characters</h2>
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-4">
         {items.map((c, i) => (
           <li key={c.id} className="animate-rise" style={{ animationDelay: `${(i % 12) * 30}ms` }}>
-            <Link href={`/app/c/${c.id}`} className="block rounded-xl" aria-label={`${c.name} — ${c.hook}`}>
+            <Link href={`/app/c/${c.id}`} className="block rounded-xl">
               <CharacterCard character={c} priority={i < 4} />
             </Link>
           </li>

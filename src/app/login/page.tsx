@@ -14,6 +14,7 @@ const errors: Record<string, string> = {
   link: "That sign-in link is invalid or expired. Request a new one.",
   google: "Google sign-in isn't available right now. Use your email instead.",
   config: "Sign-in isn't set up yet.",
+  "google-off": "Google sign-in isn't enabled yet — use your email for now.",
 };
 
 export default async function LoginPage({

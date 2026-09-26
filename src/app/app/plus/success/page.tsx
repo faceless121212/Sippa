@@ -23,7 +23,7 @@ export default async function SuccessPage({
 
   const title =
     result.kind === "beans"
-      ? `${result.beans} Beans added ☕`
+      ? `${result.beans} Flowers added 🌸`
       : result.kind === "plus"
         ? "Welcome to Sippa Plus ✨"
         : result.kind === "pending"
@@ -33,7 +33,7 @@ export default async function SuccessPage({
     result.kind === "beans"
       ? "Use them for extra creations or messages past your daily limit."
       : result.kind === "plus"
-        ? "Unlimited messages and creations are on, plus your monthly Beans."
+        ? "Unlimited messages and creations are on, plus your monthly Flowers."
         : result.kind === "pending"
           ? "This can take a minute. Refresh this page shortly."
           : "If you were charged, it'll show up shortly — or contact support.";
@@ -50,7 +50,7 @@ export default async function SuccessPage({
           Start chatting
         </Link>
         <Link href="/app/plus" className={buttonClass({ variant: "secondary" })}>
-          Plans & Beans
+          Plans & Flowers
         </Link>
       </div>
     </div>

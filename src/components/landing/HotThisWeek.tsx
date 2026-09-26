@@ -1,5 +1,6 @@
 import { Flame } from "lucide-react";
 import Link from "next/link";
+import { signupHref } from "@/lib/signup";
 import { hotThisWeek } from "@/data/landing";
 import { CharacterCard } from "../CharacterCard";
 
@@ -21,7 +22,7 @@ export function HotThisWeek() {
           </h2>
         </div>
         <Link
-          href="/app/explore?sort=hot"
+          href={signupHref("/app/explore")}
           className="text-primary-ink shrink-0 text-sm font-medium hover:underline"
         >
           View all

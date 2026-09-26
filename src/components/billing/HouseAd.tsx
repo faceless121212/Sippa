@@ -24,7 +24,7 @@ export function HouseAd() {
             Sip without limits.
           </p>
           <p className="mt-1.5 text-sm font-medium text-black/70">
-            Unlimited chats · {pricing.plusMonthlyBeans} Beans every month · zero ads
+            Unlimited chats · {pricing.plusMonthlyBeans} Flowers every month · zero ads
           </p>
           <Link
             href="/app/plus"
@@ -40,7 +40,7 @@ export function HouseAd() {
         <div className="relative hidden h-32 w-40 shrink-0 sm:block" aria-hidden="true">
           <BrandIcon name="plus" size={112} className="absolute top-0 right-6 rotate-[-6deg] shadow-2xl" />
           <BrandIcon
-            name="beans"
+            name="flowers"
             size={64}
             className="absolute right-0 bottom-0 rotate-[8deg] shadow-xl ring-4 ring-[var(--primary)]"
           />

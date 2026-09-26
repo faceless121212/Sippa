@@ -7,8 +7,8 @@ test.beforeEach(async ({ context }) => {
 
 test("renders all landing sections without horizontal scroll", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("brew your own");
-  for (const id of ["vibes", "creator", "why", "hot", "pricing", "faq", "waitlist"]) {
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("create your own");
+  for (const id of ["vibes", "creator", "why", "hot", "pricing", "faq", "join"]) {
     await expect(page.locator(`#${id}`)).toBeAttached();
   }
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -25,7 +25,7 @@ test("category tabs switch sample characters and deep links", async ({ page }) =
   await expect(panel).toContainText("Ada Lovelace");
   await expect(panel.getByRole("link", { name: /Start chatting/ })).toHaveAttribute(
     "href",
-    "/app/explore?category=famous",
+    `/login?next=${encodeURIComponent("/app/explore?category=famous")}`,
   );
 
   // Arrow-key navigation (WAI-ARIA tabs pattern).
@@ -56,16 +56,21 @@ test("FAQ answers expand", async ({ page }) => {
   await expect(page.getByText(/Adults 18\+/)).toBeVisible();
 });
 
-test("waitlist requires consent, then succeeds", async ({ page }, testInfo) => {
+test("every call-to-action on the landing page leads to sign-up", async ({ page }) => {
   await page.goto("/");
-  const form = page.locator("#waitlist");
-  await form.getByLabel("Email address").fill(`e2e-${testInfo.project.name}-${Date.now()}@example.com`);
-  await form.getByRole("button", { name: "Join the waitlist" }).click();
-  await expect(form.getByRole("status")).toHaveCount(0);
-
-  await form.getByRole("checkbox").check();
-  await form.getByRole("button", { name: "Join the waitlist" }).click();
-  await expect(form.getByRole("status")).toContainText("You're on the list");
+  const ctas = page.locator(
+    "main a[class*='rounded'], header a[class*='bg-primary'], main a:has-text('View all')",
+  );
+  const count = await ctas.count();
+  expect(count).toBeGreaterThan(8);
+  for (let i = 0; i < count; i++) {
+    const href = await ctas.nth(i).getAttribute("href");
+    if (href?.startsWith("#")) continue; // in-page anchors (nav) aren't CTAs
+    expect(href, await ctas.nth(i).innerText()).toMatch(/^\/login\?next=/);
+  }
+  await page.getByRole("link", { name: "Create your character" }).first().click();
+  await expect(page).toHaveURL(/\/login\?next=%2Fapp%2Fcreate/);
+  await expect(page.getByRole("heading", { name: "Start sipping" })).toBeVisible();
 });
 
 test("waitlist API rejects bad input", async ({ request }) => {

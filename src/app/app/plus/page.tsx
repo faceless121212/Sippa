@@ -16,7 +16,7 @@ export const metadata: Metadata = { title: "Sippa Plus" };
 const PLUS_FEATURES = [
   "Unlimited messages",
   "Unlimited character creations",
-  `${pricing.plusMonthlyBeans} Beans every month`,
+  `${pricing.plusMonthlyBeans} Flowers every month`,
   "Longer memory",
   "No ads",
 ];
@@ -38,13 +38,13 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
     <div className="mx-auto max-w-5xl space-y-8 px-4 py-6 sm:px-6 md:py-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-muted text-xs font-bold tracking-[0.08em] uppercase">Plans & Beans</p>
+          <p className="text-muted text-xs font-bold tracking-[0.08em] uppercase">Plans & Flowers</p>
           <h1 className="text-3xl font-extrabold tracking-[-0.03em] sm:text-4xl">
             {isPlus ? "You're on Sippa Plus ☕" : "Sip without limits"}
           </h1>
         </div>
         <div className="border-border bg-surface flex items-center gap-2 rounded-xl border px-4 py-2.5">
-          <BrandIcon name="beans" size={28} />
+          <BrandIcon name="flowers" size={28} />
           <span className="text-sm">
             <strong className="text-lg">{p?.beans ?? 0}</strong> Beans
           </span>
@@ -134,13 +134,14 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
             <li>{siteConfig.freeCharacterCreations} free character creations</li>
             <li>Light ads — never inside chats</li>
           </ul>
-          <h3 className="mt-6 text-sm font-extrabold">What Beans buy</h3>
+          <h3 className="mt-6 text-sm font-extrabold">What Flowers buy</h3>
           <ul className="text-muted mt-2 space-y-1.5 text-sm">
             <li>
-              <strong className="text-text">{beanCosts.creation} Beans</strong> — one more character creation
+              <strong className="text-text">{beanCosts.creation} Flowers</strong> — one more character
+              creation
             </li>
             <li>
-              <strong className="text-text">{beanCosts.message} Bean</strong> — one message past the daily
+              <strong className="text-text">{beanCosts.message} Flower</strong> — one message past the daily
               limit (only when you choose)
             </li>
           </ul>
@@ -150,7 +151,7 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
       {/* Beans */}
       <section aria-labelledby="beans">
         <h2 id="beans" className="text-xl font-extrabold tracking-[-0.02em]">
-          Bean packs
+          Flower packs
         </h2>
         <ul className="mt-4 grid gap-3 sm:grid-cols-3">
           {beanPacks.map((pack) => (
@@ -167,9 +168,9 @@ export default async function PlusPage({ searchParams }: { searchParams: Promise
                 </span>
               )}
               <p className="flex items-center gap-2 text-2xl font-extrabold">
-                <BrandIcon name="beans" size={36} /> {pack.beans}
+                <BrandIcon name="flowers" size={36} /> {pack.beans}
               </p>
-              <p className="text-muted text-sm">Beans · {formatPrice(pack.price)}</p>
+              <p className="text-muted text-sm">Flowers · {formatPrice(pack.price)}</p>
               <BuyButton item={pack.id} variant={pack.label ? "primary" : "secondary"} className="mt-4">
                 Buy for {formatPrice(pack.price)}
               </BuyButton>

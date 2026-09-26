@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
 /** Pages that need a signed-in user. Explore and character pages stay public. */
-const PROTECTED = ["/app/chats", "/app/create", "/app/profile", "/app/plus", "/onboarding"];
+const PROTECTED = ["/app/chats", "/app/create", "/app/profile", "/app/plus", "/app/admin", "/onboarding"];
 
 export async function middleware(request: NextRequest) {
   const { response, user } = await updateSession(request);

@@ -39,6 +39,10 @@ export type CharacterDetail = CharacterSummary & {
   speakingStyle: string;
   firstMessage: string;
   creatorName: string;
+  creatorId: string | null;
+  visibility: "private" | "unlisted" | "public";
+  status: "draft" | "pending" | "approved" | "hidden";
+  moderationNote: string | null;
 };
 
 export type Sort = "popular" | "trending" | "new";
@@ -75,6 +79,9 @@ type Row = {
   speaking_style?: string;
   first_message?: string;
   creator_id?: string | null;
+  visibility?: CharacterDetail["visibility"];
+  status?: CharacterDetail["status"];
+  moderation_note?: string | null;
 };
 
 const SUMMARY_COLUMNS =
@@ -172,13 +179,19 @@ export async function getCharacter(id: string, viewerIsAdult: boolean): Promise<
       speakingStyle: c.speakingStyle,
       firstMessage: c.firstMessage,
       creatorName: "Sippa",
+      creatorId: null,
+      visibility: "public",
+      status: "approved",
+      moderationNote: null,
     };
   }
 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("characters")
-    .select(`${SUMMARY_COLUMNS},description,personality,speaking_style,first_message,creator_id`)
+    .select(
+      `${SUMMARY_COLUMNS},description,personality,speaking_style,first_message,creator_id,visibility,status,moderation_note`,
+    )
     .eq("id", id)
     .maybeSingle();
   if (error) throw error;
@@ -191,6 +204,10 @@ export async function getCharacter(id: string, viewerIsAdult: boolean): Promise<
     speakingStyle: r.speaking_style ?? "",
     firstMessage: r.first_message ?? "",
     creatorName: r.creator_id ? "Community creator" : "Sippa",
+    creatorId: r.creator_id ?? null,
+    visibility: r.visibility ?? "public",
+    status: r.status ?? "approved",
+    moderationNote: r.moderation_note ?? null,
   };
 }
 

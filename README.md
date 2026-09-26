@@ -12,8 +12,8 @@ Plan and decisions: [`docs/PLAN.md`](docs/PLAN.md), [`docs/DECISIONS.md`](docs/D
 | 2     | App shell: auth + age gate, explore, character page, seed data | ✅ Done |
 | 3     | Chat (streaming, memory, limits, safety)                       | ✅ Done |
 | 4     | AI Character Creator                                           | ✅ Done |
-| 5     | Monetization (Stripe test mode, Plus, Beans, ads)              | ✅ Done |
-| 6     | Admin, moderation, legal, polish                               | Next    |
+| 5     | Monetization (Stripe test mode, Plus, Flowers, ads)            | ✅ Done |
+| 6     | Admin, moderation, legal, polish                               | ✅ Done |
 
 ## Run it
 
@@ -81,9 +81,19 @@ Without Supabase keys the app still runs: Explore and character pages read the l
 
 **Google sign-in** (optional): create an OAuth client in Google Cloud Console, then enable the Google provider in Supabase → Authentication → Providers with its client ID and secret.
 
+## Moderation & admin
+
+- Make someone admin: `npm run admin:grant -- you@example.com` (`--revoke` to remove).
+- Admins see **Moderation** in the sidebar (`/app/admin`): reports (with the automatic verdict), public characters waiting for approval, hidden characters, users (ban/unban) and the audit log.
+- Reports are reviewed automatically first: clear violations and characters with 3+ open reports are hidden until an admin decides.
+
+## Characters message you
+
+Every 3–4 minutes a character from your chats sends a short in-character message as a popup (Haiku-written, safety rules applied, never guilt-trippy). Reply opens the chat. Users can switch it off in Settings. `npm run nudge:smoke` tests it live.
+
 ## Payments
 
-**Demo mode (default in development):** with no Stripe key, "Buy" opens a simulated checkout that grants Plus or Beans instantly — no card, no money. Force it on a deployed preview with `PAYMENTS_MODE=demo`; disable with `PAYMENTS_MODE=off`.
+**Demo mode (default in development):** with no Stripe key, "Buy" opens a simulated checkout that grants Plus or Flowers instantly — no card, no money. Force it on a deployed preview with `PAYMENTS_MODE=demo`; disable with `PAYMENTS_MODE=off`.
 
 **Stripe (test mode):**
 
@@ -92,6 +102,11 @@ Without Supabase keys the app still runs: Explore and character pages read the l
 3. Buy from `/app/plus` with test card `4242 4242 4242 4242`, any future date, any CVC.
 
 Locally, purchases are confirmed when you return from Checkout (the server re-checks the session with Stripe). In production also add a webhook endpoint `https://<domain>/api/billing/webhook` for `checkout.session.completed`, `invoice.paid` and `customer.subscription.*`, and set `STRIPE_WEBHOOK_SECRET`.
+
+## Google sign-in
+
+1. Google Cloud Console → APIs & Services → Credentials → OAuth client ID (Web). Authorized origin `http://localhost:3000`; redirect URI `https://<project-ref>.supabase.co/auth/v1/callback`.
+2. Supabase → Authentication → Sign In / Providers → Google: paste client ID + secret, enable.
 
 ## Accounts checklist
 

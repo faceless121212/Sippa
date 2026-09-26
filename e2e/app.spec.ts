@@ -12,7 +12,10 @@ test("explore lists characters, filters by category and loads more on scroll", a
   await page.locator("main li").last().scrollIntoViewIfNeeded();
   await expect(cards).not.toHaveCount(12); // infinite scroll fetched more
 
-  await page.getByRole("link", { name: /Famous/ }).first().click();
+  await page
+    .getByRole("link", { name: /Famous/ })
+    .first()
+    .click();
   await expect(page).toHaveURL(/category=famous/);
   await expect(page.getByText("Marcus Aurelius")).toBeVisible();
   await expect(page.getByText("Pip Marlow")).toHaveCount(0);
@@ -45,9 +48,11 @@ test("unknown characters 404", async ({ page }) => {
 });
 
 test("protected pages send signed-out users to login", async ({ page }) => {
-  for (const path of ["/app/chats", "/app/create", "/app/profile", "/app/plus"]) {
+  for (const path of ["/app/chats", "/app/create", "/app/profile", "/app/plus", "/app/admin"]) {
     await page.goto(path);
-    await expect(page).toHaveURL(new RegExp(`/login\\?next=${encodeURIComponent(path).replace(/\//g, "%2F")}`));
+    await expect(page).toHaveURL(
+      new RegExp(`/login\\?next=${encodeURIComponent(path).replace(/\//g, "%2F")}`),
+    );
     await expect(page.getByRole("heading", { name: "Start sipping" })).toBeVisible();
   }
 });

@@ -12,6 +12,7 @@ const STYLE =
 const ICONS: Record<string, string> = {
   plus: `a cute chunky coffee cup in vivid neon lime green (#C3FF00) with a small shiny gold crown resting on top and two soft white steam swirls, ${STYLE}`,
   beans: `three chunky glossy roasted coffee beans with vivid neon lime green (#C3FF00) rim highlights, stacked playfully, ${STYLE}`,
+  flowers: `a small playful bouquet of three chunky glossy 3D flowers with vivid neon lime green (#C3FF00) petals and soft pink centres, tied with a tiny ribbon, ${STYLE}`,
   cup: `a cute chunky coffee cup in vivid neon lime green (#C3FF00) with a heart-shaped steam swirl, ${STYLE}`,
 };
 

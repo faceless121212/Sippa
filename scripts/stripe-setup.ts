@@ -22,7 +22,7 @@ async function ensurePrice(lookupKey: string, create: () => Promise<Stripe.Price
 }
 
 async function main() {
-  const plus = await stripe.products.create({ name: "Sippa Plus", description: "Unlimited messages & creations, no ads, 300 Beans every month." });
+  const plus = await stripe.products.create({ name: "Sippa Plus", description: "Unlimited messages & creations, no ads, 300 Flowers every month." });
   await ensurePrice(STRIPE_ITEMS.plus_monthly.lookupKey, () =>
     stripe.prices.create({ product: plus.id, currency: "eur", unit_amount: cents(pricing.plusMonthly), recurring: { interval: "month" }, lookup_key: STRIPE_ITEMS.plus_monthly.lookupKey, tax_behavior: "inclusive" }),
   );
@@ -36,7 +36,7 @@ async function main() {
   for (const pack of beanPacks) {
     const lookup = STRIPE_ITEMS[pack.id].lookupKey;
     await ensurePrice(lookup, async () => {
-      const product = await stripe.products.create({ name: `${pack.beans} Beans`, description: "Sippa Beans for extra creations and messages." });
+      const product = await stripe.products.create({ name: `${pack.beans} Flowers`, description: "Sippa Flowers for extra creations and messages." });
       return stripe.prices.create({ product: product.id, currency: "eur", unit_amount: cents(pack.price), lookup_key: lookup, tax_behavior: "inclusive" });
     });
   }

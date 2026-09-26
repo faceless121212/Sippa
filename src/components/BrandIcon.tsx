@@ -7,7 +7,7 @@ export function BrandIcon({
   size = 28,
   className,
 }: {
-  name: "plus" | "beans" | "cup";
+  name: "plus" | "flowers" | "beans" | "cup";
   size?: number;
   className?: string;
 }) {

@@ -136,11 +136,7 @@ export default async function HomePage() {
             <ul className="no-scrollbar -mx-4 mt-4 flex snap-x gap-3 overflow-x-auto px-4 sm:mx-0 sm:px-0">
               {c.items.map((ch) => (
                 <li key={ch.id} className="w-40 shrink-0 snap-start sm:w-48">
-                  <Link
-                    href={`/app/c/${ch.id}`}
-                    className="block rounded-xl"
-                    aria-label={`${ch.name} — ${ch.hook}`}
-                  >
+                  <Link href={`/app/c/${ch.id}`} className="block rounded-xl">
                     <CharacterCard character={ch} />
                   </Link>
                 </li>

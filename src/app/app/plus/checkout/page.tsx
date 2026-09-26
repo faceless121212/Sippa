@@ -32,7 +32,7 @@ export default async function DemoCheckoutPage({
       <div className="border-border bg-surface mt-6 rounded-2xl border p-6">
         <p className="text-muted text-xs font-bold tracking-[0.08em] uppercase">Order summary</p>
         <div className="mt-3 flex items-center gap-3">
-          <BrandIcon name={isPlus ? "plus" : "beans"} size={44} />
+          <BrandIcon name={isPlus ? "plus" : "flowers"} size={44} />
           <div className="flex-1">
             <p className="font-extrabold">{info.title}</p>
             <p className="text-muted text-xs">
