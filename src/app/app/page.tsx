@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CharacterAvatar } from "@/components/CharacterAvatar";
 import { CharacterCard } from "@/components/CharacterCard";
+import { CheckInCard } from "@/components/engage/CheckInCard";
+import { MomentCard } from "@/components/engage/MomentCard";
+import { getFeed } from "@/lib/moments";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { HouseAd } from "@/components/billing/HouseAd";
 import { BrandIcon } from "@/components/BrandIcon";
 import { buttonClass } from "@/components/ui/button";
@@ -61,6 +65,28 @@ export default async function HomePage() {
     ),
   ]);
   const collections = rows as (Collection & { items: CharacterSummary[] })[];
+
+  // Engagement: daily check-in, moments strip, top creators.
+  const admin = createAdminClient();
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
+  const [checkins, moments, creators] = await Promise.all([
+    viewer
+      ? admin
+          .from("checkins")
+          .select("day,streak")
+          .eq("user_id", viewer.user.id)
+          .in("day", [today, yesterday])
+      : Promise.resolve({ data: null }),
+    getFeed(viewer ? { userId: viewer.user.id, adult } : null, 4),
+    admin
+      .from("top_creators")
+      .select("creator_id,name,characters,likes,messages")
+      .order("likes", { ascending: false })
+      .limit(5),
+  ]);
+  const todayRow = checkins.data?.find((r) => r.day === today);
+  const streak = todayRow?.streak ?? checkins.data?.find((r) => r.day === yesterday)?.streak ?? 0;
   const name = viewer?.profile?.display_name;
 
   return (
@@ -106,6 +132,8 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {viewer && <CheckInCard streak={streak} claimedToday={Boolean(todayRow)} />}
+
       {/* rankings */}
       <section aria-labelledby="rankings-title">
         <h2 id="rankings-title" className="sr-only">
@@ -128,6 +156,30 @@ export default async function HomePage() {
       </section>
 
       {viewer?.profile?.plan !== "plus" && <HouseAd />}
+
+      {moments.length > 0 && (
+        <section aria-labelledby="moments-title">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h2 id="moments-title" className="text-xl font-extrabold tracking-[-0.02em]">
+                Moments
+              </h2>
+              <p className="text-muted text-sm">What your characters are up to.</p>
+            </div>
+            <Link
+              href="/app/moments"
+              className="text-muted hover:text-text flex items-center text-sm font-semibold"
+            >
+              See all <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
+            {moments.map((m) => (
+              <MomentCard key={m.id} moment={m} signedIn={Boolean(viewer)} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* collections */}
       {collections.map((c) =>
@@ -158,6 +210,25 @@ export default async function HomePage() {
             </ul>
           </section>
         ) : null,
+      )}
+      {(creators.data?.length ?? 0) > 0 && (
+        <section aria-labelledby="creators-title" className="border-border bg-surface rounded-2xl border p-4">
+          <h2 id="creators-title" className="font-extrabold">
+            🏆 Top creators
+          </h2>
+          <ol className="mt-3 space-y-1">
+            {creators.data!.map((c, i) => (
+              <li key={c.creator_id} className="flex items-center gap-3 rounded-lg p-2 text-sm">
+                <span className="w-4 text-center font-extrabold">{i + 1}</span>
+                <span className="min-w-0 flex-1 truncate font-semibold">{c.name}</span>
+                <span className="text-muted text-xs">
+                  {c.characters} character{c.characters === 1 ? "" : "s"} · ❤️ {c.likes} ·{" "}
+                  {formatCount(Number(c.messages))} msgs
+                </span>
+              </li>
+            ))}
+          </ol>
+        </section>
       )}
     </div>
   );

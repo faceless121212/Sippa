@@ -19,8 +19,11 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import { addMemory, deleteMemory, newChat, type MemoryRow } from "@/app/app/chats/actions";
 import type { Helpline } from "@/lib/safety/crisis";
+import type { CategoryId } from "@/config/categories";
+import { GIFTS, XP, type GiftSize } from "@/config/engagement";
 import { cn } from "@/lib/utils";
 import { ReportButton } from "../app/ReportButton";
+import { BondMeter } from "../engage/BondMeter";
 import { CharacterAvatar } from "../CharacterAvatar";
 import { buttonClass } from "../ui/button";
 import { MessageText } from "./MessageText";
@@ -37,7 +40,8 @@ export type ChatMessage = {
 
 type Props = {
   chatId: string;
-  character: { id: string; name: string; hook: string; avatarUrl?: string | null };
+  character: { id: string; name: string; hook: string; avatarUrl?: string | null; category: CategoryId };
+  bondXp: number;
   initialMessages: ChatMessage[];
   initialMemories: MemoryRow[];
   summary: string;
@@ -66,6 +70,8 @@ export function ChatView(props: Props) {
   const [panel, setPanel] = useState(false);
   // Past the free limit, spend Beans only after the user explicitly opts in.
   const [useBeans, setUseBeans] = useState(false);
+  const [bondXp, setBondXp] = useState(props.bondXp);
+  const [giftOpen, setGiftOpen] = useState(false);
   const abort = useRef<AbortController | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
@@ -132,6 +138,17 @@ export function ChatView(props: Props) {
         signal: controller.signal,
       });
       if (!res.body) throw new Error("No response");
+      if (!res.ok && !res.headers.get("content-type")?.includes("ndjson")) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string; needFlowers?: boolean };
+        dropReply();
+        dropUser();
+        setNotice(
+          data.needFlowers
+            ? { kind: "limit", beans: 0 }
+            : { kind: "error", text: data.error ?? "Something went wrong." },
+        );
+        return;
+      }
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let buf = "";
@@ -150,7 +167,8 @@ export function ChatView(props: Props) {
             setMessages((m) => m.map((x) => (x.id === replyId ? { ...x, content: x.content + e.v } : x)));
           } else if (e.t === "done") {
             setMessages((m) => m.map((x) => (x.id === replyId ? { ...x, id: e.id, streaming: false } : x)));
-            if (e.remaining !== undefined) setRemaining(e.remaining);
+            if (e.remaining !== undefined && e.remaining !== null) setRemaining(e.remaining);
+            if (typeof e.xp === "number") setBondXp(e.xp);
           } else if (e.t === "crisis") {
             setMessages((m) => [
               ...m.filter((x) => x.id !== replyId),
@@ -193,6 +211,14 @@ export function ChatView(props: Props) {
     setInput("");
     inputRef.current?.focus();
     run(`/api/chats/${chatId}/messages`, { content, useBeans }, { id: tempId--, role: "user", content });
+  };
+
+  const sendGift = (size: GiftSize) => {
+    setGiftOpen(false);
+    if (busy) return;
+    const gift = GIFTS.find((g) => g.size === size)!;
+    const text = `${gift.emoji} *gives you ${size === 5 ? "a single bloom" : size === 20 ? "a bouquet of 20 flowers" : "a grand bouquet of 50 flowers"}*`;
+    run(`/api/chats/${chatId}/gift`, { size }, { id: tempId--, role: "user", content: text });
   };
 
   const continueWithBeans = () => {
@@ -278,6 +304,12 @@ export function ChatView(props: Props) {
               </span>
             </span>
           </Link>
+          <BondMeter
+            xp={bondXp}
+            category={character.category}
+            compact
+            className="ml-2 hidden w-40 sm:block"
+          />
           <div className="ml-auto flex items-center gap-1">
             <form action={newChat}>
               <input type="hidden" name="character_id" value={character.id} />
@@ -483,6 +515,43 @@ export function ChatView(props: Props) {
               placeholder={`Message ${character.name}…`}
               className="[field-sizing:content] max-h-40 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-[15px] focus:outline-none"
             />
+            <div className="relative shrink-0">
+              <button
+                type="button"
+                onClick={() => setGiftOpen((o) => !o)}
+                disabled={busy}
+                aria-expanded={giftOpen}
+                aria-label={`Send ${character.name} flowers`}
+                title="Send flowers"
+                className="hover:bg-surface-2 flex h-10 w-10 items-center justify-center rounded-xl text-lg disabled:opacity-40"
+              >
+                <span aria-hidden="true">🌸</span>
+              </button>
+              {giftOpen && (
+                <div className="border-border bg-bg animate-msg absolute bottom-12 left-0 z-20 w-56 rounded-xl border p-2 shadow-xl">
+                  <p className="text-muted px-2 pb-1 text-[11px] font-bold tracking-[0.08em] uppercase">
+                    Send a gift
+                  </p>
+                  {GIFTS.map((g) => (
+                    <button
+                      key={g.size}
+                      type="button"
+                      onClick={() => sendGift(g.size)}
+                      className="hover:bg-surface-2 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm"
+                    >
+                      <span className="text-lg" aria-hidden="true">
+                        {g.emoji}
+                      </span>
+                      <span className="flex-1 font-semibold">{g.label}</span>
+                      <span className="text-muted text-xs">{g.size} 🌸</span>
+                    </button>
+                  ))}
+                  <p className="text-muted px-2 pt-1 text-[11px]">
+                    Gifts grow your bond (+{XP.perFlowerGifted} XP per flower).
+                  </p>
+                </div>
+              )}
+            </div>
             {busy ? (
               <button
                 type="button"

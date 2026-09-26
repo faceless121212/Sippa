@@ -2,6 +2,7 @@
 
 import {
   Compass,
+  Newspaper,
   Home,
   MessageCircle,
   PanelLeftClose,
@@ -23,6 +24,7 @@ import { buttonClass } from "../ui/button";
 const NAV = [
   { href: "/app", label: "Home", icon: Home },
   { href: "/app/explore", label: "Explore", icon: Compass },
+  { href: "/app/moments", label: "Moments", icon: Newspaper },
   { href: "/app/chats", label: "Chats", icon: MessageCircle },
   { href: "/app/create", label: "Create", icon: Plus },
   { href: "/app/profile", label: "Profile", icon: User },

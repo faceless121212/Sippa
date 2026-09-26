@@ -7,11 +7,16 @@ import { moderateText } from "../src/lib/moderation";
 import { NUDGE_COLUMNS, writeNudge } from "../src/lib/nudges";
 
 async function main() {
-  const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
+  const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    auth: { persistSession: false },
+  });
   for (const id of ["ren-kaito", "marcus-aurelius"]) {
     const { data: c } = await admin.from("characters").select(NUDGE_COLUMNS).eq("id", id).single();
     const text = await writeNudge(c as never, "Ilia");
-    const guilt = /(miss(ed)? you so|lonely|why (did|do) you (leave|ignore)|don'?t leave|you (never|forgot)|come back)/i.test(text);
+    const guilt =
+      /(miss(ed)? you so|lonely|why (did|do) you (leave|ignore)|don'?t leave|you (never|forgot)|come back)/i.test(
+        text,
+      );
     console.log(`${guilt ? "✗ guilt-trippy" : "✓"} ${id}: ${text}`);
   }
   const ok = await moderateText("*smiles* Want to grab coffee after your shift?");

@@ -217,6 +217,56 @@ async function main() {
         )) as { n: number }[];
         check("pending (unapproved) characters are invisible to others", pendingSeen[0].n === 0);
 
+        // ── engagement mechanics ──
+        await denied("users cannot give themselves bond XP", () =>
+          as(
+            adult,
+            () =>
+              tx`insert into public.bonds (user_id, character_id, xp) values (${adult}, 'ada-lovelace', 999)`,
+          ),
+        );
+        await denied("users cannot call add_bond_xp", () =>
+          as(adult, () => tx`select public.add_bond_xp(${adult}, 'ada-lovelace', 999, 0)`),
+        );
+        await denied("users cannot fake a daily check-in", () =>
+          as(
+            adult,
+            () => tx`insert into public.checkins (user_id, day, streak) values (${adult}, current_date, 99)`,
+          ),
+        );
+        await denied("users cannot post moments as characters", () =>
+          as(
+            adult,
+            () => tx`insert into public.moments (character_id, text) values ('ada-lovelace', 'fake')`,
+          ),
+        );
+        const [{ id: mom }] =
+          await tx`insert into public.moments (character_id, text) values ('marie-curie', 'test moment') returning id`;
+        await as(
+          adult,
+          () => tx`insert into public.moment_likes (moment_id, user_id) values (${mom}, ${adult})`,
+        );
+        const likes = (await tx`select like_count from public.moments where id = ${mom}`)[0].like_count;
+        check("moment likes update the count", likes === 1);
+        await denied("users cannot like as someone else", () =>
+          as(teen, () => tx`insert into public.moment_likes (moment_id, user_id) values (${mom}, ${adult})`),
+        );
+        await tx`insert into public.moments (character_id, text) values ('mara-vellin', 'lover moment')`;
+        const adultSees = (await as(
+          adult,
+          () => tx`select count(*)::int as n from public.moments where character_id = 'mara-vellin'`,
+        )) as { n: number }[];
+        check("verified adults see Lover characters' moments", adultSees[0].n >= 1);
+        const loverMoments = (await as(
+          teen,
+          () =>
+            tx`select count(*)::int as n from public.moments m join public.characters c on c.id = m.character_id where c.category = 'lover'`,
+        )) as { n: number }[];
+        check("non-verified users can't see Lover characters' moments", loverMoments[0].n === 0);
+        await denied("the creator leaderboard view isn't readable with user keys", () =>
+          as(adult, () => tx`select * from public.top_creators limit 1`),
+        );
+
         throw new Error("__rollback__");
       })
       .catch((e) => {

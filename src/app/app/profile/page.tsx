@@ -6,6 +6,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { buttonClass } from "@/components/ui/button";
 import { requireAdult, viewerIsAdult } from "@/lib/auth";
 import { listCharacters } from "@/lib/characters";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { deleteAccount, setNudges } from "./actions";
@@ -23,9 +24,18 @@ export default async function ProfilePage() {
   const favIds = new Set((favs ?? []).map((f) => f.character_id as string));
   const { data: mine } = await supabase
     .from("characters")
-    .select("id,name,age,category,famous_type,hook,tags,message_count,visibility,avatar_url")
+    .select("id,name,age,category,famous_type,hook,tags,message_count,visibility,avatar_url,like_count")
     .eq("creator_id", viewer.user.id)
     .order("created_at", { ascending: false });
+  const { count: chatCount } = mine?.length
+    ? await createAdminClient()
+        .from("chats")
+        .select("id", { count: "exact", head: true })
+        .in(
+          "character_id",
+          mine.map((c) => c.id),
+        )
+    : { count: 0 };
   const all = favIds.size ? await listCharacters({ limit: 200 }, viewerIsAdult(viewer)) : [];
   const favorites = all.filter((c) => favIds.has(c.id));
   const p = viewer.profile!;
@@ -47,6 +57,25 @@ export default async function ProfilePage() {
           {p.plan === "plus" ? "SIPPA PLUS" : "FREE"} · {p.beans} Flowers
         </Link>
       </section>
+
+      {mine && mine.length > 0 && (
+        <section aria-labelledby="stats" className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <h2 id="stats" className="sr-only">
+            Creator stats
+          </h2>
+          {[
+            { label: "Characters", value: mine.length },
+            { label: "Likes", value: mine.reduce((n, c) => n + (c.like_count ?? 0), 0) },
+            { label: "Messages", value: mine.reduce((n, c) => n + Number(c.message_count), 0) },
+            { label: "Chats started", value: chatCount ?? 0 },
+          ].map((st) => (
+            <div key={st.label} className="border-border bg-surface rounded-xl border p-4">
+              <p className="text-2xl font-extrabold">{st.value}</p>
+              <p className="text-muted text-xs font-semibold">{st.label}</p>
+            </div>
+          ))}
+        </section>
+      )}
 
       <section aria-labelledby="mine">
         <div className="flex items-center justify-between">
@@ -76,7 +105,9 @@ export default async function ProfilePage() {
                     }}
                   />
                 </Link>
-                <p className="text-muted mt-1 text-xs capitalize">{c.visibility}</p>
+                <p className="text-muted mt-1 text-xs">
+                  <span className="capitalize">{c.visibility}</span> · ❤️ {c.like_count ?? 0}
+                </p>
               </li>
             ))}
           </ul>

@@ -43,6 +43,7 @@ export type CharacterDetail = CharacterSummary & {
   visibility: "private" | "unlisted" | "public";
   status: "draft" | "pending" | "approved" | "hidden";
   moderationNote: string | null;
+  likeCount: number;
 };
 
 export type Sort = "popular" | "trending" | "new";
@@ -82,6 +83,7 @@ type Row = {
   visibility?: CharacterDetail["visibility"];
   status?: CharacterDetail["status"];
   moderation_note?: string | null;
+  like_count?: number;
 };
 
 const SUMMARY_COLUMNS =
@@ -183,6 +185,7 @@ export async function getCharacter(id: string, viewerIsAdult: boolean): Promise<
       visibility: "public",
       status: "approved",
       moderationNote: null,
+      likeCount: 0,
     };
   }
 
@@ -190,7 +193,7 @@ export async function getCharacter(id: string, viewerIsAdult: boolean): Promise<
   const { data, error } = await supabase
     .from("characters")
     .select(
-      `${SUMMARY_COLUMNS},description,personality,speaking_style,first_message,creator_id,visibility,status,moderation_note`,
+      `${SUMMARY_COLUMNS},description,personality,speaking_style,first_message,creator_id,visibility,status,moderation_note,like_count`,
     )
     .eq("id", id)
     .maybeSingle();
@@ -208,6 +211,7 @@ export async function getCharacter(id: string, viewerIsAdult: boolean): Promise<
     visibility: r.visibility ?? "public",
     status: r.status ?? "approved",
     moderationNote: r.moderation_note ?? null,
+    likeCount: r.like_count ?? 0,
   };
 }
 

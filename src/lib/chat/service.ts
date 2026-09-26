@@ -1,6 +1,7 @@
 import "server-only";
 import { after } from "next/server";
 import type { CategoryId } from "@/config/categories";
+import { bondLevel, bondPromptNote, XP } from "@/config/engagement";
 import { beanCosts, pricing } from "@/config/site";
 import { complete, LlmUnavailableError, streamChat } from "@/lib/llm";
 import { asksIfHuman, claimsToBeMinor, isMinorSexualContent } from "@/lib/safety/content";
@@ -27,7 +28,14 @@ export type ChatContext = {
   userId: string;
   userName: string | null;
   plan: "free" | "plus";
-  chat: { id: string; character_id: string; summary: string; summarized_upto: number; message_count: number };
+  chat: {
+    id: string;
+    character_id: string;
+    summary: string;
+    summarized_upto: number;
+    message_count: number;
+    scene: string | null;
+  };
   character: PromptCharacter & { id: string };
 };
 
@@ -54,7 +62,7 @@ export async function loadChatContext(chatId: string): Promise<ChatContext> {
     admin.from("profiles").select("display_name,is_adult,plan,banned_at").eq("id", user.id).maybeSingle(),
     admin
       .from("chats")
-      .select("id,user_id,character_id,summary,summarized_upto,message_count")
+      .select("id,user_id,character_id,summary,summarized_upto,message_count,scene")
       .eq("id", chatId)
       .maybeSingle(),
   ]);
@@ -96,8 +104,15 @@ export async function loadChatContext(chatId: string): Promise<ChatContext> {
   };
 }
 
-/** Creates a chat that opens with the character's greeting. Returns its id. */
-export async function createChat(userId: string, characterId: string): Promise<string> {
+/**
+ * Creates a chat that opens with the character's greeting (or a scene opener).
+ * Returns its id.
+ */
+export async function createChat(
+  userId: string,
+  characterId: string,
+  scene?: { prompt: string; opener: string },
+): Promise<string> {
   const admin = createAdminClient();
   const { data: c } = await admin
     .from("characters")
@@ -112,20 +127,23 @@ export async function createChat(userId: string, characterId: string): Promise<s
     .insert({
       user_id: userId,
       character_id: characterId,
-      last_message_preview: c.first_message.slice(0, 120),
+      scene: scene?.prompt ?? null,
+      last_message_preview: (scene?.opener ?? c.first_message).slice(0, 120),
       message_count: 1,
     })
     .select("id")
     .single();
   if (error) throw error;
-  await admin.from("messages").insert({ chat_id: chat.id, role: "assistant", content: c.first_message });
+  await admin
+    .from("messages")
+    .insert({ chat_id: chat.id, role: "assistant", content: scene?.opener ?? c.first_message });
   return chat.id;
 }
 
 type Event =
   | { t: "user"; id: number }
   | { t: "d"; v: string }
-  | { t: "done"; id: number; remaining: number | null }
+  | { t: "done"; id: number; remaining: number | null; xp?: number }
   | {
       t: "crisis";
       country: string;
@@ -259,7 +277,15 @@ async function touchChat(ctx: ChatContext, added: number, preview: string) {
  */
 export async function streamReply(
   ctx: ChatContext,
-  opts: { lastUserText: string; userMessageId?: number; remaining: number | null; signal?: AbortSignal },
+  opts: {
+    lastUserText: string;
+    userMessageId?: number;
+    remaining: number | null;
+    signal?: AbortSignal;
+    /** Bond XP for this exchange (default: one message). */
+    xp?: number;
+    gift?: number;
+  },
 ): Promise<Response> {
   const { messages, recentCrisis } = await history(ctx);
   const { data: mem } = await ctx.admin
@@ -269,6 +295,14 @@ export async function streamReply(
     .order("created_at")
     .limit(30);
 
+  const { data: bond } = await ctx.admin
+    .from("bonds")
+    .select("xp")
+    .eq("user_id", ctx.userId)
+    .eq("character_id", ctx.character.id)
+    .maybeSingle();
+  const level = bondLevel(bond?.xp ?? 0, ctx.character.category).level;
+
   const system = buildSystem(ctx.character, {
     userName: ctx.userName,
     memories: (mem ?? []).map((m) => m.text),
@@ -277,6 +311,8 @@ export async function streamReply(
       asksIfHuman: asksIfHuman(opts.lastUserText),
       userClaimsMinor: claimsToBeMinor(opts.lastUserText),
       recentCrisis,
+      bond: bondPromptNote(level, ctx.character.category),
+      scene: ctx.chat.scene,
     },
   });
 
@@ -311,7 +347,20 @@ export async function streamReply(
           .single();
         await touchChat(ctx, 1, reply);
         await ctx.admin.rpc("bump_character_messages", { p_character: ctx.character.id });
-        controller.enqueue(line({ t: "done", id: saved!.id, remaining: opts.remaining }));
+        const { data: xp } = await ctx.admin.rpc("add_bond_xp", {
+          p_user: ctx.userId,
+          p_character: ctx.character.id,
+          p_xp: opts.xp ?? XP.message,
+          p_gift: opts.gift ?? 0,
+        });
+        controller.enqueue(
+          line({
+            t: "done",
+            id: saved!.id,
+            remaining: opts.remaining,
+            xp: typeof xp === "number" ? xp : undefined,
+          }),
+        );
         after(() => maybeSummarize(ctx.chat.id).catch((e) => console.error("summary:", e)));
       } catch (e) {
         console.error("chat stream:", e);

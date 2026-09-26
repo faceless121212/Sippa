@@ -4,7 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdult } from "@/lib/auth";
+import { bondLevel, sceneById, XP } from "@/config/engagement";
 import { createChat } from "@/lib/chat/service";
+import { writeSceneOpener } from "@/lib/scenes";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 const characterId = z.string().regex(/^[a-z0-9-]{2,64}$/);
@@ -72,4 +75,51 @@ export async function deleteMemory(memoryId: string): Promise<{ ok: boolean }> {
   const supabase = await createClient();
   const { error } = await supabase.from("memories").delete().eq("id", memoryId);
   return { ok: !error };
+}
+
+/** Start a new chat inside a scene (scene cards on the character page). */
+export async function startScene(form: FormData) {
+  const id = characterId.parse(form.get("character_id"));
+  const sceneId = z.string().max(40).parse(form.get("scene_id"));
+  const viewer = await requireAdult(`/app/c/${id}`);
+  const admin = createAdminClient();
+  const { data: c } = await admin
+    .from("characters")
+    .select(
+      "id,name,age,category,famous_type,hook,description,personality,speaking_style,backstory,first_message,example_dialogues,status,visibility,creator_id",
+    )
+    .eq("id", id)
+    .maybeSingle();
+  if (!c || c.status === "hidden") redirect("/app/explore");
+  const scene = sceneById(c.category, sceneId);
+  if (!scene) redirect(`/app/c/${id}`);
+
+  const { data: bond } = await admin
+    .from("bonds")
+    .select("xp")
+    .eq("user_id", viewer.user.id)
+    .eq("character_id", id)
+    .maybeSingle();
+  if (bondLevel(bond?.xp ?? 0, c.category).level < scene.minLevel) redirect(`/app/c/${id}?locked=${sceneId}`);
+
+  const opener = await writeSceneOpener(
+    {
+      name: c.name,
+      age: c.age,
+      category: c.category,
+      famousType: c.famous_type,
+      hook: c.hook,
+      description: c.description,
+      traits: (c.personality as { traits?: string[] })?.traits ?? [],
+      speakingStyle: c.speaking_style,
+      backstory: c.backstory,
+      firstMessage: c.first_message,
+      exampleDialogues: (c.example_dialogues as { user: string; character: string }[]) ?? [],
+    },
+    scene,
+  );
+  const chatId = await createChat(viewer.user.id, id, { prompt: `${scene.title}: ${scene.prompt}`, opener });
+  await admin.rpc("add_bond_xp", { p_user: viewer.user.id, p_character: id, p_xp: XP.sceneStart, p_gift: 0 });
+  revalidatePath("/app/chats");
+  redirect(`/app/chats/${chatId}`);
 }

@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { OwnerPanel } from "@/components/app/OwnerPanel";
+import { BondMeter } from "@/components/engage/BondMeter";
+import { bondLevel, SCENES } from "@/config/engagement";
 import { ReportButton } from "@/components/app/ReportButton";
 import { CharacterAvatar } from "@/components/CharacterAvatar";
 import { buttonClass } from "@/components/ui/button";
@@ -13,7 +15,7 @@ import { exploreHref } from "@/lib/explore-params";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import { cn, formatCount } from "@/lib/utils";
-import { startChat } from "../../chats/actions";
+import { startChat, startScene } from "../../chats/actions";
 import { toggleFavorite } from "./actions";
 
 type Props = { params: Promise<{ id: string }> };
@@ -47,6 +49,20 @@ export default async function CharacterPage({ params }: Props) {
     favorited = Boolean(data);
   }
 
+  let bondXp = 0;
+  if (viewer && supabaseConfigured) {
+    const { data: bond } = await (
+      await createClient()
+    )
+      .from("bonds")
+      .select("xp")
+      .eq("user_id", viewer.user.id)
+      .eq("character_id", id)
+      .maybeSingle();
+    bondXp = bond?.xp ?? 0;
+  }
+  const level = bondLevel(bondXp, character.category).level;
+  const scenes = SCENES[character.category];
   const category = categories.find((c) => c.id === character.category)!;
   const style = categoryStyles[character.category];
 
@@ -134,7 +150,8 @@ export default async function CharacterPage({ params }: Props) {
                     className={cn("h-4 w-4", favorited && "text-lover-ink fill-current")}
                     aria-hidden="true"
                   />
-                  {favorited ? "Saved" : "Save"}
+                  {favorited ? "Liked" : "Like"}
+                  {character.likeCount > 0 ? ` · ${character.likeCount}` : ""}
                 </button>
               </form>
             )}
@@ -144,6 +161,48 @@ export default async function CharacterPage({ params }: Props) {
             <Bot className="h-3.5 w-3.5" aria-hidden="true" />
             You&apos;re chatting with an AI character. They aren&apos;t a real person.
           </p>
+
+          {viewer && supabaseConfigured && (
+            <section aria-labelledby="bond-scenes" className="mt-6 space-y-4">
+              <h2 id="bond-scenes" className="sr-only">
+                Your bond and scenes
+              </h2>
+              <BondMeter xp={bondXp} category={character.category} className="max-w-sm" />
+              <div>
+                <h3 className="text-muted text-xs font-bold tracking-[0.08em] uppercase">Start a scene</h3>
+                <ul className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {scenes.map((sc) => {
+                    const locked = level < sc.minLevel;
+                    return (
+                      <li key={sc.id}>
+                        <form action={startScene}>
+                          <input type="hidden" name="character_id" value={id} />
+                          <input type="hidden" name="scene_id" value={sc.id} />
+                          <button
+                            type="submit"
+                            disabled={locked}
+                            title={locked ? `Unlocks at bond level ${sc.minLevel}` : sc.prompt}
+                            className={cn(
+                              "border-border flex h-full w-full flex-col items-start gap-1 rounded-xl border p-3 text-left text-sm transition-colors",
+                              locked
+                                ? "bg-surface-2 text-muted cursor-not-allowed"
+                                : "bg-surface hover:border-text",
+                            )}
+                          >
+                            <span className="text-lg" aria-hidden="true">
+                              {locked ? "🔒" : sc.emoji}
+                            </span>
+                            <span className="font-bold">{sc.title}</span>
+                            {locked && <span className="text-[11px]">Bond Lv {sc.minLevel}</span>}
+                          </button>
+                        </form>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </section>
+          )}
 
           {viewer && character.creatorId === viewer.user.id && (
             <OwnerPanel

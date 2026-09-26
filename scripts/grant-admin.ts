@@ -5,7 +5,10 @@
 import { createClient } from "@supabase/supabase-js";
 
 async function main() {
-  const email = process.argv.slice(2).find((a) => a.includes("@"))?.toLowerCase();
+  const email = process.argv
+    .slice(2)
+    .find((a) => a.includes("@"))
+    ?.toLowerCase();
   const revoke = process.argv.includes("--revoke");
   if (!email) throw new Error("Usage: npm run admin:grant -- you@example.com [--revoke]");
   const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {

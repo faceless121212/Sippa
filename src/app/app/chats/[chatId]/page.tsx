@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { ChatList } from "@/components/chat/ChatList";
 import { ChatView, type ChatMessage } from "@/components/chat/ChatView";
+import type { CategoryId } from "@/config/categories";
 import { pricing } from "@/config/site";
 import { requireAdult } from "@/lib/auth";
 import { listChats } from "@/lib/chat/queries";
@@ -20,7 +21,7 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
   const supabase = await createClient();
   const { data: chat } = await supabase
     .from("chats")
-    .select("id,summary,character_id,characters(id,name,hook,avatar_url)")
+    .select("id,summary,character_id,characters(id,name,hook,avatar_url,category)")
     .eq("id", chatId)
     .maybeSingle();
   const row = chat?.characters as unknown as {
@@ -28,11 +29,14 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
     name: string;
     hook: string;
     avatar_url: string | null;
+    category: CategoryId;
   } | null;
-  const character = row ? { id: row.id, name: row.name, hook: row.hook, avatarUrl: row.avatar_url } : null;
+  const character = row
+    ? { id: row.id, name: row.name, hook: row.hook, avatarUrl: row.avatar_url, category: row.category }
+    : null;
   if (!chat || !character) notFound();
 
-  const [{ data: rows }, { data: memories }, chats, remaining] = await Promise.all([
+  const [{ data: rows }, { data: memories }, chats, remaining, { data: bond }] = await Promise.all([
     supabase
       .from("messages")
       .select("id,role,content,rating,flagged,flag_reason")
@@ -42,6 +46,12 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
     supabase.from("memories").select("id,text").eq("chat_id", chatId).order("created_at"),
     listChats(),
     remainingToday(viewer.user.id, viewer.profile!.plan),
+    supabase
+      .from("bonds")
+      .select("xp")
+      .eq("user_id", viewer.user.id)
+      .eq("character_id", character.id)
+      .maybeSingle(),
   ]);
 
   const messages: ChatMessage[] = (rows ?? [])
@@ -62,6 +72,7 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
         key={chatId}
         chatId={chatId}
         character={character}
+        bondXp={bond?.xp ?? 0}
         initialMessages={messages}
         initialMemories={memories ?? []}
         summary={chat.summary}

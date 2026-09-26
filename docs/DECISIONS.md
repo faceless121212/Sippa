@@ -85,6 +85,16 @@ Answers to the kickoff questions (spec §11), recorded 2026-09-26.
 - Attempt limits per IP/email on sign-up, sign-in, resend and reset (in-memory; Supabase also rate-limits).
 - Note: Supabase's built-in email sender allows only a few emails per hour — set up custom SMTP (e.g. Resend) before launch.
 
+## Engagement mechanics (owner picks 2026-09-26)
+
+- **Gift flowers**: 🌷 5 · 💐 20 · 🌸 50 Flowers from the chat composer; the character reacts in voice; +2 bond XP per flower; gifts don't use the daily message allowance.
+- **Bond levels** per user × character: 5 levels with category names (e.g. Lover: Stranger → Acquaintance → Crush → Sweetheart → Soulmate). XP: +1 per message, +2 per gifted flower, +3 per scene. The level is passed to the chat prompt so characters grow warmer, and it unlocks scenes.
+- **Daily check-in**: 5 Flowers per UTC day; every 7th day in a row +30. Missing a day just restarts the streak — no penalty or guilt messaging.
+- **Scene starters**: 4 per category (2 free, 2 unlocked at bond Lv 3/4). The character writes a scene-specific opening line (Haiku); the scene is kept in the chat prompt.
+- **Moments feed** (`/app/moments` + Home strip): characters post short in-voice updates (Haiku, ≤ every 8 h per character, generated in the background). ❤️ likes; Reply drops the moment into your chat.
+- **Likes & creator stats**: "Save" became ❤️ Like with public counts; creators see characters / likes / messages / chats in Profile; Home shows a Top creators board (display names only, approved public characters).
+- All XP, Flowers and counts change only on the server (verified by `npm run db:check`).
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.

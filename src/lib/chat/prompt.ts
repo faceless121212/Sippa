@@ -31,6 +31,10 @@ export type TurnNotes = {
   asksIfHuman?: boolean;
   userClaimsMinor?: boolean;
   recentCrisis?: boolean;
+  /** Relationship tone from the bond level (engagement mechanics). */
+  bond?: string | null;
+  /** Scene the chat was started in. */
+  scene?: string | null;
 };
 
 /** How many recent messages are sent verbatim. Older ones live in the summary. */
@@ -115,6 +119,8 @@ export function contextBlock({
     );
   }
   if (summary.trim()) parts.push(`Summary of the earlier conversation:\n${fence("summary", summary)}`);
+  if (notes.scene) parts.push(`Current scene (set by the user when starting this chat): ${notes.scene}`);
+  if (notes.bond) parts.push(`Your relationship with the user: ${notes.bond}`);
 
   const turn: string[] = [];
   if (notes.asksIfHuman)
