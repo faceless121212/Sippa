@@ -4,6 +4,15 @@ import { cn } from "@/lib/utils";
 
 const hasGenerated = new Set<string>(generated);
 
+function isTemporaryPreview(url: string) {
+  try {
+    const host = new URL(url).hostname;
+    return host === "fal.media" || host.endsWith(".fal.media");
+  } catch {
+    return false;
+  }
+}
+
 type Props = {
   id: string;
   name: string;
@@ -29,6 +38,20 @@ export function CharacterAvatar({
   src,
 }: Props) {
   const url = src || (hasGenerated.has(id) ? `/characters/${id}.jpg` : null);
+  // Unsaved creator previews point at temporary fal.ai URLs, which aren't in
+  // next/image's allow-list (and aren't worth optimising) — render them directly.
+  if (url && isTemporaryPreview(url)) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- temporary provider URL
+      <img
+        src={url}
+        alt={`AI-generated portrait of ${name}`}
+        width={768}
+        height={1024}
+        className={cn("block h-full w-full object-cover", className)}
+      />
+    );
+  }
   if (url) {
     return (
       <Image
