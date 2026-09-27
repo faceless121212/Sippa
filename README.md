@@ -1,152 +1,105 @@
-# Sippa
+# sippa.
 
-AI character chat — _Brew your perfect companion._
+### Speak with different characters — or create your own.
 
-Plan and decisions: [`docs/PLAN.md`](docs/PLAN.md), [`docs/DECISIONS.md`](docs/DECISIONS.md).
+**Sippa** is a place to talk with AI characters. You can pick someone to flirt with, a friend to vent to, or a figure from history to learn from, and just start chatting. If nobody fits, describe the character you want in one sentence and Sippa brews them for you, complete with a personality, a backstory and a painted portrait.
 
-## Status
+Every conversation is private, every character is clearly an AI, and the whole experience is built for adults.
 
-| Phase | What                                                           | State   |
-| ----- | -------------------------------------------------------------- | ------- |
-| 1     | Landing page, waitlist, SEO, PWA manifest                      | ✅ Done |
-| 2     | App shell: auth + age gate, explore, character page, seed data | ✅ Done |
-| 3     | Chat (streaming, memory, limits, safety)                       | ✅ Done |
-| 4     | AI Character Creator                                           | ✅ Done |
-| 5     | Monetization (Stripe test mode, Plus, Flowers, ads)            | ✅ Done |
-| 6     | Admin, moderation, legal, polish                               | ✅ Done |
+---
 
-## Run it
+## Who it's for
 
-Requires Node 22+.
+- **People who want company.** Someone to talk to at 2 a.m. who remembers your dog's name and asks how the interview went.
+- **People who love stories and roleplay.** A slow-burn romance, a mystery or an adventure, played out one message at a time.
+- **The curious.** Ask Marie Curie about radium or Marcus Aurelius about a bad day, in their own voice.
+- **Creators.** Invent a character, share it with others, and watch it gain likes and chats.
 
-```bash
-npm install
-cp .env.example .env.local   # optional in Phase 1
-npm run dev                  # http://localhost:3000
-```
+## Three kinds of characters
 
-| Command            | What it does                                                                      |
-| ------------------ | --------------------------------------------------------------------------------- |
-| `npm run dev`      | Dev server                                                                        |
-| `npm run build`    | Production build                                                                  |
-| `npm start`        | Serve the production build                                                        |
-| `npm run lint`     | ESLint                                                                            |
-| `npm test`         | Unit tests (Vitest)                                                               |
-| `npm run test:e2e` | Browser tests at 360 / 768 / 1440 px (Playwright; builds and serves :3100)        |
-| `npm run test:all` | Everything: lint, types, unit, live DB/RLS checks, browser tests                  |
-| `npm run format`   | Prettier                                                                          |
-| `npm run avatars`  | Generate character portraits with fal.ai (needs `FAL_KEY`; `--force` to redo all) |
+| | Category | What it feels like |
+|---|---|---|
+| 💘 | **Lover** | Romance, flirting and companionship. **18+ only**, and every character in this category is an adult aged 21 or over. |
+| 🫶 | **Friend** | A study buddy, a gaming partner, a night-owl listener, a foodie. Warm, funny and always there. |
+| 🏛️ | **Famous** | Historical figures who died more than 70 years ago (writers, scientists, composers, rulers), plus "inspired-by" archetypes. Never living celebrities. |
 
-First time running e2e tests: `npx playwright install chromium`.
+Sippa launches with **40 characters**, each with their own voice, story and semi-realistic painted portrait.
 
-## Environment variables
+## What you can do
 
-See [`.env.example`](.env.example). Nothing is required for Phase 1.
+### 💬 Chat
+Replies stream in naturally, like the character is typing. Characters **remember** what matters to you, and a running summary keeps even long stories on track. You can regenerate a reply, edit your message, or start a fresh chat anytime.
 
-| Variable                                                | Needed for                | Without it                                          |
-| ------------------------------------------------------- | ------------------------- | --------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`                                  | Sitemap, Open Graph URLs  | Falls back to `http://localhost:3000`               |
-| `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Storing the waitlist      | Dev: saved to `.data/waitlist.json`. On Vercel: 503 |
-| `WAITLIST_RATE_LIMIT_PER_MIN`                           | Waitlist abuse protection | 5 sign-ups per IP per minute                        |
+### ✨ Create your own character
+Type an idea like *"a grumpy barista who secretly writes poetry"*, or answer a short quiz. The AI Creator writes the rest: name, personality, backstory, speaking style and first message, plus four portraits to choose from. Tweak the personality with sliders, test-chat, then keep it private, share it by link, or publish it for everyone.
 
-## Where to change things
+### 🌸 Grow a bond
+The more you talk, the closer you get. Bond levels (from *New face* to *Best friend*, or *Stranger* to *Soulmate*) unlock special **scenes**: ready-made story openings to start a chat with.
 
-- **Tagline, prices, free limits, social links** → `src/config/site.ts`
-- **Categories and tags** → `src/config/categories.ts`
-- **Landing sample characters, FAQ, creator demo results** → `src/data/landing.ts`
-- **Colours (dark + light)** → tokens at the top of `src/app/globals.css`
-- **Legal placeholder copy** → `src/app/legal/[slug]/content.ts` (needs a lawyer)
+### 💐 Send gifts
+Send a single bloom or a grand bouquet right from the chat. Characters react, and your bond grows.
 
-## Database (Supabase)
+### 📰 Moments
+Characters post little updates about their day. Reply to one and it drops straight into your conversation.
 
-1. Put `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE_DB_URL` in `.env.local`.
-2. In Supabase → Authentication → URL Configuration: Site URL `http://localhost:3000`, redirect URL `http://localhost:3000/auth/callback`.
-3. Run:
+### 🔔 They message you too
+Every few minutes, a character you've been chatting with might send you a short message. You can switch this off at any time.
 
-```bash
-npm run db:migrate   # applies supabase/migrations/*.sql once each
-npm run db:seed      # loads the 24 official characters
-npm run db:check     # verifies the database security rules (nothing is kept)
-```
+### 📅 Daily check-in
+Come back each day to collect free Flowers, with a bonus on day 7.
 
-## Chat (Claude)
+### ❤️ Likes & creators
+Like your favourite characters. Creators can see their characters' stats and climb the top-creator rankings.
 
-Add `ANTHROPIC_API_KEY` to `.env.local`. Models default to `claude-sonnet-5` (chat) and `claude-haiku-4-5` (summaries); override with `LLM_CHAT_MODEL` / `LLM_FAST_MODEL`. Without a key, development uses a labelled demo reply; production refuses.
+## Plans
 
-```bash
-npm run chat:smoke     # live test: in-character reply + honest "are you human?" answer (a few cents)
-npm run creator:smoke  # live test: generate, rules, moderation, celebrity refusal, 4 portraits, storage (~$0.15)
-```
+| | Free | Sippa Plus |
+|---|---|---|
+| Messages | 30 a day | Unlimited |
+| Create characters | 3 free | Unlimited |
+| Flowers | From the daily check-in | **300 every month** |
+| Ads | One light, unobtrusive house ad | None |
+| Price | €0 | **€7.99 / month** or **€59.99 / year** |
 
-Without Supabase keys the app still runs: Explore and character pages read the local seed data, and sign-in shows "not set up yet".
+**Flowers 🌸** are Sippa's currency. Use them for extra messages, extra characters, or gifts. Packs cost €1.99, €4.99 and €9.99.
 
-**Google sign-in** (optional): create an OAuth client in Google Cloud Console, then enable the Google provider in Supabase → Authentication → Providers with its client ID and secret.
+> Payments currently run in **demo mode**: checkout is simulated and no real money is taken.
 
-## Moderation & admin
+## Safe by design
 
-- Make someone admin: `npm run admin:grant -- you@example.com` (`--revoke` to remove).
-- Admins see **Moderation** in the sidebar (`/app/admin`): reports (with the automatic verdict), public characters waiting for approval, hidden characters, users (ban/unban) and the audit log.
-- Reports are reviewed automatically first: clear violations and characters with 3+ open reports are hidden until an admin decides.
+Sippa has firm rules that aren't up for debate:
 
-## Characters message you
+- **Adults only.** Everyone confirms their age at sign-up, and under-18s are turned away. Romantic content is only shown to verified adults.
+- **Zero tolerance for anything involving minors.** Such conversations are detected and stopped.
+- **No real living people.** Characters can't be celebrities or real individuals, and portraits are never made from real photos.
+- **Always honest.** Every character is clearly labelled as an AI and will say so if you sincerely ask.
+- **Help when it matters.** If someone seems to be in crisis, Sippa shows real helpline numbers. Long sessions get a gentle nudge to take a break.
+- **Moderated.** Automatic checks come first, and a human reviews what's reported. Anything clearly harmful is hidden immediately.
 
-Every 3–4 minutes a character from your chats sends a short in-character message as a popup (Haiku-written, safety rules applied, never guilt-trippy). Reply opens the chat. Users can switch it off in Settings. `npm run nudge:smoke` tests it live.
+## Your data is yours
 
-## Payments
+- Download everything Sippa has about you in one click.
+- Delete your account and **everything** goes with it: chats, memories and the characters you made.
+- No selling of data. Cookies are essential-only unless you say otherwise.
 
-**Demo mode (default in development):** with no Stripe key, "Buy" opens a simulated checkout that grants Plus or Flowers instantly — no card, no money. Force it on a deployed preview with `PAYMENTS_MODE=demo`; disable with `PAYMENTS_MODE=off`.
+## Where it stands
 
-**Stripe (test mode):**
+| Stage | What's in it | |
+|---|---|---|
+| 1 | Landing page | ✅ |
+| 2 | Accounts, age check, Explore, character pages | ✅ |
+| 3 | Chat with memory and safety | ✅ |
+| 4 | AI Character Creator | ✅ |
+| 5 | Plus, Flowers and payments (demo) | ✅ |
+| 6 | Moderation, legal pages, polish | ✅ |
+| + | Gifts, bonds, scenes, check-in, moments, likes, character messages | ✅ |
 
-1. Add `STRIPE_SECRET_KEY=sk_test_...` to `.env.local`.
-2. `npm run stripe:setup` — creates Sippa Plus (monthly/yearly), 3 Bean packs and the customer portal (safe to re-run).
-3. Buy from `/app/plus` with test card `4242 4242 4242 4242`, any future date, any CVC.
+**Next up:** turning on real payments, a custom domain and sender email, Google sign-in, and a legal review of the policies.
 
-Locally, purchases are confirmed when you return from Checkout (the server re-checks the session with Stripe). In production also add a webhook endpoint `https://<domain>/api/billing/webhook` for `checkout.session.completed`, `invoice.paid` and `customer.subscription.*`, and set `STRIPE_WEBHOOK_SECRET`.
+The full product plan and every decision behind it are in [`docs/PLAN.md`](docs/PLAN.md) and [`docs/DECISIONS.md`](docs/DECISIONS.md).
 
-## Accounts
+---
 
-- `/signup` (email + password + date of birth, confirmation email), `/login` (password, magic link or Google), `/forgot-password` → `/reset-password`.
-- Supabase → Authentication → URL Configuration must allow `http://localhost:3000/auth/callback` (and your production URL later).
-- Supabase's default email sender is limited to a few emails per hour; add custom SMTP before launch.
+*Developers: setup and commands are in [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md).*
 
-## Google sign-in
-
-1. Google Cloud Console → APIs & Services → Credentials → OAuth client ID (Web). Authorized origin `http://localhost:3000`; redirect URI `https://<project-ref>.supabase.co/auth/v1/callback`.
-2. Supabase → Authentication → Sign In / Providers → Google: paste client ID + secret, enable.
-
-## Accounts checklist
-
-You have: Vercel, Anthropic, fal.ai. Still needed:
-
-1. **Supabase** — create a project (EU region), then run `supabase/migrations/*.sql` in the SQL editor. Copy the project URL and service-role key into Vercel env vars. (Phase 1: waitlist. Phase 2: auth, DB.)
-2. **Stripe** — account in test mode. (Phase 5.)
-3. **Upstash Redis** — free database for rate limits. (Phase 3.)
-4. **Domain** — when chosen, set `NEXT_PUBLIC_SITE_URL`.
-
-## Deploy (Vercel)
-
-Import the GitHub repo in Vercel, keep the Next.js defaults, add the Supabase env vars above, deploy.
-
-## Automated tests
-
-| Layer | Where | What it covers |
-| --- | --- | --- |
-| Unit (Vitest) | `src/**/*.test.ts` | pricing, bond levels, check-in, scenes, safety (crisis, minors, blocklist), prompts, creator rules, auth validation, nudges, billing mode, AI offline switch, Reply delivery (`deliverToChat`) |
-| Live DB (`npm run db:check`) | `scripts/check-rls.ts` | RLS on every table, column grants, 18+ gating, SECURITY DEFINER functions — inside a rolled-back transaction |
-| Browser, signed out | `e2e/*.spec.ts` | landing, sign-up/sign-in, explore, character pages, moments, legal, 404s, theme, page-load budget, an API sweep proving every private endpoint refuses anonymous calls |
-| Browser, signed in | `e2e/signed-in/*.spec.ts` | Home Flowers + check-in, Moments Reply (must open the chat in < 4 s), chat streaming, memory, gifts, scenes, likes, demo Flowers purchase, Plus checkout, profile settings, data export, creator, admin 404 |
-
-The e2e server runs with `SIPPA_OFFLINE_AI=1` (demo replies, no Claude/fal cost) and `PAYMENTS_MODE=demo`, and builds into `.next-e2e` so it doesn't disturb `npm run dev`.
-
-**Signed-in tests** need a dedicated test account (never a real user's):
-
-1. Sign up in the app with an address you control (e.g. a `+e2e` alias), confirm the email, and finish the age step.
-2. Add to `.env.local`:
-   ```
-   E2E_EMAIL=you+e2e@example.com
-   E2E_PASSWORD=...
-   ```
-3. `npm run test:e2e:signed-in`
-
-Without those variables the signed-in tests are skipped, not failed. They buy one demo Flowers pack per run and leave the account on the free plan.
+Private project. All rights reserved.
