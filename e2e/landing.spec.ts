@@ -107,6 +107,9 @@ test("SEO and PWA endpoints respond", async ({ request }) => {
     "/manifest.webmanifest",
     "/opengraph-image",
     "/pwa-icon/512",
+    "/pwa-icon/512-maskable",
+    "/icon.svg",
+    "/apple-icon",
     "/legal/privacy",
   ]) {
     const res = await request.get(path);
