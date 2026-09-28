@@ -1,12 +1,18 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { appComingSoon } from "@/lib/paths";
 import { signupHref } from "@/lib/signup";
 import { BrandIcon } from "../BrandIcon";
 
 /** Final call to action: every landing CTA leads to sign-up. */
 export function SignupCta() {
   return (
-    <section id="join" aria-labelledby="join-title" className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 md:pb-24">
+    // On the static landing before the app is live, every app button jumps here.
+    <section
+      id={appComingSoon ? "coming-soon" : "join"}
+      aria-labelledby="join-title"
+      className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 md:pb-24"
+    >
       <div className="bg-primary relative overflow-hidden rounded-3xl p-8 text-black sm:p-12">
         <div
           aria-hidden="true"
@@ -23,24 +29,30 @@ export function SignupCta() {
             <p className="mt-3 max-w-md text-base font-medium text-black/70">
               Free account, 30 messages a day, 3 characters to brew. No card needed.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href={signupHref("/app/create")}
-                className="group inline-flex items-center gap-2 rounded-xl bg-black px-5 py-3 font-bold text-white transition-transform hover:-translate-y-0.5"
-              >
-                Create free account
-                <ArrowRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-                  aria-hidden="true"
-                />
-              </Link>
-              <Link
-                href={signupHref("/app/explore")}
-                className="inline-flex items-center rounded-xl border-2 border-black px-5 py-3 font-bold transition-colors hover:bg-black/5"
-              >
-                Meet the characters
-              </Link>
-            </div>
+            {appComingSoon ? (
+              <p className="mt-6 inline-flex rounded-xl bg-black px-5 py-3 font-bold text-white">
+                Opening soon — the app launches shortly.
+              </p>
+            ) : (
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href={signupHref("/app/create")}
+                  className="group inline-flex items-center gap-2 rounded-xl bg-black px-5 py-3 font-bold text-white transition-transform hover:-translate-y-0.5"
+                >
+                  Create free account
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </Link>
+                <Link
+                  href={signupHref("/app/explore")}
+                  className="inline-flex items-center rounded-xl border-2 border-black px-5 py-3 font-bold transition-colors hover:bg-black/5"
+                >
+                  Meet the characters
+                </Link>
+              </div>
+            )}
             <p className="mt-4 text-xs font-medium text-black/60">
               18+ only · You&apos;re always chatting with an AI
             </p>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { withBase } from "@/lib/paths";
 import { cn } from "@/lib/utils";
 
 /** Sippa's generated 3D brand icons (public/brand, made by `npm run brand:icons`). */
@@ -17,7 +18,7 @@ export function BrandIcon({
       style={{ width: size, height: size }}
     >
       <Image
-        src={`/brand/${name}.jpg`}
+        src={withBase(`/brand/${name}.jpg`)}
         alt=""
         width={size * 2}
         height={size * 2}

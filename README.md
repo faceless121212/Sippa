@@ -100,6 +100,6 @@ The full product plan and every decision behind it are in [`docs/PLAN.md`](docs/
 
 ---
 
-*Developers: setup and commands are in [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md).*
+*Developers: setup and commands are in [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md); deploying (Vercel + GitHub Pages) in [`docs/DEPLOY.md`](docs/DEPLOY.md).*
 
 Private project. All rights reserved.

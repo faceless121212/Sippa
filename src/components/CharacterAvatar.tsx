@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { withBase } from "@/lib/paths";
 import generated from "@/data/avatar-manifest.json";
 import { cn } from "@/lib/utils";
 
@@ -37,7 +38,9 @@ export function CharacterAvatar({
   sizes = "(min-width: 1024px) 240px, 50vw",
   src,
 }: Props) {
-  const url = src || (hasGenerated.has(id) ? `/characters/${id}.jpg` : null);
+  const raw = src || (hasGenerated.has(id) ? `/characters/${id}.jpg` : null);
+  // Public files need the base path when the site is served from a sub-path (GitHub Pages).
+  const url = raw ? withBase(raw) : null;
   // Unsaved creator previews point at temporary fal.ai URLs, which aren't in
   // next/image's allow-list (and aren't worth optimising) — render them directly.
   if (url && isTemporaryPreview(url)) {

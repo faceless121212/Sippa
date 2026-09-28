@@ -3,6 +3,7 @@
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { appUrl } from "@/lib/paths";
 import { signupHref } from "@/lib/signup";
 import { Logo } from "../Logo";
 import { ThemeToggle } from "../ThemeToggle";
@@ -43,7 +44,7 @@ export function Header() {
         <div className="ml-auto flex items-center gap-1 sm:gap-2">
           <ThemeToggle />
           <Link
-            href="/login"
+            href={appUrl("/login")}
             className={buttonClass({ variant: "ghost", size: "sm", className: "hidden sm:inline-flex" })}
           >
             Sign in
@@ -86,7 +87,10 @@ export function Header() {
               </li>
             ))}
             <li>
-              <Link href="/login" className="hover:bg-surface-2 block rounded-lg px-2 py-3 text-base">
+              <Link
+                href={appUrl("/login")}
+                className="hover:bg-surface-2 block rounded-lg px-2 py-3 text-base"
+              >
                 Sign in
               </Link>
             </li>

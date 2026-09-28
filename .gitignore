@@ -17,6 +17,8 @@
 /.next/
 /.next-e2e/
 /.next-speed/
+/.next-pages/
+/out-pages/
 /out/
 
 # production

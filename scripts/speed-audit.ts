@@ -139,7 +139,9 @@ async function main() {
   console.log("|---|---|---|---|---|---|");
   for (const r of rows) {
     const m = median(r.ms);
-    console.log(`| ${r.area} | ${r.what} | ${m} ms | ${r.ms.join(", ")} | ${r.budget} ms | ${m > r.budget ? "❌" : "✅"} |`);
+    console.log(
+      `| ${r.area} | ${r.what} | ${m} ms | ${r.ms.join(", ")} | ${r.budget} ms | ${m > r.budget ? "❌" : "✅"} |`,
+    );
   }
   console.log(`\n${over.length ? `${over.length} over budget.` : "Everything within budget."}`);
   mkdirSync(".data", { recursive: true });

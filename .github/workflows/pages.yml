@@ -1,0 +1,58 @@
+# Publishes the landing page (and legal pages) to GitHub Pages on every push to main.
+# The app itself needs a server and runs on Vercel; set the repository variable
+# APP_URL (Settings → Secrets and variables → Actions → Variables) to its URL so the
+# landing's sign-up / sign-in buttons point there. Until then they show "Opening soon".
+name: Landing → GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  NEXT_DIST_DIR: .next-pages
+  NEXT_PUBLIC_STATIC_LANDING: "1"
+  NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+  NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+  NEXT_PUBLIC_APP_URL: ${{ vars.APP_URL }}
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build
+        run: npx next build
+      - name: Export the landing as static files
+        run: |
+          npx next start -p 3300 &
+          for i in $(seq 1 60); do curl -sf -o /dev/null "http://localhost:3300${NEXT_PUBLIC_BASE_PATH}" && break; sleep 1; done
+          SERVER=http://localhost:3300 BASE_PATH="$NEXT_PUBLIC_BASE_PATH" DIST=.next-pages OUT=out-pages npx tsx scripts/export-landing.ts
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out-pages
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
