@@ -40,7 +40,7 @@ export async function POST(request: Request) {
 
   if (mode === "demo") return NextResponse.json({ url: `/app/plus/checkout?item=${item}` });
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(request.url).origin;
+  const origin = process.env.NEXT_PUBLIC_SITE_URL?.trim() || new URL(request.url).origin;
   const [customer, price] = await Promise.all([ensureCustomer(user.id, user.email), priceFor(item)]);
   const session = await stripe().checkout.sessions.create({
     mode: itemMode,

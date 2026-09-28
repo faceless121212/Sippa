@@ -21,7 +21,7 @@ export async function POST(request: Request) {
 
   const configs = await stripe().billingPortal.configurations.list({ limit: 100 });
   const configuration = configs.data.find((c) => c.metadata?.app === "sippa")?.id;
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(request.url).origin;
+  const origin = process.env.NEXT_PUBLIC_SITE_URL?.trim() || new URL(request.url).origin;
   const session = await stripe().billingPortal.sessions.create({
     customer: p.stripe_customer_id,
     return_url: `${origin}/app/plus`,

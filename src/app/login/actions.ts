@@ -20,9 +20,17 @@ import { createClient } from "@/lib/supabase/server";
 
 export type LoginState = { status: "idle" | "sent" | "error"; message?: string };
 
+/**
+ * Where email links (confirm, magic link, password reset) send people back to.
+ * An empty NEXT_PUBLIC_SITE_URL counts as unset: then the address this request came in
+ * on is used (e.g. https://sippa-kappa.vercel.app). Supabase only honours addresses in
+ * its Redirect URLs allow-list; anything else falls back to its Site URL.
+ */
 async function origin() {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/$/, "");
+  if (configured) return configured;
   const h = await headers();
-  return process.env.NEXT_PUBLIC_SITE_URL ?? `${h.get("x-forwarded-proto") ?? "http"}://${h.get("host")}`;
+  return `${h.get("x-forwarded-proto") ?? "http"}://${h.get("x-forwarded-host") ?? h.get("host")}`;
 }
 
 export async function sendMagicLink(_prev: LoginState, form: FormData): Promise<LoginState> {
