@@ -216,10 +216,24 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-:focus-visible {
-  outline: 2px solid var(--text);
-  outline-offset: 2px;
-  border-radius: 6px;
+/* In the base layer so components can override it (e.g. the chat box shows focus on
+   its container instead of drawing a second ring inside it). */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+/* iOS Safari zooms the page when a field under 16px gets focus. On touch screens every
+   text field is at least 16px (unlayered on purpose, so it beats text-sm utilities). */
+@media (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select {
+    font-size: max(16px, 1em);
+  }
 }
 
 /* Hide horizontal scrollbar on chip / card rows while keeping them scrollable. */

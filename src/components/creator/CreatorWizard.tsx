@@ -10,6 +10,9 @@ import type { Helpline } from "@/lib/safety/crisis";
 import { cn } from "@/lib/utils";
 import { CharacterCard } from "../CharacterCard";
 import { MessageText } from "../chat/MessageText";
+
+/** Long text fields grow with their content (up to ~8 lines) so text is never cut off. */
+const GROW_FIELD = "min-h-20 max-h-56 resize-y leading-relaxed [field-sizing:content]";
 import { buttonClass } from "../ui/button";
 
 type Step = "category" | "describe" | "brewing" | "tune";
@@ -535,6 +538,16 @@ function TuneStep(props: TuneProps) {
                 <ImageIcon className="h-3.5 w-3.5" aria-hidden="true" /> New portraits
               </button>
             </div>
+            {props.avatarsBusy && (
+              <p className="text-muted mt-1 text-xs" role="status">
+                Painting 4 portraits… this takes about 15 seconds.
+              </p>
+            )}
+            {!props.avatarsBusy && !props.avatars.length && (
+              <p className="border-border text-muted mt-2 rounded-lg border border-dashed p-4 text-center text-sm">
+                No portraits yet. Adjust the look below if you like, then tap <strong>New portraits</strong>.
+              </p>
+            )}
             <div className="mt-2 grid grid-cols-4 gap-2">
               {props.avatarsBusy && !props.avatars.length
                 ? [0, 1, 2, 3].map((i) => (
@@ -561,15 +574,18 @@ function TuneStep(props: TuneProps) {
                     </button>
                   ))}
             </div>
-            <Field label="Look (used for portraits)">
-              <textarea
-                value={draft.visualPrompt}
-                maxLength={500}
-                rows={2}
-                onChange={(e) => set("visualPrompt", e.target.value)}
-                className={inputCls}
-              />
-            </Field>
+            <div className="mt-5">
+              <Field label="Look (used for portraits)">
+                <textarea
+                  value={draft.visualPrompt}
+                  maxLength={500}
+                  rows={4}
+                  onChange={(e) => set("visualPrompt", e.target.value)}
+                  // Grows with the text (up to ~8 lines) so the description is never cut off.
+                  className={cn(inputCls, GROW_FIELD)}
+                />
+              </Field>
+            </div>
           </section>
 
           <section aria-labelledby="basics" className="grid gap-4 sm:grid-cols-[1fr_120px_140px]">
@@ -622,7 +638,7 @@ function TuneStep(props: TuneProps) {
               maxLength={600}
               rows={2}
               onChange={(e) => set("description", e.target.value)}
-              className={inputCls}
+              className={cn(inputCls, GROW_FIELD)}
             />
           </Field>
           <Field
@@ -663,7 +679,7 @@ function TuneStep(props: TuneProps) {
               maxLength={1000}
               rows={3}
               onChange={(e) => set("backstory", e.target.value)}
-              className={inputCls}
+              className={cn(inputCls, GROW_FIELD)}
             />
           </Field>
           <Field
@@ -676,7 +692,7 @@ function TuneStep(props: TuneProps) {
               maxLength={500}
               rows={2}
               onChange={(e) => set("firstMessage", e.target.value)}
-              className={inputCls}
+              className={cn(inputCls, GROW_FIELD)}
             />
           </Field>
 

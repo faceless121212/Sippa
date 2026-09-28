@@ -508,7 +508,7 @@ export function ChatView(props: Props) {
           onSubmit={send}
           className="border-border shrink-0 border-t p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
         >
-          <div className="border-border bg-surface focus-within:border-text mx-auto flex max-w-3xl items-end gap-2 rounded-2xl border p-2">
+          <div className="border-border bg-surface focus-within:border-text mx-auto flex w-full max-w-3xl min-w-0 items-end gap-2 rounded-2xl border p-2">
             <label htmlFor="chat-input" className="sr-only">
               Message {character.name}
             </label>
@@ -521,7 +521,7 @@ export function ChatView(props: Props) {
               rows={1}
               maxLength={4000}
               placeholder={`Message ${character.name}…`}
-              className="[field-sizing:content] max-h-40 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-[15px] focus:outline-none"
+              className="[field-sizing:content] max-h-40 min-h-10 w-full min-w-0 flex-1 resize-none bg-transparent px-2 py-2 text-base outline-none focus:outline-none focus-visible:outline-none sm:text-[15px]"
             />
             <div className="relative shrink-0">
               <button
