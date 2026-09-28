@@ -89,3 +89,15 @@ test("key pages load fast (production build)", async ({ page }, testInfo) => {
     expect(ms, `${path} took ${ms} ms`).toBeLessThan(5_000);
   }
 });
+
+test("Home and Moments show our promises; social proof never shows placeholder numbers", async ({ page }) => {
+  for (const path of ["/app", "/app/moments"]) {
+    await page.goto(path);
+    const promises = page.getByRole("list", { name: "Our promises" });
+    await expect(promises).toBeVisible();
+    for (const p of ["Adults only (18+)", "Never real people", "Always an AI", "Delete anytime"])
+      await expect(promises.getByText(p)).toBeVisible();
+    // Seeded placeholder counts (millions) must never appear as social proof.
+    await expect(page.getByText(/\d+(\.\d)?M\b/)).toHaveCount(0);
+  }
+});

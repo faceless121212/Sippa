@@ -115,98 +115,102 @@ export function ChatView(props: Props) {
     return () => ro.disconnect();
   }, []);
 
-  const run = useCallback(async (url: string, body: object | null, optimisticUser?: ChatMessage) => {
-    setBusy(true);
-    setNotice(null);
-    stick.current = true;
-    setShowJump(false);
-    const replyId = tempId--;
-    setMessages((m) => [
-      ...m,
-      ...(optimisticUser ? [{ ...optimisticUser, ckey: `c${optimisticUser.id}` }] : []),
-      { id: replyId, role: "assistant", content: "", streaming: true, ckey: `c${replyId}` },
-    ]);
-    const controller = new AbortController();
-    abort.current = controller;
+  const run = useCallback(
+    async (url: string, body: object | null, optimisticUser?: ChatMessage) => {
+      setBusy(true);
+      setNotice(null);
+      stick.current = true;
+      setShowJump(false);
+      const replyId = tempId--;
+      setMessages((m) => [
+        ...m,
+        ...(optimisticUser ? [{ ...optimisticUser, ckey: `c${optimisticUser.id}` }] : []),
+        { id: replyId, role: "assistant", content: "", streaming: true, ckey: `c${replyId}` },
+      ]);
+      const controller = new AbortController();
+      abort.current = controller;
 
-    const dropReply = () => setMessages((m) => m.filter((x) => x.id !== replyId));
-    const dropUser = () => optimisticUser && setMessages((m) => m.filter((x) => x.id !== optimisticUser.id));
+      const dropReply = () => setMessages((m) => m.filter((x) => x.id !== replyId));
+      const dropUser = () =>
+        optimisticUser && setMessages((m) => m.filter((x) => x.id !== optimisticUser.id));
 
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: body ? JSON.stringify(body) : undefined,
-        signal: controller.signal,
-      });
-      if (!res.body) throw new Error("No response");
-      if (!res.ok && !res.headers.get("content-type")?.includes("ndjson")) {
-        const data = (await res.json().catch(() => ({}))) as { error?: string; needFlowers?: boolean };
-        dropReply();
-        dropUser();
-        setNotice(
-          data.needFlowers
-            ? { kind: "limit", beans: 0 }
-            : { kind: "error", text: data.error ?? "Something went wrong." },
-        );
-        return;
-      }
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buf = "";
-      for (;;) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buf += decoder.decode(value, { stream: true });
-        const lines = buf.split("\n");
-        buf = lines.pop() ?? "";
-        for (const raw of lines) {
-          if (!raw.trim()) continue;
-          const e = JSON.parse(raw);
-          if (e.t === "user" && optimisticUser) {
-            setMessages((m) => m.map((x) => (x.id === optimisticUser.id ? { ...x, id: e.id } : x)));
-          } else if (e.t === "d") {
-            setMessages((m) => m.map((x) => (x.id === replyId ? { ...x, content: x.content + e.v } : x)));
-          } else if (e.t === "done") {
-            setMessages((m) => m.map((x) => (x.id === replyId ? { ...x, id: e.id, streaming: false } : x)));
-            if (e.remaining !== undefined && e.remaining !== null) setRemaining(e.remaining);
-            if (typeof e.xp === "number") setBondXp(e.xp);
-            // Update the sidebar's preview and order in the background (the chat keeps its state).
-            router.refresh();
-          } else if (e.t === "crisis") {
-            setMessages((m) => [
-              ...m.filter((x) => x.id !== replyId),
-              { id: e.systemId, role: "system", content: CRISIS_MARKER },
-            ]);
-          } else if (e.t === "limit") {
-            dropReply();
-            dropUser();
-            if (optimisticUser) setInput(optimisticUser.content);
-            setRemaining(0);
-            setNotice({ kind: "limit", beans: e.beans ?? 0 });
-          } else if (e.t === "blocked") {
-            dropReply();
-            dropUser();
-            setNotice({ kind: "blocked", text: e.message });
-          } else if (e.t === "error") {
-            setMessages((m) =>
-              m.flatMap((x) => (x.id === replyId ? (x.content ? [{ ...x, streaming: false }] : []) : [x])),
-            );
-            setNotice({ kind: "error", text: e.message });
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: body ? JSON.stringify(body) : undefined,
+          signal: controller.signal,
+        });
+        if (!res.body) throw new Error("No response");
+        if (!res.ok && !res.headers.get("content-type")?.includes("ndjson")) {
+          const data = (await res.json().catch(() => ({}))) as { error?: string; needFlowers?: boolean };
+          dropReply();
+          dropUser();
+          setNotice(
+            data.needFlowers
+              ? { kind: "limit", beans: 0 }
+              : { kind: "error", text: data.error ?? "Something went wrong." },
+          );
+          return;
+        }
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buf = "";
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buf += decoder.decode(value, { stream: true });
+          const lines = buf.split("\n");
+          buf = lines.pop() ?? "";
+          for (const raw of lines) {
+            if (!raw.trim()) continue;
+            const e = JSON.parse(raw);
+            if (e.t === "user" && optimisticUser) {
+              setMessages((m) => m.map((x) => (x.id === optimisticUser.id ? { ...x, id: e.id } : x)));
+            } else if (e.t === "d") {
+              setMessages((m) => m.map((x) => (x.id === replyId ? { ...x, content: x.content + e.v } : x)));
+            } else if (e.t === "done") {
+              setMessages((m) => m.map((x) => (x.id === replyId ? { ...x, id: e.id, streaming: false } : x)));
+              if (e.remaining !== undefined && e.remaining !== null) setRemaining(e.remaining);
+              if (typeof e.xp === "number") setBondXp(e.xp);
+              // Update the sidebar's preview and order in the background (the chat keeps its state).
+              router.refresh();
+            } else if (e.t === "crisis") {
+              setMessages((m) => [
+                ...m.filter((x) => x.id !== replyId),
+                { id: e.systemId, role: "system", content: CRISIS_MARKER },
+              ]);
+            } else if (e.t === "limit") {
+              dropReply();
+              dropUser();
+              if (optimisticUser) setInput(optimisticUser.content);
+              setRemaining(0);
+              setNotice({ kind: "limit", beans: e.beans ?? 0 });
+            } else if (e.t === "blocked") {
+              dropReply();
+              dropUser();
+              setNotice({ kind: "blocked", text: e.message });
+            } else if (e.t === "error") {
+              setMessages((m) =>
+                m.flatMap((x) => (x.id === replyId ? (x.content ? [{ ...x, streaming: false }] : []) : [x])),
+              );
+              setNotice({ kind: "error", text: e.message });
+            }
           }
         }
+      } catch (err) {
+        if ((err as Error).name !== "AbortError")
+          setNotice({ kind: "error", text: "Connection lost. Try again." });
+        setMessages((m) =>
+          m.flatMap((x) => (x.id === replyId ? (x.content ? [{ ...x, streaming: false }] : []) : [x])),
+        );
+      } finally {
+        setBusy(false);
+        abort.current = null;
       }
-    } catch (err) {
-      if ((err as Error).name !== "AbortError")
-        setNotice({ kind: "error", text: "Connection lost. Try again." });
-      setMessages((m) =>
-        m.flatMap((x) => (x.id === replyId ? (x.content ? [{ ...x, streaming: false }] : []) : [x])),
-      );
-    } finally {
-      setBusy(false);
-      abort.current = null;
-    }
-  }, [router]);
+    },
+    [router],
+  );
 
   const send = (e?: FormEvent) => {
     e?.preventDefault();

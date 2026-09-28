@@ -6,20 +6,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toggleMomentLike } from "@/app/app/moments/actions";
 import type { Moment } from "@/lib/moments";
-import { cn } from "@/lib/utils";
+import { cn, timeAgo } from "@/lib/utils";
 import { CharacterAvatar } from "../CharacterAvatar";
 import { MessageText } from "../chat/MessageText";
 
 const SIGNUP = "/signup?next=/app/moments";
 const actionCls =
   "hover:bg-surface-2 flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-semibold disabled:opacity-60";
-
-function ago(iso: string) {
-  const m = Math.round((Date.now() - new Date(iso).getTime()) / 60_000);
-  if (m < 60) return `${Math.max(1, m)}m`;
-  if (m < 1440) return `${Math.round(m / 60)}h`;
-  return `${Math.round(m / 1440)}d`;
-}
 
 export function MomentCard({ moment, signedIn }: { moment: Moment; signedIn: boolean }) {
   const router = useRouter();
@@ -65,7 +58,7 @@ export function MomentCard({ moment, signedIn }: { moment: Moment; signedIn: boo
           >
             {moment.character.name}
           </Link>
-          <p className="text-muted text-xs">AI · {ago(moment.createdAt)}</p>
+          <p className="text-muted text-xs">AI · {timeAgo(moment.createdAt)}</p>
         </div>
       </header>
       <p className="mt-3 text-[15px] leading-relaxed whitespace-pre-wrap">

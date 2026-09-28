@@ -1,14 +1,30 @@
 /**
  * In-memory stand-in for the Supabase query builder, for speed/regression tests.
  *
- * Every awaited query takes `latencyMs`, like a real network round-trip. Tests
- * assert how many *sequential* rounds a loader needs (elapsed time / latency), so a
- * change that turns parallel queries back into a waterfall fails loudly.
+ * Every awaited query waits `latencyMs`, like a real network round-trip. Queries that
+ * start while a round is in flight share it (they'd run in parallel on a real network);
+ * a query started after it finishes opens a new round. Tests assert how many sequential
+ * rounds a loader needs, so a change that turns parallel queries back into a waterfall
+ * fails — independent of how fast or busy the machine is.
  */
 type Row = Record<string, unknown>;
 
 export function createFakeSupabase(tables: Record<string, Row[]>, latencyMs = 20) {
   const log: string[] = [];
+  let current: Promise<void> | null = null;
+  let roundCount = 0;
+  const joinRound = () => {
+    if (!current) {
+      roundCount++;
+      current = new Promise((r) =>
+        setTimeout(() => {
+          current = null;
+          r();
+        }, latencyMs),
+      );
+    }
+    return current;
+  };
 
   function from(table: string) {
     const filters: ((r: Row) => boolean)[] = [];
@@ -20,7 +36,7 @@ export function createFakeSupabase(tables: Record<string, Row[]>, latencyMs = 20
 
     const run = async (single: boolean) => {
       log.push(`${op}:${table}`);
-      await new Promise((r) => setTimeout(r, latencyMs));
+      await joinRound();
       const rows = (tables[table] ??= []);
       if (op === "insert") {
         const added = (Array.isArray(payload) ? payload : [payload]).map((r, i) => ({
@@ -50,7 +66,12 @@ export function createFakeSupabase(tables: Record<string, Row[]>, latencyMs = 20
       neq: (k: string, v: unknown) => (filters.push((r) => r[k] !== v), q),
       in: (k: string, vs: unknown[]) => (filters.push((r) => vs.includes(r[k])), q),
       is: (k: string, v: unknown) => (filters.push((r) => (r[k] ?? null) === v), q),
-      order: (col: string, o?: { ascending?: boolean }) => ((orderBy = { col, asc: o?.ascending ?? true }), q),
+      not: (k: string, _op: "is", v: unknown) => (filters.push((r) => (r[k] ?? null) !== v), q),
+      gte: (k: string, v: string | number) => (filters.push((r) => (r[k] as string | number) >= v), q),
+      order: (col: string, o?: { ascending?: boolean }) => (
+        (orderBy = { col, asc: o?.ascending ?? true }),
+        q
+      ),
       limit: (n: number) => ((limitN = n), q),
       insert: (p: Row | Row[]) => ((op = "insert"), (payload = p), q),
       update: (p: Row) => ((op = "update"), (payload = p), q),
@@ -65,10 +86,9 @@ export function createFakeSupabase(tables: Record<string, Row[]>, latencyMs = 20
   /** Runs `fn` and reports how many sequential round-trips it took. */
   async function rounds<T>(fn: () => Promise<T>): Promise<{ result: T; rounds: number; queries: string[] }> {
     log.length = 0;
-    const started = performance.now();
+    roundCount = 0;
     const result = await fn();
-    const elapsed = performance.now() - started;
-    return { result, rounds: Math.round(elapsed / latencyMs), queries: [...log] };
+    return { result, rounds: roundCount, queries: [...log] };
   }
 
   return { client: { from }, from, log, rounds };

@@ -8,6 +8,19 @@
  */
 export const showUsageStats = false;
 
+/**
+ * Social proof only shows real numbers, and only once they're meaningful.
+ * Lower these to preview the sections; never fake the underlying data.
+ */
+export const socialProof = {
+  /** Show "chats started / characters created / moments" once there are this many chats. */
+  minChatsForCounters: 100,
+  /** Show "% of replies rated 👍" once this many replies have been rated. */
+  minRatingsForScore: 30,
+  /** Live activity looks back this far. */
+  activityWindowHours: 24,
+};
+
 export const siteConfig = {
   name: "Sippa",
   tagline: "Brew your perfect companion.",

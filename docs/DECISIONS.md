@@ -95,6 +95,16 @@ Answers to the kickoff questions (spec §11), recorded 2026-09-26.
 - **Likes & creator stats**: "Save" became ❤️ Like with public counts; creators see characters / likes / messages / chats in Profile; Home shows a Top creators board (display names only, approved public characters).
 - All XP, Flowers and counts change only on the server (verified by `npm run db:check`).
 
+## Social proof (owner picks 2026-09-28)
+
+Shown on the signed-in Home and Moments pages. **Real data only — nothing seeded or estimated.**
+
+- **Our promises strip:** Adults only (18+) · Never real people · Always an AI · Delete anytime · Data stored in the EU. Age is self-declared, so it doesn't say "verified". Only the database is confirmed EU-hosted, so it doesn't say "EU-hosted".
+- **Live on Sippa:** anonymous events from the last 24 h, e.g. "New chat with Marie Curie · 5m". It never shows who. Private and pending characters are never shown, nor Lover characters to non-adults.
+- **Real counters** (chats started · characters by the community · moments posted): hidden until there are 100 chats (`socialProof.minChatsForCounters`).
+- **👍 rate of rated replies:** hidden until 30 ratings (`socialProof.minRatingsForScore`).
+- Seeded `message_count` values are placeholders and stay hidden (`showUsageStats = false`) until they come from real chats.
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.

@@ -4,7 +4,11 @@
  */
 export default function AppLoading() {
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 md:py-8" aria-busy="true" aria-live="polite">
+    <div
+      className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 md:py-8"
+      aria-busy="true"
+      aria-live="polite"
+    >
       <p className="sr-only">Loading…</p>
       <div className="bg-surface-2 h-9 w-48 animate-pulse rounded-lg" />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

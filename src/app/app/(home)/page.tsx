@@ -4,8 +4,10 @@ import Link from "next/link";
 import { CharacterAvatar } from "@/components/CharacterAvatar";
 import { CharacterCard } from "@/components/CharacterCard";
 import { CheckInCard } from "@/components/engage/CheckInCard";
+import { LiveOnSippa, TrustStrip } from "@/components/engage/SocialProof";
 import { MomentCard } from "@/components/engage/MomentCard";
 import { getFeed } from "@/lib/moments";
+import { getSocialProof } from "@/lib/social-proof";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { HouseAd } from "@/components/billing/HouseAd";
 import { BrandIcon } from "@/components/BrandIcon";
@@ -62,7 +64,7 @@ export default async function HomePage() {
   const admin = createAdminClient();
   const today = new Date().toISOString().slice(0, 10);
   const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
-  const [hot, trending, rows, checkins, moments, creators] = await Promise.all([
+  const [hot, trending, rows, checkins, moments, creators, proof] = await Promise.all([
     listCharacters({ sort: "popular", limit: 3 }, adult).then(withChatCounts),
     listCharacters({ sort: showUsageStats ? "trending" : "new", limit: 3 }, adult).then(withChatCounts),
     Promise.all(
@@ -83,6 +85,7 @@ export default async function HomePage() {
       .select("creator_id,name,characters,likes,messages")
       .order("likes", { ascending: false })
       .limit(5),
+    getSocialProof(adult),
   ]);
   const collections = rows as (Collection & { items: CharacterSummary[] })[];
   const todayRow = checkins.data?.find((r) => r.day === today);
@@ -165,6 +168,8 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <LiveOnSippa proof={proof} />
+
       {viewer?.profile?.plan !== "plus" && <HouseAd />}
 
       {moments.length > 0 && (
@@ -240,6 +245,7 @@ export default async function HomePage() {
           </ol>
         </section>
       )}
+      <TrustStrip />
     </div>
   );
 }
