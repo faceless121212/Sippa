@@ -2,6 +2,7 @@ import "server-only";
 import type { CategoryId } from "@/config/categories";
 import { seedCharacters, type Character, type Gender } from "@/data/characters";
 import { supabaseConfigured } from "./supabase/config";
+import { unstable_cache } from "next/cache";
 import { createAdminClient } from "./supabase/admin";
 import { createClient } from "./supabase/server";
 
@@ -229,15 +230,40 @@ export function isSeedLover(id: string) {
 export async function chatCounts(ids: string[]): Promise<Map<string, number>> {
   const counts = new Map<string, number>();
   if (!supabaseConfigured || !ids.length) return counts;
-  const admin = createAdminClient();
-  await Promise.all(
-    [...new Set(ids)].map(async (id) => {
-      const { count } = await admin
-        .from("chats")
-        .select("id", { count: "exact", head: true })
-        .eq("character_id", id);
-      counts.set(id, count ?? 0);
-    }),
-  );
+  // One request for the whole list: each character with its chat count embedded.
+  const { data } = await createAdminClient()
+    .from("characters")
+    .select("id,chats(count)")
+    .in("id", [...new Set(ids)]);
+  for (const r of data ?? [])
+    counts.set(r.id, (r.chats as unknown as { count: number }[] | null)?.[0]?.count ?? 0);
+  for (const id of ids) if (!counts.has(id)) counts.set(id, 0);
   return counts;
+}
+
+/** chatCounts, cached for a minute (the same for every viewer). */
+export async function cachedChatCounts(ids: string[]): Promise<Map<string, number>> {
+  const key = [...new Set(ids)].sort();
+  const entries = await unstable_cache(async () => [...(await chatCounts(key))], ["chat-counts", ...key], {
+    revalidate: 60,
+  })();
+  return new Map(entries);
+}
+
+/**
+ * The signed-in user's liked characters, newest first — one query with the characters
+ * embedded. RLS limits favorites to the user's own and hides characters they may not see.
+ */
+export async function listFavorites(): Promise<CharacterSummary[]> {
+  if (!supabaseConfigured) return [];
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("favorites")
+    .select(`created_at,characters(${SUMMARY_COLUMNS})`)
+    .order("created_at", { ascending: false })
+    .limit(100);
+  return (data ?? []).flatMap((f) => {
+    const c = f.characters as unknown as Row | null;
+    return c ? [fromRow(c)] : [];
+  });
 }

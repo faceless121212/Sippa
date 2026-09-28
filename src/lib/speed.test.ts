@@ -19,6 +19,7 @@ vi.mock("@/lib/supabase/server", () => ({
   createClient: async () => ({ ...fake.client, auth: { getClaims, getUser } }),
 }));
 vi.mock("@/lib/supabase/config", () => ({ supabaseConfigured: true }));
+vi.mock("next/cache", () => ({ unstable_cache: (fn: () => unknown) => fn }));
 // after() work runs once the response is sent, so it never counts against a page's budget.
 vi.mock("next/server", () => ({ after: vi.fn() }));
 vi.mock("next/navigation", () => ({ redirect: vi.fn(), notFound: vi.fn() }));
@@ -29,31 +30,38 @@ const { chatCounts } = await import("./characters");
 
 function seed() {
   for (const k of Object.keys(tables)) delete tables[k];
+  const characters = ["pip", "marie", "mara"].map((id, i) => ({
+    id,
+    name: id,
+    category: id === "mara" ? "lover" : "friend",
+    status: "approved",
+    visibility: "public",
+    creator_id: null,
+    message_count: 100 - i,
+    avatar_url: null,
+  }));
+  // Embedded relations are stored the way PostgREST returns them.
+  const withChar = (c: Record<string, unknown>) => ({
+    ...c,
+    characters: characters.find((x) => x.id === c.character_id),
+  });
   Object.assign(tables, {
-    characters: ["pip", "marie", "mara"].map((id, i) => ({
-      id,
-      name: id,
-      category: id === "mara" ? "lover" : "friend",
-      status: "approved",
-      visibility: "public",
-      creator_id: null,
-      message_count: 100 - i,
-      avatar_url: null,
-    })),
+    characters,
     chats: [
       { id: "c1", user_id: "u1", character_id: "pip", updated_at: iso(1000) },
       { id: "c2", user_id: "u2", character_id: "pip", updated_at: iso(2000) },
       { id: "c3", user_id: "u1", character_id: "marie", updated_at: iso(3000) },
-    ],
+    ].map(withChar),
     // Fresh moments, so no AI top-up is needed on this load.
     moments: ["pip", "marie", "mara", "pip"].map((cid, i) => ({
       id: `m${i}`,
       character_id: cid,
       text: `moment ${i}`,
       created_at: iso(60_000 * (i + 1)),
-      like_count: 0,
+      like_count: i === 0 ? 1 : 0,
+      moment_likes: i === 0 ? [{ user_id: "u1" }] : [],
+      moment_reactions: [],
     })),
-    moment_likes: [{ user_id: "u1", moment_id: "m0" }],
     profiles: [{ id: "u1", email: "a@b.c", dob: "1990-01-01", is_adult: true, plan: "free", beans: 5 }],
   });
 }
@@ -65,17 +73,23 @@ beforeEach(() => {
 });
 
 describe("page loaders stay within their round-trip budget", () => {
-  it("Moments feed: 4 rounds for a signed-in user, with likes and age rules applied", async () => {
+  it("Moments feed: 2 rounds for a signed-in user, with likes and age rules applied", async () => {
     const { result, rounds } = await fake.rounds(() => getFeed({ userId: "u1", adult: false }, 10));
-    expect(rounds).toBeLessThanOrEqual(4);
+    expect(rounds).toBeLessThanOrEqual(2);
     expect(result.map((m) => m.character.id)).not.toContain("mara"); // Lover hidden from non-verified
     expect(result.find((m) => m.id === "m0")?.liked).toBe(true);
   });
 
-  it("Moments feed for visitors: 3 rounds, no likes lookup", async () => {
-    const { rounds, queries } = await fake.rounds(() => getFeed(null, 10));
-    expect(rounds).toBeLessThanOrEqual(3);
+  it("Moments feed for visitors: 2 rounds, and nobody's likes shown as theirs", async () => {
+    const { result, rounds, queries } = await fake.rounds(() => getFeed(null, 10));
+    expect(rounds).toBeLessThanOrEqual(2);
     expect(queries).not.toContain("select:moment_likes");
+    expect(result.some((m) => m.liked)).toBe(false);
+  });
+
+  it("another user's like isn't shown as yours", async () => {
+    const { result } = await fake.rounds(() => getFeed({ userId: "u2", adult: false }, 10));
+    expect(result.find((m) => m.id === "m0")).toMatchObject({ liked: false, likeCount: 1 });
   });
 
   it("signed-in check verifies the token locally: no auth-server call, one DB round", async () => {

@@ -4,45 +4,29 @@ import Link from "next/link";
 import { CharacterCard } from "@/components/CharacterCard";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { buttonClass } from "@/components/ui/button";
-import { requireAdult, viewerIsAdult } from "@/lib/auth";
-import { listCharacters } from "@/lib/characters";
+import { requireAdult } from "@/lib/auth";
+import { listFavorites } from "@/lib/characters";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { deleteAccount, setNudges } from "./actions";
 
 export const metadata: Metadata = { title: "Profile" };
 
 export default async function ProfilePage() {
-  const viewer = await requireAdult("/app/profile");
-  const supabase = await createClient();
-  // Two parallel rounds instead of four sequential queries.
-  const [{ data: favs }, { data: mine }] = await Promise.all([
-    supabase
-      .from("favorites")
-      .select("character_id")
-      .eq("user_id", viewer.user.id)
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("characters")
-      .select("id,name,age,category,famous_type,hook,tags,message_count,visibility,avatar_url,like_count")
-      .eq("creator_id", viewer.user.id)
-      .order("created_at", { ascending: false }),
-  ]);
-  const favIds = new Set((favs ?? []).map((f) => f.character_id as string));
-  const [{ count: chatCount }, all] = await Promise.all([
-    mine?.length
-      ? createAdminClient()
-          .from("chats")
-          .select("id", { count: "exact", head: true })
-          .in(
-            "character_id",
-            mine.map((c) => c.id),
-          )
-      : Promise.resolve({ count: 0 }),
-    favIds.size ? listCharacters({ limit: 200 }, viewerIsAdult(viewer)) : Promise.resolve([]),
-  ]);
-  const favorites = all.filter((c) => favIds.has(c.id));
+  // Two rounds: favourites load alongside the sign-in check; your characters (with
+  // their chat counts embedded) follow once we know who you are.
+  const [viewer, favorites] = await Promise.all([requireAdult("/app/profile"), listFavorites()]);
+  const { data: mine } = await createAdminClient()
+    .from("characters")
+    .select(
+      "id,name,age,category,famous_type,hook,tags,message_count,visibility,avatar_url,like_count,chats(count)",
+    )
+    .eq("creator_id", viewer.user.id)
+    .order("created_at", { ascending: false });
+  const chatCount = (mine ?? []).reduce(
+    (n, c) => n + ((c.chats as unknown as { count: number }[] | null)?.[0]?.count ?? 0),
+    0,
+  );
   const p = viewer.profile!;
 
   return (

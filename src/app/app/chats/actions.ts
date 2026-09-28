@@ -25,6 +25,7 @@ export async function startChat(form: FormData) {
     .limit(1)
     .maybeSingle();
   const chatId = existing?.id ?? (await createChat(viewer.user.id, id));
+  if (!existing) revalidatePath("/app/chats", "layout");
   redirect(`/app/chats/${chatId}`);
 }
 
@@ -66,6 +67,7 @@ export async function addMemory(chatId: string, text: string): Promise<MemoryRow
     .select("id,text")
     .single();
   if (error) return { error: "Couldn't save that memory." };
+  revalidatePath(`/app/chats/${parsed.data.chatId}`);
   return data;
 }
 
@@ -74,6 +76,7 @@ export async function deleteMemory(memoryId: string): Promise<{ ok: boolean }> {
   await requireAdult("/app/chats");
   const supabase = await createClient();
   const { error } = await supabase.from("memories").delete().eq("id", memoryId);
+  revalidatePath("/app/chats", "layout");
   return { ok: !error };
 }
 

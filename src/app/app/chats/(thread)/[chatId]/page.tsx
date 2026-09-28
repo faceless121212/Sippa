@@ -13,21 +13,20 @@ export const metadata: Metadata = { title: "Chat" };
 
 export default async function ChatPage({ params }: { params: Promise<{ chatId: string }> }) {
   const { chatId } = await params;
-  const viewer = await requireAdult(`/app/chats/${chatId}`);
   if (!/^[0-9a-f-]{36}$/i.test(chatId)) notFound();
 
+  // Everything starts at once (2 rounds): the sign-in check runs alongside the chat's reads,
+  // which RLS already limits to the viewer's own rows. The bond is embedded in the chat query
+  // (bonds RLS returns only the viewer's own row), so it needs no extra round.
+  const viewerP = requireAdult(`/app/chats/${chatId}`);
   const supabase = await createClient();
-  // One round of parallel reads; the bond lookup chains off the chat row.
-  // Wrapped so the request runs once even though two consumers await it.
-  const chatQuery = Promise.resolve(
+  const [, { data: chat }, { data: rows }, { data: memories }, remaining] = await Promise.all([
+    viewerP,
     supabase
       .from("chats")
-      .select("id,summary,character_id,characters(id,name,hook,avatar_url,category)")
+      .select("id,summary,character_id,characters(id,name,hook,avatar_url,category,bonds(xp))")
       .eq("id", chatId)
       .maybeSingle(),
-  );
-  const [{ data: chat }, { data: rows }, { data: memories }, remaining, bond] = await Promise.all([
-    chatQuery,
     supabase
       .from("messages")
       .select("id,role,content,rating,flagged,flag_reason")
@@ -35,17 +34,7 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
       .order("id", { ascending: false })
       .limit(200),
     supabase.from("memories").select("id,text").eq("chat_id", chatId).order("created_at"),
-    remainingToday(viewer.user.id, viewer.profile!.plan),
-    chatQuery.then(async ({ data }) => {
-      if (!data) return null;
-      const { data: b } = await supabase
-        .from("bonds")
-        .select("xp")
-        .eq("user_id", viewer.user.id)
-        .eq("character_id", data.character_id)
-        .maybeSingle();
-      return b;
-    }),
+    viewerP.then((v) => remainingToday(v.user.id, v.profile!.plan)),
   ]);
   const row = chat?.characters as unknown as {
     id: string;
@@ -53,6 +42,7 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
     hook: string;
     avatar_url: string | null;
     category: CategoryId;
+    bonds: { xp: number }[] | null;
   } | null;
   const character = row
     ? { id: row.id, name: row.name, hook: row.hook, avatarUrl: row.avatar_url, category: row.category }
@@ -69,7 +59,7 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
       key={chatId}
       chatId={chatId}
       character={character}
-      bondXp={bond?.xp ?? 0}
+      bondXp={row?.bonds?.[0]?.xp ?? 0}
       initialMessages={messages}
       initialMemories={memories ?? []}
       summary={chat.summary}

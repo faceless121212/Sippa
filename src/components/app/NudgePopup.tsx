@@ -88,7 +88,10 @@ export function NudgePopup() {
       const res = await fetch(`/api/nudge/${nudge.id}/reply`, { method: "POST" });
       const data = (await res.json()) as { chatId?: string };
       setNudge(null);
-      if (data.chatId) router.push(`/app/chats/${data.chatId}`);
+      if (data.chatId) {
+        router.refresh(); // the chat just changed: don't reuse a cached copy of it
+        router.push(`/app/chats/${data.chatId}`);
+      }
     } finally {
       setOpening(false);
     }

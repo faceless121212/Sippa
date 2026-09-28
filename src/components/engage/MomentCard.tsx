@@ -32,7 +32,10 @@ export function MomentCard({ moment, signedIn }: { moment: Moment; signedIn: boo
     setError(null);
     const res = await fetch(`/api/moments/${moment.id}/reply`, { method: "POST" }).catch(() => null);
     const data = await res?.json().catch(() => ({}));
-    if (data?.chatId) return router.push(`/app/chats/${data.chatId}`);
+    if (data?.chatId) {
+      router.refresh(); // the chat just changed: don't reuse a cached copy of it
+      return router.push(`/app/chats/${data.chatId}`);
+    }
     setBusy(false);
     setError(data?.error ?? "Couldn't open the chat. Try again.");
   };

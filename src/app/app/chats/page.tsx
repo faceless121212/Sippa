@@ -9,8 +9,8 @@ import { listChats } from "@/lib/chat/queries";
 export const metadata: Metadata = { title: "Chats" };
 
 export default async function ChatsPage() {
-  await requireAdult("/app/chats");
-  const chats = await listChats();
+  // RLS already limits the list to the viewer's own chats, so both run at once.
+  const [, chats] = await Promise.all([requireAdult("/app/chats"), listChats()]);
 
   return (
     <div className="flex h-[calc(100dvh-3.5rem-4rem)] md:h-dvh">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CHECKIN } from "@/config/engagement";
 import { cn } from "@/lib/utils";
@@ -7,6 +8,7 @@ import { BrandIcon } from "../BrandIcon";
 
 /** Daily check-in: 5 Flowers a day, +30 on day 7. Missing a day just restarts — no penalty. */
 export function CheckInCard({ streak, claimedToday }: { streak: number; claimedToday: boolean }) {
+  const router = useRouter();
   const [state, setState] = useState({ streak, claimed: claimedToday, reward: 0, busy: false, error: "" });
   const dayInCycle =
     ((state.streak - (state.claimed ? 1 : 0)) % CHECKIN.streakLength) + (state.claimed ? 1 : 0);
@@ -15,8 +17,10 @@ export function CheckInCard({ streak, claimedToday }: { streak: number; claimedT
     setState((s) => ({ ...s, busy: true, error: "" }));
     const res = await fetch("/api/checkin", { method: "POST" });
     const data = await res.json().catch(() => ({}));
-    if (res.ok) setState({ streak: data.streak, claimed: true, reward: data.total, busy: false, error: "" });
-    else
+    if (res.ok) {
+      setState({ streak: data.streak, claimed: true, reward: data.total, busy: false, error: "" });
+      router.refresh(); // update the Flowers balance (and drop cached pages showing the old one)
+    } else
       setState((s) => ({
         ...s,
         busy: false,

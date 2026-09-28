@@ -13,7 +13,7 @@ import { HouseAd } from "@/components/billing/HouseAd";
 import { BrandIcon } from "@/components/BrandIcon";
 import { buttonClass } from "@/components/ui/button";
 import { getViewer, viewerIsAdult } from "@/lib/auth";
-import { chatCounts, listCharacters, type CharacterSummary, type ExploreQuery } from "@/lib/characters";
+import { cachedChatCounts, listCharacters, type CharacterSummary, type ExploreQuery } from "@/lib/characters";
 import { exploreHref } from "@/lib/explore-params";
 import { showUsageStats } from "@/config/site";
 import { cn, formatCount } from "@/lib/utils";
@@ -254,7 +254,7 @@ type RankedCharacter = CharacterSummary & { chats: number };
 
 /** Adds each character's real chat count (chained onto its list query, so no extra wait). */
 async function withChatCounts(items: CharacterSummary[]): Promise<RankedCharacter[]> {
-  const counts = await chatCounts(items.map((c) => c.id));
+  const counts = await cachedChatCounts(items.map((c) => c.id));
   return items.map((c) => ({ ...c, chats: counts.get(c.id) ?? 0 }));
 }
 

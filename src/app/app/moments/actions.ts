@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireAdult } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -11,8 +12,10 @@ export async function toggleMomentLike(momentId: string, liked: boolean): Promis
   const supabase = await createClient();
   if (liked) {
     await supabase.from("moment_likes").delete().eq("moment_id", momentId).eq("user_id", viewer.user.id);
+    revalidatePath("/app", "layout"); // also clears the browser's cached pages
     return false;
   }
   await supabase.from("moment_likes").insert({ moment_id: momentId, user_id: viewer.user.id });
+  revalidatePath("/app", "layout");
   return true;
 }

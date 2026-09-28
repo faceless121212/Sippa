@@ -31,6 +31,18 @@ export type Moment = {
 const reactionsOf = (m: { moment_reactions?: unknown }) =>
   (m.moment_reactions as unknown as ReactionRow[] | null) ?? [];
 
+/** Only what the feed shows about each character (plus what visibility checks need). */
+const FEED_CHAR_COLUMNS = "id,name,category,avatar_url,status,visibility,creator_id";
+type FeedChar = {
+  id: string;
+  name: string;
+  category: "lover" | "friend" | "famous";
+  avatar_url: string | null;
+  status: string;
+  visibility: string;
+  creator_id: string | null;
+};
+
 type ReactionRow = {
   id: string;
   kind: "like" | "reply";
@@ -193,48 +205,53 @@ export async function getFeed(
   limit = 20,
 ): Promise<Moment[]> {
   const admin = createAdminClient();
-  // Round 1: the viewer's recent characters and the most popular public ones, together.
-  let popular = admin.from("characters").select("id").eq("status", "approved").eq("visibility", "public");
+  // Round 1: the viewer's recent characters and the most popular public ones, with
+  // just the columns the feed displays (full sheets are only needed to write new moments).
+  let popular = admin
+    .from("characters")
+    .select(FEED_CHAR_COLUMNS)
+    .eq("status", "approved")
+    .eq("visibility", "public");
   if (!viewer?.adult) popular = popular.neq("category", "lover");
   const [{ data: chats }, { data: top }] = await Promise.all([
     viewer
       ? admin
           .from("chats")
-          .select("character_id")
+          .select(`character_id,characters(${FEED_CHAR_COLUMNS})`)
           .eq("user_id", viewer.userId)
           .order("updated_at", { ascending: false })
           .limit(20)
-      : Promise.resolve({ data: [] as { character_id: string }[] }),
+      : Promise.resolve({ data: [] as { character_id: string; characters: unknown }[] }),
     popular.order("message_count", { ascending: false }).limit(10),
   ]);
-  const recent = Array.from(new Set((chats ?? []).map((c) => c.character_id))).slice(0, 8);
-  const ids = Array.from(new Set([...recent, ...(top ?? []).map((c) => c.id)])).slice(0, 14);
-  if (!ids.length) return [];
-
-  // Round 2: which of those the viewer may see.
-  const { data: chars } = await admin
-    .from("characters")
-    .select(
-      "id,name,age,category,famous_type,hook,description,personality,speaking_style,backstory,first_message,example_dialogues,avatar_url,status,visibility,creator_id",
-    )
-    .in("id", ids);
-  const allowed = (chars ?? []).filter(
+  const candidates = new Map<string, FeedChar>();
+  for (const c of chats ?? []) {
+    const ch = c.characters as unknown as FeedChar | null;
+    if (ch && candidates.size < 8) candidates.set(ch.id, ch);
+  }
+  for (const ch of (top ?? []) as unknown as FeedChar[]) if (candidates.size < 14) candidates.set(ch.id, ch);
+  const allowed = [...candidates.values()].filter(
     (c) =>
       c.status === "approved" &&
       (c.visibility !== "private" || c.creator_id === viewer?.userId) &&
       (viewer?.adult || c.category !== "lover"),
-  ) as (CharRow & { status: string })[];
+  );
+  if (!allowed.length) return [];
   const allowedIds = allowed.map((c) => c.id);
 
-  // Round 3: freshness check and the feed itself, together.
+  // Round 2: freshness check and the feed itself (with reactions and your likes embedded), together.
+  // Visitors have no likes; this id never matches, so their embedded likes come back empty.
+  const likesOf = viewer?.userId ?? "00000000-0000-0000-0000-000000000000";
   const feedQuery = () =>
     admin
       .from("moments")
-      // Reactions ride along in the same query (embedded via the foreign key): no extra round-trip.
+      // Reactions and the viewer's own like ride along in the same query: no extra round-trip.
       .select(
-        "id,character_id,text,created_at,like_count,moment_reactions(id,kind,text,created_at,characters(id,name,avatar_url,category,status,visibility))",
+        "id,character_id,text,created_at,like_count,moment_likes(user_id),moment_reactions(id,kind,text,created_at,characters(id,name,avatar_url,category,status,visibility))",
       )
       .in("character_id", allowedIds)
+      // Filters the embedded likes to the viewer's own (not the moments themselves).
+      .eq("moment_likes.user_id", likesOf)
       .order("created_at", { ascending: false })
       .limit(limit);
   const [{ data: latest }, { data: firstFeed }] = await Promise.all([
@@ -257,7 +274,19 @@ export async function getFeed(
     .filter((c) => Date.now() - (lastAt.get(c.id) ?? 0) > FRESH_MS)
     .slice(0, MAX_NEW_PER_LOAD);
   const topUp = async () => {
-    const fresh = await Promise.all(stale.map(async (c) => ({ id: c.id, text: await writeMoment(c) })));
+    // Full character sheets are only needed here, to write new moments.
+    const { data: sheets } = await admin
+      .from("characters")
+      .select(
+        "id,name,age,category,famous_type,hook,description,personality,speaking_style,backstory,first_message,example_dialogues,avatar_url",
+      )
+      .in(
+        "id",
+        stale.map((c) => c.id),
+      );
+    const fresh = await Promise.all(
+      ((sheets ?? []) as CharRow[]).map(async (c) => ({ id: c.id, text: await writeMoment(c) })),
+    );
     const rows = fresh.filter((f) => f.text).map((f) => ({ character_id: f.id, text: f.text! }));
     if (rows.length) await admin.from("moments").insert(rows);
   };
@@ -270,18 +299,7 @@ export async function getFeed(
     } else after(() => topUp().catch((e) => console.error("moments:", e)));
   }
 
-  const likedIds = new Set<string>();
-  if (viewer && moments?.length) {
-    const { data: likes } = await admin
-      .from("moment_likes")
-      .select("moment_id")
-      .eq("user_id", viewer.userId)
-      .in(
-        "moment_id",
-        moments.map((m) => m.id),
-      );
-    for (const l of likes ?? []) likedIds.add(l.moment_id);
-  }
+  const likedIds = new Set((moments ?? []).filter((m) => (m.moment_likes ?? []).length > 0).map((m) => m.id));
   const byId = new Map(allowed.map((c) => [c.id, c]));
 
   // Moments nobody has reacted to yet get character reactions after the response.
