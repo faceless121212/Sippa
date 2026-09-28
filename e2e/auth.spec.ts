@@ -43,10 +43,13 @@ test("under-18s are refused before any account is created", async ({ page }) => 
   await expect(page).toHaveURL(/\/onboarding\/blocked/); // cookie keeps them out
 });
 
-test("sign-in page offers password, magic link, Google and reset", async ({ page }) => {
+test("sign-in page offers password, magic link and reset", async ({ page }) => {
   await page.goto("/login");
   await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
+  // Google appears only once it's enabled in Supabase (NEXT_PUBLIC_GOOGLE_AUTH=1).
+  await expect(page.getByRole("button", { name: "Continue with Google" })).toHaveCount(
+    process.env.NEXT_PUBLIC_GOOGLE_AUTH === "1" ? 1 : 0,
+  );
   await page.getByRole("button", { name: "Email me a sign-in link instead" }).click();
   await expect(page.getByRole("button", { name: "Email me a sign-in link" })).toBeVisible();
   await page.getByRole("button", { name: "Use my password instead" }).click();

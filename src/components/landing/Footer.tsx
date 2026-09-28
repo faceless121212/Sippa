@@ -10,6 +10,8 @@ const legal = [
 ];
 
 export function Footer() {
+  // Profiles without a real URL yet ("#") are hidden rather than shown as dead links.
+  const socials = siteConfig.socials.filter((s) => s.href !== "#");
   return (
     <footer className="border-border border-t">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[2fr_1fr_1fr]">
@@ -33,18 +35,20 @@ export function Footer() {
             ))}
           </ul>
         </nav>
-        <nav aria-label="Social media">
-          <h2 className="text-sm font-semibold">Follow along</h2>
-          <ul className="mt-3 space-y-2">
-            {siteConfig.socials.map((s) => (
-              <li key={s.label}>
-                <a href={s.href} className="text-muted hover:text-text text-sm" rel="noopener noreferrer">
-                  {s.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {socials.length > 0 && (
+          <nav aria-label="Social media">
+            <h2 className="text-sm font-semibold">Follow along</h2>
+            <ul className="mt-3 space-y-2">
+              {socials.map((s) => (
+                <li key={s.label}>
+                  <a href={s.href} className="text-muted hover:text-text text-sm" rel="noopener noreferrer">
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
       </div>
       <div className="border-border border-t">
         <p className="text-muted mx-auto max-w-6xl px-4 py-6 text-xs sm:px-6">

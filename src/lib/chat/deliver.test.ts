@@ -72,7 +72,9 @@ describe("deliverToChat (moment / popup Reply)", () => {
     expect(id).toBe("c-old");
     expect(db.chats).toHaveLength(1);
     expect(db.chats[0].message_count).toBe(8);
-    expect(db.messages).toEqual([expect.objectContaining({ chat_id: "c-old", role: "assistant", content: "hello again" })]);
+    expect(db.messages).toEqual([
+      expect.objectContaining({ chat_id: "c-old", role: "assistant", content: "hello again" }),
+    ]);
   });
 
   it("stays within a few round-trips (keeps Reply fast)", async () => {

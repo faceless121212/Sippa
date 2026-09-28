@@ -49,7 +49,10 @@ describe("AI provider switch", () => {
 
   it("demo replies still disclose being an AI when sincerely asked", async () => {
     vi.stubEnv("SIPPA_OFFLINE_AI", "1");
-    const { text } = await collect("are you human?", "You are playing Pip. The user is sincerely asking whether you're human.");
+    const { text } = await collect(
+      "are you human?",
+      "You are playing Pip. The user is sincerely asking whether you're human.",
+    );
     expect(text).toMatch(/I'm an AI character/);
   });
 });

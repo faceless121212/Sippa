@@ -67,7 +67,14 @@ export function PasswordField({
                 key={r.label}
                 className={cn("flex items-center gap-1", ok ? "text-friend-ink" : "text-muted")}
               >
-                <Check className={cn("h-3 w-3", !ok && "opacity-30")} aria-hidden="true" />
+                {ok ? (
+                  <Check className="h-3 w-3" aria-hidden="true" />
+                ) : (
+                  // A hollow dot, so unmet rules don't read as already ticked off.
+                  <span className="flex h-3 w-3 items-center justify-center" aria-hidden="true">
+                    <span className="h-1.5 w-1.5 rounded-full border border-current" />
+                  </span>
+                )}
                 {r.label}
                 <span className="sr-only">{ok ? " — done" : " — missing"}</span>
               </li>

@@ -12,17 +12,16 @@ type Billing = "monthly" | "yearly";
 const freeFeatures = [
   `${pricing.freeMessagesPerDay} messages a day`,
   `${siteConfig.freeCharacterCreations} free character creations`,
-  "Standard memory",
-  "Light ads, never mid-chat",
+  "Memory you can see and edit",
+  "One light ad, never mid-chat",
 ];
 
+// Only list what Plus actually changes (see lib/chat/service.ts and lib/creator/server.ts).
 const plusFeatures = [
   "Unlimited messages",
-  "Longer memory",
-  "Faster, smarter replies",
+  "Unlimited character creations",
+  `${pricing.plusMonthlyBeans} Flowers a month for gifts and extras`,
   "No ads",
-  "Monthly Flowers bonus",
-  "Voice (soon)",
 ];
 
 export function Pricing() {
@@ -73,10 +72,10 @@ export function Pricing() {
         <div className="mx-auto mt-10 grid max-w-4xl gap-4 md:grid-cols-2">
           <PlanCard
             name="Free"
-            price={formatPrice(0)}
+            price="€0"
             period="forever"
             features={freeFeatures}
-            cta="Start free"
+            cta="Create free account"
           />
           <PlanCard
             name="Sippa Plus"

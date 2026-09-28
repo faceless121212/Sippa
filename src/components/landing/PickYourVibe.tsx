@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { categories, categoryStyles, type CategoryId } from "@/config/categories";
 import { charactersByCategory } from "@/data/landing";
+import { exploreHref } from "@/lib/explore-params";
 import { signupHref } from "@/lib/signup";
 import { cn } from "@/lib/utils";
 import { CharacterCard } from "../CharacterCard";
@@ -55,7 +56,7 @@ export function PickYourVibe() {
         >
           Pick your vibe
         </h2>
-        <p className="text-muted mt-3">Three ways to sip.</p>
+        <p className="text-muted mt-3">Three kinds of characters.</p>
       </div>
 
       <div role="tablist" aria-label="Character categories" className="mt-8 grid gap-3 sm:grid-cols-3">
@@ -118,13 +119,13 @@ export function PickYourVibe() {
         </ul>
         <ul className="no-scrollbar mt-5 flex gap-2 overflow-x-auto" aria-label={`${current.label} sub-tags`}>
           {current.subTags.map((t) => (
-            <li
-              key={t}
-              className={cn(
-                "border-border text-muted shrink-0 rounded-md border px-2.5 py-1 text-xs font-medium",
-              )}
-            >
-              {t}
+            <li key={t} className="shrink-0">
+              <Link
+                href={signupHref(exploreHref({ category: active, tag: t }))}
+                className="border-border text-muted hover:border-text hover:text-text block rounded-md border px-2.5 py-1 text-xs font-medium"
+              >
+                {t}
+              </Link>
             </li>
           ))}
         </ul>

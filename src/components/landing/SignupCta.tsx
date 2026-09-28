@@ -28,7 +28,7 @@ export function SignupCta() {
                 href={signupHref("/app/create")}
                 className="group inline-flex items-center gap-2 rounded-xl bg-black px-5 py-3 font-bold text-white transition-transform hover:-translate-y-0.5"
               >
-                Create your free account
+                Create free account
                 <ArrowRight
                   className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
                   aria-hidden="true"

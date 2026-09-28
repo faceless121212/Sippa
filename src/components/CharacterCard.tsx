@@ -1,5 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import { categoryStyles, type CategoryId } from "@/config/categories";
+import { showUsageStats } from "@/config/site";
 import { cn, formatCount } from "@/lib/utils";
 import { CharacterAvatar } from "./CharacterAvatar";
 
@@ -28,14 +29,18 @@ export function CharacterCard({
   character,
   className,
   priority,
+  rank,
 }: {
   character: CardCharacter;
   className?: string;
   priority?: boolean;
+  /** Position in a ranking, shown as a numbered circle in the top-left corner. */
+  rank?: number;
 }) {
   const style = categoryStyles[character.category];
   // At most one badge per card, most meaningful first.
-  const topBadge = ["pick", "hot", "new", "trending"].find((b) => character.badges?.includes(b));
+  const badgeOrder = showUsageStats ? ["pick", "hot", "new", "trending"] : ["pick", "new"];
+  const topBadge = badgeOrder.find((b) => character.badges?.includes(b));
 
   return (
     <article
@@ -57,15 +62,21 @@ export function CharacterCard({
       />
 
       <div className="flex items-start justify-between gap-2 p-2.5">
-        {character.messages > 0 ? (
-          <span className="inline-flex items-center gap-1 rounded-md bg-black/55 px-1.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur-sm">
-            <MessageCircle className="h-3 w-3" aria-hidden="true" />
-            {formatCount(character.messages)}
-            <span className="sr-only"> messages</span>
-          </span>
-        ) : (
-          <span />
-        )}
+        <span className="flex items-center gap-1.5">
+          {rank !== undefined && (
+            <span className="bg-primary text-on-primary flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold">
+              <span className="sr-only">Rank </span>
+              {rank}
+            </span>
+          )}
+          {showUsageStats && character.messages > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-md bg-black/55 px-1.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur-sm">
+              <MessageCircle className="h-3 w-3" aria-hidden="true" />
+              {formatCount(character.messages)}
+              <span className="sr-only"> messages</span>
+            </span>
+          )}
+        </span>
         {topBadge && (
           <span
             className={cn(

@@ -1,4 +1,4 @@
-import { ChevronRight, Flame, Sparkles, TrendingUp } from "lucide-react";
+import { ChevronRight, Clock, Flame, Sparkles, TrendingUp } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CharacterAvatar } from "@/components/CharacterAvatar";
@@ -13,6 +13,7 @@ import { buttonClass } from "@/components/ui/button";
 import { getViewer, viewerIsAdult } from "@/lib/auth";
 import { listCharacters, type CharacterSummary, type ExploreQuery } from "@/lib/characters";
 import { exploreHref } from "@/lib/explore-params";
+import { showUsageStats } from "@/config/site";
 import { cn, formatCount } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Home" };
@@ -59,7 +60,7 @@ export default async function HomePage() {
 
   const [hot, trending, ...rows] = await Promise.all([
     listCharacters({ sort: "popular", limit: 3 }, adult),
-    listCharacters({ sort: "trending", limit: 3 }, adult),
+    listCharacters({ sort: showUsageStats ? "trending" : "new", limit: 3 }, adult),
     ...COLLECTIONS.filter((c) => adult || !c.adultsOnly).map((c) =>
       listCharacters({ ...c.query, limit: 8 }, adult).then((items) => ({ ...c, items })),
     ),
@@ -139,16 +140,28 @@ export default async function HomePage() {
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Ranking
-            title="Hot"
-            icon={<Flame className="text-lover-ink h-4 w-4" />}
+            title={showUsageStats ? "Hot" : "Staff picks"}
+            icon={
+              showUsageStats ? (
+                <Flame className="text-lover-ink h-4 w-4" />
+              ) : (
+                <Sparkles className="text-lover-ink h-4 w-4" />
+              )
+            }
             items={hot}
             href={exploreHref({ sort: "popular" })}
           />
           <Ranking
-            title="Trending"
-            icon={<TrendingUp className="text-friend-ink h-4 w-4" />}
+            title={showUsageStats ? "Trending" : "Just added"}
+            icon={
+              showUsageStats ? (
+                <TrendingUp className="text-friend-ink h-4 w-4" />
+              ) : (
+                <Clock className="text-friend-ink h-4 w-4" />
+              )
+            }
             items={trending}
-            href={exploreHref({ sort: "trending" })}
+            href={exploreHref({ sort: showUsageStats ? "trending" : "new" })}
           />
         </div>
       </section>
@@ -220,8 +233,8 @@ export default async function HomePage() {
                 <span className="w-4 text-center font-extrabold">{i + 1}</span>
                 <span className="min-w-0 flex-1 truncate font-semibold">{c.name}</span>
                 <span className="text-muted text-xs">
-                  {c.characters} character{c.characters === 1 ? "" : "s"} · ❤️ {c.likes} ·{" "}
-                  {formatCount(Number(c.messages))} msgs
+                  {c.characters} character{c.characters === 1 ? "" : "s"} · ❤️ {c.likes}
+                  {showUsageStats && ` · ${formatCount(Number(c.messages))} msgs`}
                 </span>
               </li>
             ))}
@@ -273,7 +286,9 @@ function Ranking({
                 <span className="block truncate text-sm font-bold">{c.name}</span>
                 <span className="text-muted block truncate text-xs">{c.hook}</span>
               </span>
-              <span className="text-muted shrink-0 text-xs font-semibold">{formatCount(c.messages)}</span>
+              {showUsageStats && (
+                <span className="text-muted shrink-0 text-xs font-semibold">{formatCount(c.messages)}</span>
+              )}
             </Link>
           </li>
         ))}

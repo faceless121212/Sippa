@@ -122,7 +122,7 @@ export function CreatorShowcase() {
               <BrewResult example={result} />
             ) : (
               <p className="text-muted m-auto max-w-xs text-center text-sm">
-                {brewing ? "Brewing…" : "Your character pours out here."}
+                {brewing ? "Brewing…" : "Your character appears here."}
               </p>
             )}
           </div>

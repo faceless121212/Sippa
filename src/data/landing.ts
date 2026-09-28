@@ -16,9 +16,9 @@ const pick = (ids: string[]): SampleCharacter[] => ids.map((id) => characterById
 /** 4 per category, shown in "Pick your vibe". */
 export const sampleCharacters: SampleCharacter[] = pick([
   "mara-vellin",
-  "theo-hart",
+  "elena-voss",
   "ren-kaito",
-  "sol-rivera",
+  "valentina-cruz",
   "pip-marlow",
   "nora-quill",
   "dex-okafor",

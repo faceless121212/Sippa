@@ -37,7 +37,8 @@ test("character page shows sheet, AI disclosure and actions", async ({ page }) =
   await page.goto("/app/c/marie-curie");
   await expect(page.getByRole("heading", { level: 1, name: /Marie Curie/ })).toBeVisible();
   await expect(page.getByText("You're chatting with an AI character")).toBeVisible();
-  await expect(page.getByRole("link", { name: "Start chat" })).toHaveAttribute("href", /\/login\?next=/);
+  // Visitors are sent to sign-up (new accounts), with a way back to this character.
+  await expect(page.getByRole("link", { name: "Start chat" })).toHaveAttribute("href", /\/signup\?next=/);
   await page.getByRole("button", { name: "Report" }).click();
   await expect(page.getByRole("dialog", { name: "Report" })).toBeVisible();
 });

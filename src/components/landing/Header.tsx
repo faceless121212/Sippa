@@ -52,7 +52,7 @@ export function Header() {
             href={signupHref()}
             className={buttonClass({ size: "sm", className: "hidden sm:inline-flex" })}
           >
-            Start sipping — free
+            Create free account
           </Link>
           <button
             type="button"
@@ -96,7 +96,7 @@ export function Header() {
             onClick={() => setOpen(false)}
             className={buttonClass({ className: "w-full" })}
           >
-            Start sipping — free
+            Create free account
           </Link>
         </nav>
       )}

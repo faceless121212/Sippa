@@ -1,4 +1,5 @@
-import { Search } from "lucide-react";
+import { Search, Sparkles, Star } from "lucide-react";
+import { showUsageStats } from "@/config/site";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CharacterGrid } from "@/components/app/CharacterGrid";
@@ -18,11 +19,16 @@ const GENDERS = [
   { id: "nonbinary", label: "Non-binary" },
 ] as const;
 
-const SORTS = [
-  { id: "popular", label: "Popular" },
-  { id: "trending", label: "Trending" },
-  { id: "new", label: "New" },
-] as const;
+const SORTS = showUsageStats
+  ? ([
+      { id: "popular", label: "Popular" },
+      { id: "trending", label: "Trending" },
+      { id: "new", label: "New" },
+    ] as const)
+  : ([
+      { id: "popular", label: "Featured" },
+      { id: "new", label: "New" },
+    ] as const);
 
 export default async function ExplorePage({
   searchParams,
@@ -77,13 +83,15 @@ export default async function ExplorePage({
             href={exploreHref(params, { badge: params.badge === "pick" ? undefined : "pick" })}
             active={params.badge === "pick"}
           >
-            ⭐ Staff picks
+            <Star className="h-3.5 w-3.5" aria-hidden="true" />
+            Staff picks
           </FilterLink>
           <FilterLink
             href={exploreHref(params, { badge: params.badge === "new" ? undefined : "new" })}
             active={params.badge === "new"}
           >
-            ✨ New
+            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+            New
           </FilterLink>
           {visibleCategories.map((c) => (
             <FilterLink

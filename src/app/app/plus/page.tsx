@@ -17,7 +17,6 @@ const PLUS_FEATURES = [
   "Unlimited messages",
   "Unlimited character creations",
   `${pricing.plusMonthlyBeans} Flowers every month`,
-  "Longer memory",
   "No ads",
 ];
 

@@ -20,7 +20,7 @@ export function Hero() {
         <div>
           <p className="border-border bg-bg text-muted mb-5 inline-flex items-center gap-2 rounded-lg border px-2.5 py-1 text-xs font-medium">
             <span className="bg-primary h-2 w-2 rounded-full ring-2 ring-black/10" aria-hidden="true" />
-            New: AI Character Creator
+            Free to start · No card needed
           </p>
           <h1
             id="hero-title"
@@ -42,7 +42,7 @@ export function Hero() {
               href={signupHref("/app/explore")}
               className={buttonClass({ variant: "secondary", size: "lg" })}
             >
-              Start chatting
+              Meet the characters
             </Link>
           </div>
           <div className="mt-8 flex items-center gap-3">
@@ -56,7 +56,7 @@ export function Hero() {
             <p className="text-muted text-xs leading-snug">
               Lovers, friends &amp; famous minds.
               <br />
-              Free to start · 18+ · Always an AI
+              18+ only · Always an AI
             </p>
           </div>
         </div>

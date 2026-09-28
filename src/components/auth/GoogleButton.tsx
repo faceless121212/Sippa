@@ -1,7 +1,11 @@
 import { signInWithGoogle } from "@/app/login/actions";
 import { buttonClass } from "../ui/button";
 
+/** Shown only once Google is enabled in Supabase → Authentication → Providers. */
+export const googleAuthEnabled = process.env.NEXT_PUBLIC_GOOGLE_AUTH === "1";
+
 export function GoogleButton({ next, label = "Continue with Google" }: { next: string; label?: string }) {
+  if (!googleAuthEnabled) return null;
   return (
     <form action={signInWithGoogle}>
       <input type="hidden" name="next" value={next} />
@@ -31,6 +35,7 @@ export function GoogleButton({ next, label = "Continue with Google" }: { next: s
 }
 
 export function OrDivider() {
+  if (!googleAuthEnabled) return null;
   return (
     <div className="text-muted flex items-center gap-3 text-xs">
       <span className="bg-border h-px flex-1" /> or <span className="bg-border h-px flex-1" />

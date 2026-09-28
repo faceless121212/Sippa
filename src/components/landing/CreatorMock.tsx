@@ -103,7 +103,7 @@ export function CreatorMock() {
         </div>
 
         {/* stage */}
-        <div className="relative mt-4 flex h-[440px] items-end justify-center overflow-x-clip sm:h-[460px]">
+        <div className="relative mt-4 flex h-[380px] items-end justify-center overflow-x-clip sm:h-[460px]">
           {/* fanned deck of earlier results */}
           {animate &&
             previous.map((p, i) => (

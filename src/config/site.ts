@@ -2,6 +2,12 @@
  * Editable brand, pricing and link settings. Change copy and prices here,
  * not in components.
  */
+/**
+ * Message counts and popularity badges ("Hot", "Trending") are hidden until they
+ * reflect real usage. Turn on once the numbers come from actual chats.
+ */
+export const showUsageStats = false;
+
 export const siteConfig = {
   name: "Sippa",
   tagline: "Brew your perfect companion.",

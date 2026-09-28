@@ -1,4 +1,5 @@
 import { Bot, Heart, MessageCircle } from "lucide-react";
+import { signupHref } from "@/lib/signup";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -14,6 +15,7 @@ import { getCharacter, isSeedLover } from "@/lib/characters";
 import { exploreHref } from "@/lib/explore-params";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
+import { showUsageStats } from "@/config/site";
 import { cn, formatCount } from "@/lib/utils";
 import { startChat, startScene } from "../../chats/actions";
 import { toggleFavorite } from "./actions";
@@ -99,10 +101,12 @@ export default async function CharacterPage({ params }: Props) {
           <p className="mt-2 text-lg">{character.hook}</p>
 
           <div className="text-muted mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-            <span className="flex items-center gap-1.5">
-              <MessageCircle className="h-4 w-4" aria-hidden="true" />
-              {formatCount(character.messages)} messages
-            </span>
+            {showUsageStats && (
+              <span className="flex items-center gap-1.5">
+                <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                {formatCount(character.messages)} messages
+              </span>
+            )}
             <span>by {character.creatorName}</span>
           </div>
 
@@ -129,10 +133,7 @@ export default async function CharacterPage({ params }: Props) {
                 </button>
               </form>
             ) : (
-              <Link
-                href={`/login?next=${encodeURIComponent(`/app/c/${id}`)}`}
-                className={buttonClass({ size: "lg" })}
-              >
+              <Link href={signupHref(`/app/c/${id}`)} className={buttonClass({ size: "lg" })}>
                 <MessageCircle className="h-4 w-4" aria-hidden="true" />
                 Start chat
               </Link>
@@ -232,7 +233,7 @@ export default async function CharacterPage({ params }: Props) {
             )}
             {character.firstMessage && (
               <div>
-                <h2 className="text-muted text-xs font-bold tracking-[0.08em] uppercase">Says hi like</h2>
+                <h2 className="text-muted text-xs font-bold tracking-[0.08em] uppercase">First message</h2>
                 <blockquote className="bg-surface border-border mt-2 rounded-xl rounded-tl-sm border p-4 text-sm leading-relaxed">
                   {character.firstMessage}
                 </blockquote>
