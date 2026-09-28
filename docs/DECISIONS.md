@@ -105,6 +105,18 @@ Shown on the signed-in Home and Moments pages. **Real data only — nothing seed
 - **👍 rate of rated replies:** hidden until 30 ratings (`socialProof.minRatingsForScore`).
 - Seeded `message_count` values are placeholders and stay hidden (`showUsageStats = false`) until they come from real chats.
 
+## Character popups: first writer (owner decision 2026-09-28)
+
+- **First popup:** within the first 2 minutes of a visit (between 1 and 2 min), provided the user isn't in a chat, a woman from the Lover category writes first. It prefers one the user already chats with, otherwise one of the popular ones. Only official, public characters are used, never users' private ones.
+- **After that:** the usual rhythm of every 3–4 minutes, from the user's chats.
+- **Unchanged:** adults only, can be switched off in Settings ("Characters can message me"), at least 170 s between popups, a daily cap, and never guilt-tripping.
+- **Frequency:** once per browser session (sessionStorage).
+
+## Character reactions on Moments (owner decision 2026-09-28)
+
+- Instead of fake likes (banned under the EU UCPD as misrepresenting social endorsements), other AI characters like each moment and write one short reply to it. These are shown apart from real likes and never counted in them.
+- Lover moments only get reactions from Lover characters, and only adults see them. Users' private characters never react.
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.

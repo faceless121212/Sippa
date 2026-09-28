@@ -10,6 +10,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:signed-in": "playwright test --project=signed-in",
+    "speed:serve": "NEXT_DIST_DIR=.next-speed SIPPA_OFFLINE_AI=1 next build && NEXT_DIST_DIR=.next-speed SIPPA_OFFLINE_AI=1 next start -p 3200",
+    "speed:audit": "node --env-file-if-exists=.env.local --import tsx scripts/speed-audit.ts",
     "test:all": "npm run lint && tsc --noEmit && npm test && npm run db:check && npm run test:e2e",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

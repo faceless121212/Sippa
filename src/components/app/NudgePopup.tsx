@@ -10,9 +10,18 @@ type Nudge = { id: string; characterId: string; name: string; avatarUrl: string 
 
 const MIN_MS = 180_000; // 3 minutes
 const MAX_MS = 240_000; // 4 minutes
+// The visit's first popup comes sooner: within the first 2 minutes.
+const FIRST_MIN_MS = 60_000;
+const FIRST_MAX_MS = 120_000;
 const VISIBLE_MS = 25_000;
+const FIRST_KEY = "sippa_first_nudge";
 
-/** Every 3–4 minutes a character from your chats writes to you (can be turned off in Settings). */
+/**
+ * Characters write to you (can be turned off in Settings). In the first 2 minutes
+ * of a visit, if you aren't in a chat, a woman from the Lover category writes first
+ * (adults only — the server decides who). After that, every 3–4 minutes a character
+ * from your chats.
+ */
 export function NudgePopup() {
   const pathname = usePathname();
   const router = useRouter();
@@ -25,17 +34,23 @@ export function NudgePopup() {
     let timer: ReturnType<typeof setTimeout>;
     let cancelled = false;
     const schedule = () => {
-      timer = setTimeout(fire, MIN_MS + Math.random() * (MAX_MS - MIN_MS));
+      timer = setTimeout(() => fire(false), MIN_MS + Math.random() * (MAX_MS - MIN_MS));
     };
-    const fire = async () => {
+    const fire = async (first: boolean) => {
       if (cancelled) return;
       if (document.visibilityState !== "visible") return schedule();
       const chatMatch = /^\/app\/chats\/([0-9a-f-]{36})$/.exec(path.current);
+      // The first-writer rule only applies while you're not chatting; if you are, wait for the normal rhythm.
+      if (first && chatMatch) return schedule();
+      const asFirst = first;
       try {
         const res = await fetch("/api/nudge", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(chatMatch ? { excludeChatId: chatMatch[1] } : {}),
+          body: JSON.stringify({
+            ...(chatMatch ? { excludeChatId: chatMatch[1] } : {}),
+            ...(asFirst ? { first: true } : {}),
+          }),
         });
         if (res.status === 200 && !cancelled) setNudge((await res.json()) as Nudge);
       } catch {
@@ -43,7 +58,16 @@ export function NudgePopup() {
       }
       schedule();
     };
-    schedule();
+    // Once per browser session, however many pages you open.
+    let firstDone = true;
+    try {
+      firstDone = sessionStorage.getItem(FIRST_KEY) === "1";
+      if (!firstDone) sessionStorage.setItem(FIRST_KEY, "1");
+    } catch {
+      firstDone = false;
+    }
+    if (firstDone) schedule();
+    else timer = setTimeout(() => fire(true), FIRST_MIN_MS + Math.random() * (FIRST_MAX_MS - FIRST_MIN_MS));
     return () => {
       cancelled = true;
       clearTimeout(timer);
