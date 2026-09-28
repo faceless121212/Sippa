@@ -19,7 +19,8 @@ vi.mock("@/lib/supabase/server", () => ({
   createClient: async () => ({ ...fake.client, auth: { getClaims, getUser } }),
 }));
 vi.mock("@/lib/supabase/config", () => ({ supabaseConfigured: true }));
-vi.mock("next/server", () => ({ after: (fn: () => unknown) => void fn() }));
+// after() work runs once the response is sent, so it never counts against a page's budget.
+vi.mock("next/server", () => ({ after: vi.fn() }));
 vi.mock("next/navigation", () => ({ redirect: vi.fn(), notFound: vi.fn() }));
 
 const { getFeed } = await import("./moments");

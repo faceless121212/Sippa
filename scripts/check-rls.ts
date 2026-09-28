@@ -263,6 +263,29 @@ async function main() {
             tx`select count(*)::int as n from public.moments m join public.characters c on c.id = m.character_id where c.category = 'lover'`,
         )) as { n: number }[];
         check("non-verified users can't see Lover characters' moments", loverMoments[0].n === 0);
+
+        // Character reactions to moments (0011): server-written only; Lover reactions adults-only.
+        await denied("users cannot write character reactions", () =>
+          as(
+            adult,
+            () =>
+              tx`insert into public.moment_reactions (moment_id, character_id, kind) values (${mom}, 'jane-austen', 'like')`,
+          ),
+        );
+        const [{ id: loverMom }] =
+          await tx`insert into public.moments (character_id, text) values ('mara-vellin', 'lover reacted') returning id`;
+        await tx`insert into public.moment_reactions (moment_id, character_id, kind) values (${loverMom}, 'theo-hart', 'like')`;
+        await tx`insert into public.moment_reactions (moment_id, character_id, kind) values (${mom}, 'jane-austen', 'like')`;
+        const seen = async (uid: string) =>
+          (
+            (await as(uid, () => tx`select character_id from public.moment_reactions`)) as {
+              character_id: string;
+            }[]
+          ).map((r) => r.character_id);
+        const teenSees = await seen(teen);
+        check("non-verified users can't see Lover characters' reactions", !teenSees.includes("theo-hart"));
+        check("everyone sees reactions on non-Lover moments", teenSees.includes("jane-austen"));
+        check("verified adults see Lover characters' reactions", (await seen(adult)).includes("theo-hart"));
         await denied("the creator leaderboard view isn't readable with user keys", () =>
           as(adult, () => tx`select * from public.top_creators limit 1`),
         );

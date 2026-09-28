@@ -74,6 +74,16 @@ export function createFakeSupabase(tables: Record<string, Row[]>, latencyMs = 20
       ),
       limit: (n: number) => ((limitN = n), q),
       insert: (p: Row | Row[]) => ((op = "insert"), (payload = p), q),
+      // Upsert with ignoreDuplicates: rows whose conflict key already exists are skipped.
+      upsert: (p: Row | Row[], o?: { onConflict?: string }) => {
+        op = "insert";
+        const keys = o?.onConflict?.split(",") ?? [];
+        const existing = (tables[table] ??= []);
+        payload = (Array.isArray(p) ? p : [p]).filter(
+          (r) => !keys.length || !existing.some((e) => keys.every((k) => e[k] === r[k])),
+        );
+        return q;
+      },
       update: (p: Row) => ((op = "update"), (payload = p), q),
       maybeSingle: () => run(true),
       single: () => run(true),

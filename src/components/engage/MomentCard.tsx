@@ -64,7 +64,8 @@ export function MomentCard({ moment, signedIn }: { moment: Moment; signedIn: boo
       <p className="mt-3 text-[15px] leading-relaxed whitespace-pre-wrap">
         <MessageText text={moment.text} />
       </p>
-      <div className="mt-3 flex gap-1">
+      <LikedBy characters={moment.reactions.likedBy} />
+      <div className="mt-3 flex items-center gap-1">
         {signedIn ? (
           <>
             <button
@@ -80,6 +81,7 @@ export function MomentCard({ moment, signedIn }: { moment: Moment; signedIn: boo
               <MessageCircle className="h-4 w-4" aria-hidden="true" />
               {busy ? "Opening…" : "Reply"}
             </button>
+            {count === 0 && !liked && <span className="text-muted ml-1 text-xs">Be the first to like</span>}
           </>
         ) : (
           // Visitors get plain links: they work before the page's JavaScript has loaded.
@@ -95,11 +97,70 @@ export function MomentCard({ moment, signedIn }: { moment: Moment; signedIn: boo
           </>
         )}
       </div>
+      <CharacterReplies replies={moment.reactions.replies} />
       {error && (
         <p role="alert" className="text-lover-ink mt-2 text-sm font-medium">
           {error}
         </p>
       )}
     </article>
+  );
+}
+
+type Reactions = Moment["reactions"];
+
+/** "Liked by Leonardo da Vinci and 2 other characters" — AI characters, separate from real likes. */
+function LikedBy({ characters }: { characters: Reactions["likedBy"] }) {
+  if (!characters.length) return null;
+  const [first, ...rest] = characters;
+  return (
+    <p className="text-muted mt-3 flex items-center gap-2 text-xs">
+      <span className="flex -space-x-1.5" aria-hidden="true">
+        {characters.slice(0, 3).map((c) => (
+          <span key={c.id} className="ring-surface h-5 w-5 overflow-hidden rounded-full ring-2">
+            <CharacterAvatar id={c.id} name={c.name} src={c.avatarUrl} sizes="20px" />
+          </span>
+        ))}
+      </span>
+      <span>
+        Liked by{" "}
+        <Link href={`/app/c/${first.id}`} className="text-text font-semibold hover:underline">
+          {first.name}
+        </Link>
+        {rest.length > 0 && ` and ${rest.length} other character${rest.length === 1 ? "" : "s"}`}
+      </span>
+    </p>
+  );
+}
+
+/** Short public replies from other characters, each clearly marked as AI. */
+function CharacterReplies({ replies }: { replies: Reactions["replies"] }) {
+  if (!replies.length) return null;
+  return (
+    <ul className="border-border mt-3 space-y-3 border-t pt-3" aria-label="Replies from other characters">
+      {replies.map((r) => (
+        <li key={r.id} className="flex gap-2.5">
+          <Link href={`/app/c/${r.character.id}`} className="h-7 w-7 shrink-0 overflow-hidden rounded-full">
+            <CharacterAvatar
+              id={r.character.id}
+              name={r.character.name}
+              src={r.character.avatarUrl}
+              sizes="28px"
+            />
+          </Link>
+          <div className="bg-surface-2 min-w-0 flex-1 rounded-xl px-3 py-2">
+            <p className="text-xs">
+              <Link href={`/app/c/${r.character.id}`} className="font-bold hover:underline">
+                {r.character.name}
+              </Link>{" "}
+              <span className="text-muted">AI · {timeAgo(r.createdAt)}</span>
+            </p>
+            <p className="mt-0.5 text-sm leading-relaxed">
+              <MessageText text={r.text} />
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
