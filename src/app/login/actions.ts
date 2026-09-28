@@ -15,6 +15,7 @@ import {
 import { completeOnboardingFromMetadata } from "@/lib/onboarding";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { safeNext } from "@/lib/safe-next";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { supabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 
@@ -90,7 +91,22 @@ export type AuthState = {
   message?: string;
   email?: string;
   unconfirmed?: boolean;
+  /** Sign-up with an email that already has an account (owner decision 2026-09-28). */
+  exists?: "confirmed" | "unconfirmed";
 };
+
+/**
+ * Is there already an account for this email? Emails are stored lowercased in
+ * profiles (one row per auth user); confirmation state comes from the auth user.
+ */
+async function existingAccount(email: string): Promise<"confirmed" | "unconfirmed" | null> {
+  const admin = createAdminClient();
+  const { data: p } = await admin.from("profiles").select("id").eq("email", email).maybeSingle();
+  if (!p) return null;
+  const { data } = await admin.auth.admin.getUserById(p.id);
+  if (!data.user) return null;
+  return data.user.email_confirmed_at ? "confirmed" : "unconfirmed";
+}
 
 const attempts = createRateLimiter({ limit: 10, windowMs: 10 * 60_000 });
 
@@ -122,9 +138,21 @@ export async function signUp(_prev: AuthState, form: FormData): Promise<AuthStat
     redirect("/onboarding/blocked");
   }
 
+  // Tell people plainly when the email is taken, and don't create or email anything.
+  const exists = await existingAccount(email);
+  if (exists === "confirmed")
+    return { status: "error", exists, email, message: "This email is already registered." };
+  if (exists === "unconfirmed")
+    return {
+      status: "error",
+      exists,
+      email,
+      message: "This email is already registered but hasn't been confirmed yet.",
+    };
+
   const next = safeNext(String(form.get("next") ?? ""));
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -139,7 +167,9 @@ export async function signUp(_prev: AuthState, form: FormData): Promise<AuthStat
       return { status: "error", message: "Too many emails sent. Try again in a little while." };
     return { status: "error", message: "We couldn't create your account. Try again." };
   }
-  // Same answer whether or not the email already exists (no account enumeration).
+  // Backup signal: Supabase returns a user with no identities for an existing email.
+  if (data.user && data.user.identities?.length === 0)
+    return { status: "error", exists: "confirmed", email, message: "This email is already registered." };
   return { status: "check-email", email };
 }
 

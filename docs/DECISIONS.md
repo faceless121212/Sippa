@@ -121,6 +121,11 @@ Shown on the signed-in Home and Moments pages. **Real data only — nothing seed
 
 - **Dark is the default** for everyone (it was light). The theme toggle still switches to light, and the choice is remembered per browser.
 
+## Sign-up with an email that's already used (owner decision 2026-09-28)
+
+- Sign-up now says so plainly. For a confirmed account: "This email is already registered", with links to sign in and reset the password. For an unconfirmed one: "…hasn't been confirmed yet", with a button to resend the confirmation email. No account or email is created.
+- Trade-off accepted: this lets someone test whether an email has an account. Sign-up stays rate-limited (10 attempts per 10 minutes per visitor) to keep that slow.
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.
