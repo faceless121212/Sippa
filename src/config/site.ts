@@ -21,12 +21,33 @@ export const socialProof = {
   activityWindowHours: 24,
 };
 
+/**
+ * The public site address. An empty or invalid NEXT_PUBLIC_SITE_URL falls back to the
+ * address Vercel assigns (VERCEL_PROJECT_PRODUCTION_URL), then to localhost — so a blank
+ * variable never breaks the build.
+ */
+function siteUrl(): string {
+  const candidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL && `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`,
+  ];
+  for (const c of candidates) {
+    if (!c?.trim()) continue;
+    try {
+      return new URL(c.trim()).origin + new URL(c.trim()).pathname.replace(/\/$/, "");
+    } catch {
+      // not a valid URL — try the next one
+    }
+  }
+  return "http://localhost:3000";
+}
+
 export const siteConfig = {
   name: "Sippa",
   tagline: "Brew your perfect companion.",
   description:
     "Chat with AI characters who feel real — or brew your own in seconds. Lovers, friends and famous minds, on web and phone.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: siteUrl(),
   minimumAge: 18,
   loverMinimumCharacterAge: 21,
   freeCharacterCreations: 3,
