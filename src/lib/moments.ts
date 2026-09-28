@@ -86,22 +86,25 @@ export async function getFeed(
   limit = 20,
 ): Promise<Moment[]> {
   const admin = createAdminClient();
-  let ids: string[] = [];
-  if (viewer) {
-    const { data: chats } = await admin
-      .from("chats")
-      .select("character_id")
-      .eq("user_id", viewer.userId)
-      .order("updated_at", { ascending: false })
-      .limit(20);
-    ids = Array.from(new Set((chats ?? []).map((c) => c.character_id))).slice(0, 8);
-  }
+  // Round 1: the viewer's recent characters and the most popular public ones, together.
   let popular = admin.from("characters").select("id").eq("status", "approved").eq("visibility", "public");
   if (!viewer?.adult) popular = popular.neq("category", "lover");
-  const { data: top } = await popular.order("message_count", { ascending: false }).limit(10);
-  ids = Array.from(new Set([...ids, ...(top ?? []).map((c) => c.id)])).slice(0, 14);
+  const [{ data: chats }, { data: top }] = await Promise.all([
+    viewer
+      ? admin
+          .from("chats")
+          .select("character_id")
+          .eq("user_id", viewer.userId)
+          .order("updated_at", { ascending: false })
+          .limit(20)
+      : Promise.resolve({ data: [] as { character_id: string }[] }),
+    popular.order("message_count", { ascending: false }).limit(10),
+  ]);
+  const recent = Array.from(new Set((chats ?? []).map((c) => c.character_id))).slice(0, 8);
+  const ids = Array.from(new Set([...recent, ...(top ?? []).map((c) => c.id)])).slice(0, 14);
   if (!ids.length) return [];
 
+  // Round 2: which of those the viewer may see.
   const { data: chars } = await admin
     .from("characters")
     .select(
@@ -114,17 +117,29 @@ export async function getFeed(
       (c.visibility !== "private" || c.creator_id === viewer?.userId) &&
       (viewer?.adult || c.category !== "lover"),
   ) as (CharRow & { status: string })[];
+  const allowedIds = allowed.map((c) => c.id);
+
+  // Round 3: freshness check and the feed itself, together.
+  const feedQuery = () =>
+    admin
+      .from("moments")
+      .select("id,character_id,text,created_at,like_count")
+      .in("character_id", allowedIds)
+      .order("created_at", { ascending: false })
+      .limit(limit);
+  const [{ data: latest }, { data: firstFeed }] = await Promise.all([
+    admin
+      .from("moments")
+      .select("character_id,created_at")
+      .in("character_id", allowedIds)
+      .order("created_at", { ascending: false })
+      .limit(200),
+    feedQuery(),
+  ]);
+
+  let moments = firstFeed;
 
   // Top up stale characters.
-  const { data: latest } = await admin
-    .from("moments")
-    .select("character_id,created_at")
-    .in(
-      "character_id",
-      allowed.map((c) => c.id),
-    )
-    .order("created_at", { ascending: false })
-    .limit(200);
   const lastAt = new Map<string, number>();
   for (const m of latest ?? [])
     if (!lastAt.has(m.character_id)) lastAt.set(m.character_id, new Date(m.created_at).getTime());
@@ -139,19 +154,12 @@ export async function getFeed(
   // Keep pages fast: only wait for new moments when the feed is nearly empty;
   // otherwise write them after the response (they show up on the next visit).
   if (stale.length) {
-    if ((latest?.length ?? 0) < 3) await topUp();
-    else after(() => topUp().catch((e) => console.error("moments:", e)));
+    if ((latest?.length ?? 0) < 3) {
+      await topUp();
+      ({ data: moments } = await feedQuery());
+    } else after(() => topUp().catch((e) => console.error("moments:", e)));
   }
 
-  const { data: moments } = await admin
-    .from("moments")
-    .select("id,character_id,text,created_at,like_count")
-    .in(
-      "character_id",
-      allowed.map((c) => c.id),
-    )
-    .order("created_at", { ascending: false })
-    .limit(limit);
   const likedIds = new Set<string>();
   if (viewer && moments?.length) {
     const { data: likes } = await admin

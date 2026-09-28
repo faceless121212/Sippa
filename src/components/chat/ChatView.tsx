@@ -16,6 +16,7 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import { addMemory, deleteMemory, newChat, type MemoryRow } from "@/app/app/chats/actions";
 import type { Helpline } from "@/lib/safety/crisis";
@@ -61,6 +62,7 @@ let tempId = -1;
 
 export function ChatView(props: Props) {
   const { chatId, character } = props;
+  const router = useRouter();
   const [messages, setMessages] = useState<ChatMessage[]>(props.initialMessages);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -169,6 +171,8 @@ export function ChatView(props: Props) {
             setMessages((m) => m.map((x) => (x.id === replyId ? { ...x, id: e.id, streaming: false } : x)));
             if (e.remaining !== undefined && e.remaining !== null) setRemaining(e.remaining);
             if (typeof e.xp === "number") setBondXp(e.xp);
+            // Update the sidebar's preview and order in the background (the chat keeps its state).
+            router.refresh();
           } else if (e.t === "crisis") {
             setMessages((m) => [
               ...m.filter((x) => x.id !== replyId),
@@ -202,7 +206,7 @@ export function ChatView(props: Props) {
       setBusy(false);
       abort.current = null;
     }
-  }, []);
+  }, [router]);
 
   const send = (e?: FormEvent) => {
     e?.preventDefault();

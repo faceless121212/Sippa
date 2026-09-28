@@ -10,7 +10,9 @@ import { createAdminClient } from "./supabase/admin";
  * role, so users skip the separate age step. Returns true if the profile now
  * has a verified adult DOB.
  */
-export async function completeOnboardingFromMetadata(user: User): Promise<boolean> {
+export async function completeOnboardingFromMetadata(
+  user: Pick<User, "id"> & { user_metadata?: Record<string, unknown> },
+): Promise<boolean> {
   const dob = typeof user.user_metadata?.dob === "string" ? user.user_metadata.dob : null;
   const age = dob ? ageOn(dob) : null;
   if (!dob || age === null || age < siteConfig.minimumAge) return false;

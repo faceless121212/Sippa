@@ -1,4 +1,4 @@
-import { ChevronRight, Clock, Flame, Sparkles, TrendingUp } from "lucide-react";
+import { ChevronRight, Clock, Flame, MessageCircle, Sparkles, TrendingUp } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CharacterAvatar } from "@/components/CharacterAvatar";
@@ -11,7 +11,7 @@ import { HouseAd } from "@/components/billing/HouseAd";
 import { BrandIcon } from "@/components/BrandIcon";
 import { buttonClass } from "@/components/ui/button";
 import { getViewer, viewerIsAdult } from "@/lib/auth";
-import { listCharacters, type CharacterSummary, type ExploreQuery } from "@/lib/characters";
+import { chatCounts, listCharacters, type CharacterSummary, type ExploreQuery } from "@/lib/characters";
 import { exploreHref } from "@/lib/explore-params";
 import { showUsageStats } from "@/config/site";
 import { cn, formatCount } from "@/lib/utils";
@@ -58,20 +58,18 @@ export default async function HomePage() {
   const viewer = await getViewer();
   const adult = viewerIsAdult(viewer);
 
-  const [hot, trending, ...rows] = await Promise.all([
-    listCharacters({ sort: "popular", limit: 3 }, adult),
-    listCharacters({ sort: showUsageStats ? "trending" : "new", limit: 3 }, adult),
-    ...COLLECTIONS.filter((c) => adult || !c.adultsOnly).map((c) =>
-      listCharacters({ ...c.query, limit: 8 }, adult).then((items) => ({ ...c, items })),
-    ),
-  ]);
-  const collections = rows as (Collection & { items: CharacterSummary[] })[];
-
-  // Engagement: daily check-in, moments strip, top creators.
+  // Everything on Home loads in one parallel round.
   const admin = createAdminClient();
   const today = new Date().toISOString().slice(0, 10);
   const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
-  const [checkins, moments, creators] = await Promise.all([
+  const [hot, trending, rows, checkins, moments, creators] = await Promise.all([
+    listCharacters({ sort: "popular", limit: 3 }, adult).then(withChatCounts),
+    listCharacters({ sort: showUsageStats ? "trending" : "new", limit: 3 }, adult).then(withChatCounts),
+    Promise.all(
+      COLLECTIONS.filter((c) => adult || !c.adultsOnly).map((c) =>
+        listCharacters({ ...c.query, limit: 8 }, adult).then((items) => ({ ...c, items })),
+      ),
+    ),
     viewer
       ? admin
           .from("checkins")
@@ -86,6 +84,7 @@ export default async function HomePage() {
       .order("likes", { ascending: false })
       .limit(5),
   ]);
+  const collections = rows as (Collection & { items: CharacterSummary[] })[];
   const todayRow = checkins.data?.find((r) => r.day === today);
   const streak = todayRow?.streak ?? checkins.data?.find((r) => r.day === yesterday)?.streak ?? 0;
   const name = viewer?.profile?.display_name;
@@ -245,6 +244,14 @@ export default async function HomePage() {
   );
 }
 
+type RankedCharacter = CharacterSummary & { chats: number };
+
+/** Adds each character's real chat count (chained onto its list query, so no extra wait). */
+async function withChatCounts(items: CharacterSummary[]): Promise<RankedCharacter[]> {
+  const counts = await chatCounts(items.map((c) => c.id));
+  return items.map((c) => ({ ...c, chats: counts.get(c.id) ?? 0 }));
+}
+
 function Ranking({
   title,
   icon,
@@ -253,7 +260,7 @@ function Ranking({
 }: {
   title: string;
   icon: React.ReactNode;
-  items: CharacterSummary[];
+  items: RankedCharacter[];
   href: string;
 }) {
   return (
@@ -286,9 +293,14 @@ function Ranking({
                 <span className="block truncate text-sm font-bold">{c.name}</span>
                 <span className="text-muted block truncate text-xs">{c.hook}</span>
               </span>
-              {showUsageStats && (
-                <span className="text-muted shrink-0 text-xs font-semibold">{formatCount(c.messages)}</span>
-              )}
+              <span
+                className="text-muted flex shrink-0 items-center gap-1 text-xs font-semibold"
+                title={`${c.chats} ${c.chats === 1 ? "chat" : "chats"} with ${c.name}`}
+              >
+                <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
+                {formatCount(c.chats)}
+                <span className="sr-only"> {c.chats === 1 ? "chat" : "chats"}</span>
+              </span>
             </Link>
           </li>
         ))}

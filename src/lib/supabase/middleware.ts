@@ -18,8 +18,8 @@ export async function updateSession(request: NextRequest) {
       },
     },
   });
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Refreshes an expiring session and verifies the JWT locally (no auth-server round-trip).
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims?.sub ? { id: data.claims.sub } : null;
   return { response, user };
 }

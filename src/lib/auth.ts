@@ -1,5 +1,4 @@
 import "server-only";
-import type { User } from "@supabase/supabase-js";
 import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 import { supabaseConfigured } from "./supabase/config";
@@ -18,7 +17,9 @@ export type Profile = {
   nudges_enabled: boolean;
 };
 
-export type Viewer = { user: User; profile: Profile | null } | null;
+/** The signed-in user as read from their verified session token. */
+export type ViewerUser = { id: string; email: string | null; user_metadata: Record<string, unknown> };
+export type Viewer = { user: ViewerUser; profile: Profile | null } | null;
 
 /**
  * The signed-in user and their profile, or null. Never throws when Supabase is unconfigured.
@@ -27,10 +28,16 @@ export type Viewer = { user: User; profile: Profile | null } | null;
 export const getViewer = cache(async (): Promise<Viewer> => {
   if (!supabaseConfigured) return null;
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
+  // getClaims verifies the session JWT locally (ES256 signing keys), saving a round-trip
+  // to the auth server on every page. API routes that change data still use getUser().
+  const { data: auth } = await supabase.auth.getClaims();
+  const claims = auth?.claims;
+  if (!claims?.sub) return null;
+  const user: ViewerUser = {
+    id: claims.sub,
+    email: typeof claims.email === "string" ? claims.email : null,
+    user_metadata: (claims.user_metadata as Record<string, unknown> | undefined) ?? {},
+  };
   const { data } = await supabase
     .from("profiles")
     .select("id,email,display_name,dob,is_adult,plan,beans,is_admin,banned_at,nudges_enabled")

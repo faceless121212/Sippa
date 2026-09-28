@@ -32,37 +32,36 @@ export default async function CharacterPage({ params }: Props) {
   const { id } = await params;
   const viewer = await getViewer();
   const adult = viewerIsAdult(viewer);
-  const character = await getCharacter(id, adult);
+  // The character, your like and your bond load together.
+  const signedIn = Boolean(viewer && supabaseConfigured);
+  const supabase = signedIn ? await createClient() : null;
+  const [character, fav, bond] = await Promise.all([
+    getCharacter(id, adult),
+    supabase
+      ? supabase
+          .from("favorites")
+          .select("character_id")
+          .eq("user_id", viewer!.user.id)
+          .eq("character_id", id)
+          .maybeSingle()
+      : Promise.resolve({ data: null }),
+    supabase
+      ? supabase
+          .from("bonds")
+          .select("xp")
+          .eq("user_id", viewer!.user.id)
+          .eq("character_id", id)
+          .maybeSingle()
+      : Promise.resolve({ data: null }),
+  ]);
 
   if (!character) {
     if (!adult && isSeedLover(id)) return <AdultGate id={id} signedIn={Boolean(viewer)} />;
     notFound();
   }
 
-  let favorited = false;
-  if (viewer && supabaseConfigured) {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("favorites")
-      .select("character_id")
-      .eq("user_id", viewer.user.id)
-      .eq("character_id", id)
-      .maybeSingle();
-    favorited = Boolean(data);
-  }
-
-  let bondXp = 0;
-  if (viewer && supabaseConfigured) {
-    const { data: bond } = await (
-      await createClient()
-    )
-      .from("bonds")
-      .select("xp")
-      .eq("user_id", viewer.user.id)
-      .eq("character_id", id)
-      .maybeSingle();
-    bondXp = bond?.xp ?? 0;
-  }
+  const favorited = Boolean(fav.data);
+  const bondXp = (bond.data as { xp: number } | null)?.xp ?? 0;
   const level = bondLevel(bondXp, character.category).level;
   const scenes = SCENES[character.category];
   const category = categories.find((c) => c.id === character.category)!;

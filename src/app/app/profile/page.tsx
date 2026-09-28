@@ -16,27 +16,32 @@ export const metadata: Metadata = { title: "Profile" };
 export default async function ProfilePage() {
   const viewer = await requireAdult("/app/profile");
   const supabase = await createClient();
-  const { data: favs } = await supabase
-    .from("favorites")
-    .select("character_id")
-    .eq("user_id", viewer.user.id)
-    .order("created_at", { ascending: false });
+  // Two parallel rounds instead of four sequential queries.
+  const [{ data: favs }, { data: mine }] = await Promise.all([
+    supabase
+      .from("favorites")
+      .select("character_id")
+      .eq("user_id", viewer.user.id)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("characters")
+      .select("id,name,age,category,famous_type,hook,tags,message_count,visibility,avatar_url,like_count")
+      .eq("creator_id", viewer.user.id)
+      .order("created_at", { ascending: false }),
+  ]);
   const favIds = new Set((favs ?? []).map((f) => f.character_id as string));
-  const { data: mine } = await supabase
-    .from("characters")
-    .select("id,name,age,category,famous_type,hook,tags,message_count,visibility,avatar_url,like_count")
-    .eq("creator_id", viewer.user.id)
-    .order("created_at", { ascending: false });
-  const { count: chatCount } = mine?.length
-    ? await createAdminClient()
-        .from("chats")
-        .select("id", { count: "exact", head: true })
-        .in(
-          "character_id",
-          mine.map((c) => c.id),
-        )
-    : { count: 0 };
-  const all = favIds.size ? await listCharacters({ limit: 200 }, viewerIsAdult(viewer)) : [];
+  const [{ count: chatCount }, all] = await Promise.all([
+    mine?.length
+      ? createAdminClient()
+          .from("chats")
+          .select("id", { count: "exact", head: true })
+          .in(
+            "character_id",
+            mine.map((c) => c.id),
+          )
+      : Promise.resolve({ count: 0 }),
+    favIds.size ? listCharacters({ limit: 200 }, viewerIsAdult(viewer)) : Promise.resolve([]),
+  ]);
   const favorites = all.filter((c) => favIds.has(c.id));
   const p = viewer.profile!;
 

@@ -79,7 +79,10 @@ test("messages API rejects empty and oversized input", async ({ page }) => {
   expect(huge.status()).toBe(400);
 });
 
-test("another user's chat id is a 404", async ({ page }) => {
-  const res = await page.goto("/app/chats/00000000-0000-4000-8000-000000000000");
-  expect(res?.status()).toBe(404);
+test("another user's chat shows not found and reveals nothing", async ({ page }) => {
+  // The chat route streams a loading state first, so the HTTP status is already 200;
+  // what matters is that the not-found page renders and no messages are shown.
+  await page.goto("/app/chats/00000000-0000-4000-8000-000000000000");
+  await expect(page.getByText("This page could not be found.")).toBeVisible();
+  await expect(page.locator("#chat-input")).toHaveCount(0);
 });

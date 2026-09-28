@@ -2,6 +2,7 @@ import "server-only";
 import type { CategoryId } from "@/config/categories";
 import { seedCharacters, type Character, type Gender } from "@/data/characters";
 import { supabaseConfigured } from "./supabase/config";
+import { createAdminClient } from "./supabase/admin";
 import { createClient } from "./supabase/server";
 
 /** What cards and lists need. Matches the shape CharacterCard expects. */
@@ -218,4 +219,25 @@ export async function getCharacter(id: string, viewerIsAdult: boolean): Promise<
 /** Is the character a Lover one? Used to explain why a page is hidden. */
 export function isSeedLover(id: string) {
   return seedCharacters.some((c) => c.id === id && c.category === "lover");
+}
+
+/**
+ * How many chats each character has, across all users (real counts from the chats table,
+ * unlike the seeded message_count). Counted with the service role because RLS only lets
+ * users see their own chats; only the totals leave the server.
+ */
+export async function chatCounts(ids: string[]): Promise<Map<string, number>> {
+  const counts = new Map<string, number>();
+  if (!supabaseConfigured || !ids.length) return counts;
+  const admin = createAdminClient();
+  await Promise.all(
+    [...new Set(ids)].map(async (id) => {
+      const { count } = await admin
+        .from("chats")
+        .select("id", { count: "exact", head: true })
+        .eq("character_id", id);
+      counts.set(id, count ?? 0);
+    }),
+  );
+  return counts;
 }

@@ -33,7 +33,7 @@ export async function newChat(form: FormData) {
   const id = characterId.parse(form.get("character_id"));
   const viewer = await requireAdult(`/app/c/${id}`);
   const chatId = await createChat(viewer.user.id, id);
-  revalidatePath("/app/chats");
+  revalidatePath("/app/chats", "layout");
   redirect(`/app/chats/${chatId}`);
 }
 
@@ -42,7 +42,7 @@ export async function deleteChat(form: FormData) {
   await requireAdult("/app/chats");
   const supabase = await createClient();
   await supabase.from("chats").delete().eq("id", chatId); // RLS: own chats only
-  revalidatePath("/app/chats");
+  revalidatePath("/app/chats", "layout");
   redirect("/app/chats");
 }
 
@@ -120,6 +120,6 @@ export async function startScene(form: FormData) {
   );
   const chatId = await createChat(viewer.user.id, id, { prompt: `${scene.title}: ${scene.prompt}`, opener });
   await admin.rpc("add_bond_xp", { p_user: viewer.user.id, p_character: id, p_xp: XP.sceneStart, p_gift: 0 });
-  revalidatePath("/app/chats");
+  revalidatePath("/app/chats", "layout");
   redirect(`/app/chats/${chatId}`);
 }
