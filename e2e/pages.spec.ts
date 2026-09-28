@@ -101,3 +101,10 @@ test("Home and Moments show our promises; social proof never shows placeholder n
     await expect(page.getByText(/\d+(\.\d)?M\b/)).toHaveCount(0);
   }
 });
+
+test("dark is the default theme for new visitors", async ({ page }) => {
+  for (const path of ["/", "/app"]) {
+    await page.goto(path);
+    await expect(page.locator("html")).toHaveClass(/\bdark\b/);
+  }
+});

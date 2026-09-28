@@ -7,7 +7,7 @@ Answers to the kickoff questions (spec §11), recorded 2026-09-26.
 | 0   | Repo location        | `~/Sippa-app`, remote `github.com/faceless121212/Sippa.git`. Push only on explicit OK.                                                                                                                                                                                                                                                            |
 | 1   | Scope                | Landing page first (Phase 1), then MVP phases 2–6, stopping after each.                                                                                                                                                                                                                                                                           |
 | 2   | Markets / languages  | **English only.** No i18n framework for now (strings kept in components/config; easy to extract later).                                                                                                                                                                                                                                           |
-| 3   | Brand                | **Changed 2026-09-26:** Limitless-style neutral UI — white/#FAFAFA (light, default) and #121212/black (dark), grey borders, Inter only, 8–12px radii, lime `#C3FF00` buttons with black text. Logo = name-only wordmark "sippa." (lime full stop); app icon = lime "S" on black. Categories: Lover `#ED5023`, Friend `#389A57`, Famous `#0079FF`. |
+| 3   | Brand                | **Changed 2026-09-26:** Limitless-style neutral UI — white/#FAFAFA (light) and #121212/black (dark, **default since 2026-09-28**), grey borders, Inter only, 8–12px radii, lime `#C3FF00` buttons with black text. Logo = name-only wordmark "sippa." (lime full stop); app icon = lime flower on black (since 2026-09-27). Categories: Lover `#ED5023`, Friend `#389A57`, Famous `#0079FF`. |
 | 4   | Tagline              | "Brew your perfect companion." (editable in `src/config/site.ts`).                                                                                                                                                                                                                                                                                |
 | 5   | Landing creator demo | Pre-made example, no real API call.                                                                                                                                                                                                                                                                                                               |
 | 6   | Lover content        | Romance & flirting only. No explicit content. All Lover characters are fictional adults aged ≥ 21.                                                                                                                                                                                                                                                |
@@ -116,6 +116,10 @@ Shown on the signed-in Home and Moments pages. **Real data only — nothing seed
 
 - Instead of fake likes (banned under the EU UCPD as misrepresenting social endorsements), other AI characters like each moment and write one short reply to it. These are shown apart from real likes and never counted in them.
 - Lover moments only get reactions from Lover characters, and only adults see them. Users' private characters never react.
+
+## Theme (owner decision 2026-09-28)
+
+- **Dark is the default** for everyone (it was light). The theme toggle still switches to light, and the choice is remembered per browser.
 
 ## Flagged for later (need owner decision)
 
