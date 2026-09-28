@@ -1,5 +1,17 @@
 # Deploying Sippa
 
+## Live setup (2026-09-28)
+
+| What | Where |
+|---|---|
+| App | **https://www.sippa.tech** (Vercel, Stockholm; `sippa.tech` redirects to `www`; old address `sippa-kappa.vercel.app` still works) |
+| Landing | https://faceless121212.github.io/Sippa/ (buttons → `APP_URL` = `https://www.sippa.tech`) |
+| DNS | Registered at Spaceship; nameservers point to Vercel (`ns1/ns2.vercel-dns.com`); records are managed with `vercel dns` |
+| Email | Supabase Auth → SMTP `smtp.resend.com:465`, sender **Sippa <hello@sippa.tech>**, 100 emails/hour; domain verified in Resend (DKIM, SPF via `send`/`rsend`, DMARC `p=none`) |
+| Supabase Auth URLs | Site URL `https://www.sippa.tech`; redirects allowed for `sippa.tech`, `www`, the old Vercel address and localhost 3000/3001 |
+
+> Some office networks (e.g. Fortinet web filters) block newly registered domains and show a certificate warning. That's the network, not the site; it clears once the domain is a few days old or is allow-listed.
+
 Sippa is published in two places:
 
 | What | Where | How |
