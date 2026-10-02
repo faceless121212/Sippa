@@ -11,7 +11,14 @@ describe("buildAvatarPrompt", () => {
       expect(look, c.id).toBeDefined();
       const prompt = buildAvatarPrompt({ name: c.name, age: c.age, category: c.category, look });
       expect(prompt).toMatch(/adult/);
-      expect(prompt).toMatch(/Not a photograph/);
+      if (look.style === "photo") {
+        // Photo-realistic portraits must always be of an invented person.
+        expect(prompt, c.id).toMatch(/fictional/);
+        expect(prompt, c.id).toMatch(/not a real or famous individual/);
+        expect(prompt, c.id).toMatch(/fully clothed/);
+      } else {
+        expect(prompt, c.id).toMatch(/Not a photograph/);
+      }
     }
   });
 

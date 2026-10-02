@@ -1,7 +1,9 @@
 import type { CategoryId } from "@/config/categories";
+import { photoCharacters } from "./characters-photo";
 
 /**
- * The 24 original seed characters (8 Lover, 8 Friend, 8 Famous-historical).
+ * Seed characters: the original 40 (painted portraits) plus 20 fictional ones with
+ * photo-realistic portraits (characters-photo.ts).
  * Single source of truth for the database seed (`npm run db:seed`) and the
  * landing page samples.
  *
@@ -18,6 +20,7 @@ export type Character = {
   age?: number;
   gender: Gender;
   category: CategoryId;
+  /** "historical" = a real person who died 70+ years ago; "inspired" = fictional archetype. */
   famousType?: "historical" | "inspired";
   /** For historical figures: year of death, used by safety tests (70+ years). */
   diedYear?: number;
@@ -37,7 +40,7 @@ export type Character = {
   badges?: ("new" | "pick")[];
 };
 
-export const seedCharacters: Character[] = [
+const originalCharacters: Character[] = [
   // ─────────────── Lover (fictional adults, 21+) ───────────────
   {
     id: "mara-vellin",
@@ -1150,3 +1153,5 @@ export const seedCharacters: Character[] = [
 ];
 
 export const characterById = (id: string) => seedCharacters.find((c) => c.id === id);
+
+export const seedCharacters: Character[] = [...originalCharacters, ...photoCharacters];

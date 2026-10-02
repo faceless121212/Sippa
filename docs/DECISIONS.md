@@ -126,6 +126,15 @@ Shown on the signed-in Home and Moments pages. **Real data only — nothing seed
 - Sign-up now says so plainly. For a confirmed account: "This email is already registered", with links to sign in and reset the password. For an unconfirmed one: "…hasn't been confirmed yet", with a button to resend the confirmation email. No account or email is created.
 - Trade-off accepted: this lets someone test whether an email has an account. Sign-up stays rate-limited (10 attempts per 10 minutes per visitor) to keep that slow.
 
+## Photo-realistic characters (owner request 2026-10-02)
+
+- **Additions:** 20 new fictional characters (8 Lover, 6 Friend, 6 Famous) with **photo-realistic** portraits (`style: "photo"` in `avatar-looks.ts`). The original 40 keep the painted style (#11).
+- **Rules for photo portraits:**
+  - They're only for invented people. The prompt says "fictional … not a real or famous individual … fully clothed".
+  - Real historical figures always stay painted. A test enforces both.
+- **Famous additions are "inspired-by" archetypes,** not real people: jazz singer, Victorian detective, aviator, knight, inventor, ronin.
+- **Reviewed by hand before publishing:** three were regenerated (two Lover portraits to look clearly adult and tastefully dressed, one for age fit).
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.

@@ -1,8 +1,15 @@
 import type { AvatarLook } from "@/data/avatar-looks";
 
-/** Owner decision (DECISIONS #11): one semi-realistic painted style, never photos. */
+/** Owner decision (DECISIONS #11): semi-realistic painted style for the original characters. */
 export const AVATAR_STYLE =
   "semi-realistic digital painting, painterly brushwork, soft cinematic lighting, head-and-shoulders portrait, looking at the viewer, shallow depth of field, rich warm colours, high detail";
+
+/**
+ * Owner decision 2026-10-02: newer fictional characters get photo-realistic portraits.
+ * Always an invented person — never a real or famous individual, never historical figures.
+ */
+export const PHOTO_STYLE =
+  "photorealistic editorial portrait photograph, natural soft light, 85mm lens, shallow depth of field, head-and-shoulders, looking at the camera, true-to-life skin texture, high detail";
 
 const MINOR_WORDS =
   /\b(child|children|kid|kids|teen|teenager|teenage|minor|underage|schoolgirl|schoolboy|school uniform|loli|shota|young girl|young boy|little girl|little boy)\b/i;
@@ -28,5 +35,8 @@ export function buildAvatarPrompt({ name, age, category, look }: Subject): strin
 
   const ageText = look.ageText ?? (age !== undefined ? `${age}-year-old` : "adult");
   const subject = `${ageText} adult ${look.subject}`;
+  if (look.style === "photo") {
+    return `${PHOTO_STYLE}. Portrait of a fictional ${subject}, ${look.look}. Clearly an adult. An invented person, not a real or famous individual. Tasteful, fully clothed.`;
+  }
   return `${AVATAR_STYLE}. Portrait of a ${subject}, ${look.look}. Clearly an adult. Not a photograph.`;
 }

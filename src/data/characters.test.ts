@@ -24,11 +24,23 @@ describe("seed characters (spec §6 rules)", () => {
       expect(c.age, c.id).toBeGreaterThanOrEqual(18);
   });
 
-  it("every Famous character is historical and died 70+ years ago", () => {
+  it("every Famous character is either a real person who died 70+ years ago, or a fictional archetype", () => {
     for (const c of seedCharacters.filter((c) => c.category === "famous")) {
-      expect(c.famousType, c.id).toBe("historical");
-      expect(c.diedYear, c.id).toBeDefined();
-      expect(THIS_YEAR - c.diedYear!, c.id).toBeGreaterThanOrEqual(70);
+      expect(["historical", "inspired"], c.id).toContain(c.famousType);
+      if (c.famousType === "historical") {
+        expect(c.diedYear, c.id).toBeDefined();
+        expect(THIS_YEAR - c.diedYear!, c.id).toBeGreaterThanOrEqual(70);
+      } else {
+        expect(c.diedYear, `${c.id} is fictional — no death year`).toBeUndefined();
+      }
+    }
+  });
+
+  it("photo-realistic portraits are only for fictional characters, never real people", () => {
+    for (const c of seedCharacters) {
+      if (avatarLooks[c.id]?.style !== "photo") continue;
+      expect(c.famousType, c.id).not.toBe("historical");
+      expect(c.diedYear, c.id).toBeUndefined();
     }
   });
 

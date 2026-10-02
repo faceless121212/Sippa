@@ -10,6 +10,8 @@ export type AvatarLook = {
   look: string;
   /** For historical figures: how the age is described instead of a number. */
   ageText?: string;
+  /** "photo" = photo-realistic (newer fictional characters only); default is painted. */
+  style?: "painted" | "photo";
 };
 
 export const avatarLooks: Record<string, AvatarLook> = {
@@ -212,5 +214,107 @@ export const avatarLooks: Record<string, AvatarLook> = {
     subject: "man",
     ageText: "in his fifties",
     look: "Abraham Lincoln, resembling his famous portraits: tall and gaunt, deep-set kind eyes, dark hair, chin beard without a moustache, black frock coat and bow tie, candlelit study",
+  },
+
+  // Photo-realistic batch (owner request 2026-10-02) — all fictional.
+  "isla-moreau": {
+    subject: "woman",
+    style: "photo",
+    look: "shoulder-length dark brown hair with a soft fringe, light freckles, hazel eyes, cream knit sweater and a vintage film camera on a strap, golden-hour Paris riverside with blurred bridges",
+  },
+  "zara-quinn": {
+    subject: "woman",
+    style: "photo",
+    look: "sleek black bob, warm brown skin, gold hoop earrings, black fitted shirt with rolled sleeves, confident smile, rooftop bar at dusk with city lights bokeh",
+  },
+  "nina-kowalska": {
+    subject: "woman",
+    style: "photo",
+    look: "light blonde hair in a neat low bun, blue-grey eyes, soft pink cardigan over a black high-neck long-sleeve top, warm smile, sunlit dance studio with tall windows and a wooden barre",
+  },
+  "sofia-lind": {
+    subject: "woman",
+    style: "photo",
+    look: "straight platinum blonde hair, minimal gold necklace, oatmeal turtleneck sweater, calm smile, bright Scandinavian studio with architectural models and snowy window",
+  },
+  "amara-diallo": {
+    subject: "woman",
+    style: "photo",
+    look: "natural curly hair tied with a silk scarf, deep brown skin, bold red lipstick, tailored mustard blazer, playful grin, colourful fashion studio with fabric swatches",
+  },
+  "mei-tanaka": {
+    subject: "woman",
+    style: "photo",
+    look: "East Asian woman in her late twenties, neat shoulder-length black hair, slim rectangular glasses, charcoal button-up shirt with a work lanyard, confident adult professional, small smile, modern game studio office with monitors",
+  },
+  "luca-romano": {
+    subject: "man",
+    style: "photo",
+    look: "Southern European, short dark wavy hair, trimmed beard, warm brown eyes, white chef jacket with sleeves rolled up, big laugh, rustic trattoria kitchen with copper pans",
+  },
+  "adrian-cole": {
+    subject: "man",
+    style: "photo",
+    look: "short sandy brown hair, light stubble, kind green eyes, navy firefighter T-shirt, calm gentle smile, apartment hallway with warm evening light",
+  },
+  "jonah-reed": {
+    subject: "man",
+    style: "photo",
+    look: "tousled light brown hair, tanned skin, short beard, olive outdoor jacket and backpack straps, easy grin, sunny Lisbon street with tiled walls",
+  },
+  "priya-shah": {
+    subject: "woman",
+    style: "photo",
+    look: "South Asian, long dark wavy hair, small nose stud, comfy burgundy sweater, holding a mug of tea, cheerful smile, desk lit by a warm lamp and laptop glow at night",
+  },
+  "marcus-bell": {
+    subject: "man",
+    style: "photo",
+    look: "Black British, shaved head, broad shoulders, grey training T-shirt, whistle around his neck, encouraging smile, bright gym with weights in the background",
+  },
+  "lucia-ferreira": {
+    subject: "woman",
+    style: "photo",
+    look: "Portuguese, dark brown curly hair, warm olive skin, white linen shirt, friendly laugh, sunny Porto balcony with blue-and-white azulejo tiles",
+  },
+  "ollie-grant": {
+    subject: "man",
+    style: "photo",
+    look: "ginger hair, freckles, cheerful grin, denim jacket over a white T-shirt, holding a paper box of dumplings, busy street-food market at night",
+  },
+  "hanna-berg": {
+    subject: "woman",
+    style: "photo",
+    look: "Norwegian, light brown hair in a loose braid, soft blue eyes, teal hospital scrubs with a cardigan over them, gentle smile, quiet hospital break room with warm light",
+  },
+  "vivienne-rose": {
+    subject: "woman",
+    style: "photo",
+    look: "1920s style finger-waved auburn bob, pearl necklace, beaded emerald flapper-style evening dress with high neckline, vintage microphone, warm spotlight in a jazz supper club",
+  },
+  "arthur-gray": {
+    subject: "man",
+    style: "photo",
+    look: "1880s Victorian gentleman, neat dark hair with grey at the temples, trimmed moustache, tweed overcoat and waistcoat, holding a magnifying glass, foggy gaslit London street",
+  },
+  "elena-marsh": {
+    subject: "woman",
+    style: "photo",
+    look: "1930s aviator, windswept chestnut hair, leather flight jacket with a fur collar, aviator goggles pushed up on her head, bright smile, vintage red biplane on a grass airfield",
+  },
+  "roland-ashford": {
+    subject: "man",
+    style: "photo",
+    look: "medieval knight, shoulder-length brown hair, short beard, polished steel armour with a blue surcoat, confident smile, castle courtyard with banners",
+  },
+  "harriet-vale": {
+    subject: "woman",
+    style: "photo",
+    look: "1890s Victorian inventor, auburn hair pinned up, brass goggles on her forehead, high-collared blouse with a leather apron, curious smile, workshop full of clockwork gadgets",
+  },
+  "takeshi-arai": {
+    subject: "man",
+    style: "photo",
+    look: "Japanese, long black hair tied back, calm eyes, dark indigo traditional kimono and hakama, katana at his side, misty mountain road with a wooden torii gate",
   },
 };
