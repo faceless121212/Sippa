@@ -108,11 +108,24 @@ test("SEO and PWA endpoints respond", async ({ request }) => {
     "/opengraph-image",
     "/pwa-icon/512",
     "/pwa-icon/512-maskable",
+    "/favicon.ico",
     "/icon.svg",
+    "/icon1.png",
     "/apple-icon",
     "/legal/privacy",
   ]) {
     const res = await request.get(path);
     expect(res.status(), path).toBe(200);
   }
+});
+
+test("search engines find a favicon: /favicon.ico plus a 48px+ PNG icon", async ({ page, request }) => {
+  await page.goto("/");
+  const icons = await page.locator('link[rel="icon"]').evaluateAll((ls) =>
+    ls.map((l) => `${l.getAttribute("href")} ${l.getAttribute("sizes")} ${l.getAttribute("type")}`),
+  );
+  expect(icons.some((i) => i.startsWith("/favicon.ico"))).toBe(true);
+  expect(icons.some((i) => i.includes("192x192") && i.includes("image/png"))).toBe(true);
+  const ico = await request.get("/favicon.ico");
+  expect(ico.status()).toBe(200);
 });

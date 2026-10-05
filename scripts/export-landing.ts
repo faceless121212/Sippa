@@ -21,7 +21,9 @@ const OUT = process.env.OUT ?? "out-pages";
 
 const PAGES = ["/", "/legal/privacy", "/legal/terms", "/legal/cookies", "/legal/guidelines"];
 const FILES = [
+  "/favicon.ico",
   "/icon.svg",
+  "/icon1.png",
   "/apple-icon",
   "/opengraph-image",
   "/manifest.webmanifest",
