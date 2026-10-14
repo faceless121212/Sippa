@@ -3,7 +3,7 @@
  * minor-coded wording is always refused, whatever the character.
  */
 const MINOR =
-  /\b(child|children|kid|kids|minor|underage|under[-\s]?age|preteen|teen|teenager|teenage|schoolgirl|schoolboy|loli|shota|(1[0-7]|[1-9])\s*(yo|y\/o|years?\s*old)|dziecko|dzieci|nieletni|nastolat(ek|ka))\b/i;
+  /\b(child|children|kid|kids|minor|underage|under[-\s]?age|preteen|teen|teenager|teenage|schoolgirl|schoolboy|loli|shota|(1[0-7]|[1-9]|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen)[-\s]*(yo|y\/o|years?[-\s]*olds?)|dziecko|dzieci|nieletni|nastolat(ek|ka))\b/i;
 const SEXUAL =
   /\b(sex|sexual|sexy|nude|naked|porn|horny|kiss|kissing|make\s+out|undress|strip|touch\s+(me|you|her|him)|bed|seduce|erotic|orgasm|fuck|nsfw|lewd|seks|nag(i|a|ie)|całow)\w*/i;
 

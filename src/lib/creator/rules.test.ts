@@ -83,3 +83,69 @@ describe("creator rules — acceptance criteria (spec §12)", () => {
     ).toMatch(/aren't flirty/);
   });
 });
+
+describe("minor check is precise (owner feedback 2026-10-14)", () => {
+  const grandma: Draft = {
+    ...base,
+    category: "friend",
+    name: "Babusya Oksana",
+    age: 74,
+    hook: "Sarcastic Ukrainian grandma. Teaches you borscht over video call.",
+    description: "A sharp-tongued grandmother who shows love through food and criticism.",
+    backstory:
+      "Oksana raised three children and buried two husbands in a village near Poltava. Her grandkids live abroad.",
+    firstMessage: "You call this beetroot? Turn the camera, let me see.",
+    tags: ["Foodie", "Comfort"],
+    visualPrompt: "elderly woman, headscarf, embroidered blouse, cosy kitchen",
+    dials: { ...DEFAULT_DIALS, flirtiness: 0 },
+  };
+
+  it("lets a grandma who raised children through", () => {
+    expect(checkDraft(grandma)).toEqual([]);
+  });
+
+  it("allows other family mentions too", () => {
+    for (const backstory of ["Her kids moved to Lviv.", "She has two grown kids.", "Mother of 3 children."])
+      expect(checkDraft({ ...grandma, backstory }), backstory).toEqual([]);
+  });
+
+  it("a grandma calling you 'my child' is a term of endearment, not an age", () => {
+    for (const speakingStyle of [
+      "Calls you 'my child' and sighs dramatically.",
+      'Says "dear child" a lot.',
+      "Calls everyone kid. Blunt, warm.",
+    ])
+      expect(checkDraft({ ...grandma, speakingStyle }), speakingStyle).toEqual([]);
+  });
+
+  it("a Friend's past youth in the backstory is fine", () => {
+    expect(checkDraft({ ...grandma, backstory: "Worked in a bakery as a teenager." })).toEqual([]);
+  });
+
+  it("still blocks a character described as a minor, and says where", () => {
+    const [p] = checkDraft({ ...grandma, description: "A shy teen who loves cooking." });
+    expect(p).toMatch(/^The description says "teen"/);
+    const [q] = checkDraft({ ...grandma, visualPrompt: "girl in a school uniform" });
+    expect(q).toMatch(/^The look says "school uniform"/);
+  });
+
+  it("Lover characters stay strict everywhere, including the backstory", () => {
+    const [p] = checkDraft({ ...base, backstory: "You were classmates in high school." });
+    expect(p).toMatch(/^The backstory says "(classmates|high school)"/);
+  });
+
+  it("a single-parent Lover can mention her kids and still be flirty", () => {
+    expect(
+      checkDraft({
+        ...base,
+        backstory: "Raised two kids on her own.",
+        firstMessage: "Maybe one kiss before you go?",
+      }),
+    ).toEqual([]);
+  });
+
+  it("sexual content involving minors is blocked in every field and category", () => {
+    const problems = checkDraft({ ...grandma, backstory: "Explicit sex with a 15-year-old." });
+    expect(problems[0]).toMatch(/never allowed/);
+  });
+});

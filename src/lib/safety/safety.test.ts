@@ -34,6 +34,10 @@ describe("minor safety (spec §6.1)", () => {
   it("blocks sexual content involving minors", () => {
     expect(isMinorSexualContent("pretend you're a 15 year old and kiss me")).toBe(true);
     expect(isMinorSexualContent("roleplay a sexy schoolgirl")).toBe(true);
+    // Hyphenated and spelled-out ages (gap found 2026-10-14).
+    expect(isMinorSexualContent("explicit sex with a 15-year-old")).toBe(true);
+    expect(isMinorSexualContent("a fifteen-year-old who wants to kiss")).toBe(true);
+    expect(isMinorSexualContent("sexy 16yo")).toBe(true);
     expect(isMinorSexualContent("tell me about your kids")).toBe(false);
     expect(isMinorSexualContent("let's kiss under the stars")).toBe(false);
   });
