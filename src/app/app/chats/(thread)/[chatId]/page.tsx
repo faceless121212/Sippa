@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
+import { type MemoryRow } from "@/app/app/chats/actions";
 import { ChatView, type ChatMessage } from "@/components/chat/ChatView";
 import type { CategoryId } from "@/config/categories";
 import { pricing } from "@/config/site";
@@ -20,11 +21,14 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
   // (bonds RLS returns only the viewer's own row), so it needs no extra round.
   const viewerP = requireAdult(`/app/chats/${chatId}`);
   const supabase = await createClient();
-  const [, { data: chat }, { data: rows }, { data: memories }, remaining] = await Promise.all([
+  const [, { data: chat }, { data: rows }, remaining] = await Promise.all([
     viewerP,
     supabase
       .from("chats")
-      .select("id,summary,character_id,characters(id,name,hook,avatar_url,category,bonds(xp))")
+      // Bond and memories ride along; RLS returns only the viewer's own rows of each.
+      .select(
+        "id,summary,character_id,characters(id,name,hook,avatar_url,category,bonds(xp),memories(id,text,source,kind,created_at))",
+      )
       .eq("id", chatId)
       .maybeSingle(),
     supabase
@@ -33,7 +37,6 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
       .eq("chat_id", chatId)
       .order("id", { ascending: false })
       .limit(200),
-    supabase.from("memories").select("id,text").eq("chat_id", chatId).order("created_at"),
     viewerP.then((v) => remainingToday(v.user.id, v.profile!.plan)),
   ]);
   const row = chat?.characters as unknown as {
@@ -43,7 +46,11 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
     avatar_url: string | null;
     category: CategoryId;
     bonds: { xp: number }[] | null;
+    memories: (MemoryRow & { created_at: string })[] | null;
   } | null;
+  const memories = [...(row?.memories ?? [])]
+    .sort((a, b) => a.created_at.localeCompare(b.created_at))
+    .map(({ created_at: _, ...m }) => m);
   const character = row
     ? { id: row.id, name: row.name, hook: row.hook, avatarUrl: row.avatar_url, category: row.category }
     : null;
@@ -61,7 +68,7 @@ export default async function ChatPage({ params }: { params: Promise<{ chatId: s
       character={character}
       bondXp={row?.bonds?.[0]?.xp ?? 0}
       initialMessages={messages}
-      initialMemories={memories ?? []}
+      initialMemories={memories}
       summary={chat.summary}
       remaining={remaining}
       freeLimit={pricing.freeMessagesPerDay}

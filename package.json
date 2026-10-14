@@ -24,6 +24,7 @@
     "stripe:setup": "node --env-file-if-exists=.env.local --import tsx scripts/stripe-setup.ts",
     "brand:icons": "node --env-file-if-exists=.env.local --import tsx scripts/generate-brand-icons.ts",
     "admin:grant": "node --env-file-if-exists=.env.local --import tsx scripts/grant-admin.ts",
+    "memory:smoke": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/smoke-memory.ts",
     "nudge:smoke": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/smoke-nudge.ts"
   },
   "dependencies": {

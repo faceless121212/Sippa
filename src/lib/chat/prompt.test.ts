@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildMessages, buildSystem, SAFETY_RULES, type PromptCharacter } from "./prompt";
+import { buildMessages, buildSystem, MEMORY_HONESTY, SAFETY_RULES, type PromptCharacter } from "./prompt";
 
 const character: PromptCharacter = {
   name: "Ren Kaito",
@@ -57,8 +57,24 @@ describe("buildSystem", () => {
     expect(b[2].text).toMatch(/serious distress/);
   });
 
-  it("omits the context block when there's nothing to add", () => {
-    expect(buildSystem(character, { memories: [], summary: "", notes: {} })).toHaveLength(2);
+  it("always tells the character not to fake memories, even with nothing remembered", () => {
+    const blocks = buildSystem(character, { memories: [], summary: "", notes: {} });
+    expect(blocks).toHaveLength(3);
+    expect(blocks[2].text).toContain(MEMORY_HONESTY);
+  });
+
+  it("puts remembered facts and the chosen name in front of the character", () => {
+    const text = buildSystem(character, {
+      userName: "Maya",
+      memories: ["User has a cat named Luna.", "User has a work presentation on 2026-10-15."],
+      summary: "",
+      notes: {},
+    })
+      .map((b) => b.text)
+      .join("\n");
+    expect(text).toContain("The user likes to be called: Maya");
+    expect(text).toContain("User has a cat named Luna.");
+    expect(text).toContain("2026-10-15");
   });
 });
 

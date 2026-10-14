@@ -26,16 +26,21 @@ export async function GET() {
       .eq("reporter_id", user.id),
   ]);
   const chatIds = (chats.data ?? []).map((c) => c.id);
-  const [messages, memories] = chatIds.length
-    ? await Promise.all([
-        admin
+  const [messages, memories] = await Promise.all([
+    chatIds.length
+      ? admin
           .from("messages")
           .select("chat_id,role,content,rating,created_at")
           .in("chat_id", chatIds)
-          .order("id"),
-        admin.from("memories").select("chat_id,text,created_at").in("chat_id", chatIds),
-      ])
-    : [{ data: [] }, { data: [] }];
+          .order("id")
+      : Promise.resolve({ data: [] as { chat_id: string }[] }),
+    // Memories belong to (you, character) and are shared by all chats with that character.
+    admin
+      .from("memories")
+      .select("character_id,text,kind,source,created_at")
+      .eq("user_id", user.id)
+      .order("created_at"),
+  ]);
 
   const body = {
     exported_at: new Date().toISOString(),
@@ -45,8 +50,8 @@ export async function GET() {
     chats: (chats.data ?? []).map((c) => ({
       ...c,
       messages: (messages.data ?? []).filter((m) => m.chat_id === c.id),
-      memories: (memories.data ?? []).filter((m) => m.chat_id === c.id),
     })),
+    memories: memories.data ?? [],
     favorites: favorites.data ?? [],
     purchases_and_spending: transactions.data ?? [],
     reports_filed: reports.data ?? [],

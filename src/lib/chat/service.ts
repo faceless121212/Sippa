@@ -6,6 +6,7 @@ import { beanCosts, pricing } from "@/config/site";
 import { complete, LlmUnavailableError, streamChat } from "@/lib/llm";
 import { asksIfHuman, claimsToBeMinor, isMinorSexualContent } from "@/lib/safety/content";
 import { countryFromHeaders, detectCrisis, helplinesFor } from "@/lib/safety/crisis";
+import { loadMemories, rememberFromMessage } from "./memory";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -343,25 +344,23 @@ export async function streamReply(
     gift?: number;
   },
 ): Promise<Response> {
-  const { messages, recentCrisis } = await history(ctx);
-  const { data: mem } = await ctx.admin
-    .from("memories")
-    .select("text")
-    .eq("chat_id", ctx.chat.id)
-    .order("created_at")
-    .limit(30);
-
-  const { data: bond } = await ctx.admin
-    .from("bonds")
-    .select("xp")
-    .eq("user_id", ctx.userId)
-    .eq("character_id", ctx.character.id)
-    .maybeSingle();
+  // History, long-term memory and bond load together.
+  const [{ messages, recentCrisis }, memory, { data: bond }] = await Promise.all([
+    history(ctx),
+    loadMemories(ctx.admin, ctx.userId, ctx.character.id),
+    ctx.admin
+      .from("bonds")
+      .select("xp")
+      .eq("user_id", ctx.userId)
+      .eq("character_id", ctx.character.id)
+      .maybeSingle(),
+  ]);
   const level = bondLevel(bond?.xp ?? 0, ctx.character.category).level;
 
   const system = buildSystem(ctx.character, {
-    userName: ctx.userName,
-    memories: (mem ?? []).map((m) => m.text),
+    // The name the user gave in chat wins over the profile name.
+    userName: memory.name ?? displayName(ctx.userName),
+    memories: memory.facts,
     summary: ctx.chat.summary,
     notes: {
       asksIfHuman: asksIfHuman(opts.lastUserText),
@@ -418,6 +417,24 @@ export async function streamReply(
           }),
         );
         after(() => maybeSummarize(ctx.chat.id).catch((e) => console.error("summary:", e)));
+        // Learn lasting facts from what the user just said (not for gifts).
+        if (opts.gift === undefined) {
+          const previousCharacterLine = [...messages]
+            .reverse()
+            .slice(1)
+            .find((m) => m.role === "assistant");
+          after(() =>
+            rememberFromMessage({
+              userId: ctx.userId,
+              characterId: ctx.character.id,
+              chatId: ctx.chat.id,
+              characterName: ctx.character.name,
+              userText: opts.lastUserText,
+              previousCharacterLine:
+                typeof previousCharacterLine?.content === "string" ? previousCharacterLine.content : null,
+            }).catch((e) => console.error("memory:", e)),
+          );
+        }
       } catch (e) {
         console.error("chat stream:", e);
         controller.enqueue(line({ t: "error", message: "The reply was interrupted. Try regenerating." }));
@@ -463,4 +480,11 @@ export async function maybeSummarize(chatId: string) {
     .from("chats")
     .update({ summary: summary.slice(0, 4000), summarized_upto: fold.at(-1)!.id })
     .eq("id", chatId);
+}
+
+/** Profile names are free text; "may" becomes "May" in the character's mouth. */
+export function displayName(name: string | null | undefined): string | null {
+  const n = name?.trim();
+  if (!n) return null;
+  return n === n.toLowerCase() ? n.replace(/(^|[\s-])(\p{L})/gu, (_, sep, ch) => sep + ch.toUpperCase()) : n;
 }

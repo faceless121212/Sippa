@@ -175,6 +175,8 @@ export function ChatView(props: Props) {
               if (typeof e.xp === "number") setBondXp(e.xp);
               // Update the sidebar's preview and order in the background (the chat keeps its state).
               router.refresh();
+              // Memories from this message are saved a moment after the reply; refresh again to show them.
+              setTimeout(() => router.refresh(), 6000);
             } else if (e.t === "crisis") {
               setMessages((m) => [
                 ...m.filter((x) => x.id !== replyId),
@@ -704,6 +706,23 @@ function CrisisCard({ lines }: { lines: Helpline[] }) {
   );
 }
 
+/** Stored facts are written as "User has…"; show them to the user as "You have…". */
+function asYou(fact: string): string {
+  const swaps: [RegExp, string][] = [
+    [/^User's /, "Your "],
+    [/^User is /, "You're "],
+    [/^User was /, "You were "],
+    [/^User has /, "You have "],
+    [/^User does /, "You do "],
+    [/^User (\w+?)ies /, "You $1y "],
+    [/^User (\w+?)(ch|sh|ss|x)es /, "You $1$2 "],
+    [/^User (\w+?)s /, "You $1 "],
+    [/^User /, "You "],
+  ];
+  for (const [re, to] of swaps) if (re.test(fact)) return fact.replace(re, to);
+  return fact;
+}
+
 function MemoryPanel({
   chatId,
   name,
@@ -718,6 +737,8 @@ function MemoryPanel({
   onClose: () => void;
 }) {
   const [items, setItems] = useState(initial);
+  // New memories are saved just after each reply; pick them up when the page refreshes.
+  useEffect(() => setItems(initial), [initial]);
   const [text, setText] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -775,7 +796,12 @@ function MemoryPanel({
         <ul className="space-y-1.5">
           {items.map((m) => (
             <li key={m.id} className="bg-surface flex items-start gap-2 rounded-lg p-2.5 text-sm">
-              <span className="flex-1">{m.text}</span>
+              <span className="flex-1">
+                {m.kind === "name" ? `Calls you ${m.text}` : asYou(m.text)}
+                {m.source === "auto" && (
+                  <span className="text-muted mt-0.5 block text-[11px]">Picked up from your chat</span>
+                )}
+              </span>
               <button
                 type="button"
                 aria-label={`Forget: ${m.text}`}
@@ -789,7 +815,12 @@ function MemoryPanel({
               </button>
             </li>
           ))}
-          {!items.length && <li className="text-muted text-xs">No memories yet.</li>}
+          {!items.length && (
+            <li className="text-muted text-xs leading-relaxed">
+              Nothing yet. {name} remembers important things you mention — your name, a pet, tomorrow&apos;s
+              presentation — and you can add your own above.
+            </li>
+          )}
         </ul>
 
         {summary && (

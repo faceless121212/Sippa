@@ -30,7 +30,7 @@ export function createFakeSupabase(tables: Record<string, Row[]>, latencyMs = 20
     const filters: ((r: Row) => boolean)[] = [];
     // Filters on embedded rows ("rel.col"): trim the nested array, keep the parent row.
     const nested: ((r: Row) => Row)[] = [];
-    let op: "select" | "insert" | "update" = "select";
+    let op: "select" | "insert" | "update" | "delete" = "select";
     let payload: Row | Row[] = {};
     let head = false;
     let countEmbeds: string[] = [];
@@ -48,6 +48,10 @@ export function createFakeSupabase(tables: Record<string, Row[]>, latencyMs = 20
         }));
         rows.push(...added);
         return { data: single ? added[0] : added, error: null };
+      }
+      if (op === "delete") {
+        tables[table] = rows.filter((r) => !filters.every((f) => f(r)));
+        return { data: null, error: null };
       }
       if (op === "update") {
         rows.filter((r) => filters.every((f) => f(r))).forEach((r) => Object.assign(r, payload));
@@ -115,6 +119,7 @@ export function createFakeSupabase(tables: Record<string, Row[]>, latencyMs = 20
         return q;
       },
       update: (p: Row) => ((op = "update"), (payload = p), q),
+      delete: () => ((op = "delete"), q),
       maybeSingle: () => run(true),
       single: () => run(true),
       then: <T>(res: (v: Awaited<ReturnType<typeof run>>) => T, rej?: (e: unknown) => T) =>

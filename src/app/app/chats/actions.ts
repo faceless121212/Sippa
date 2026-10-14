@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdult } from "@/lib/auth";
 import { bondLevel, sceneById, XP } from "@/config/engagement";
+import { MAX_MEMORIES } from "@/lib/chat/memory";
 import { createChat } from "@/lib/chat/service";
 import { writeSceneOpener } from "@/lib/scenes";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -47,28 +48,37 @@ export async function deleteChat(form: FormData) {
   redirect("/app/chats");
 }
 
-export type MemoryRow = { id: string; text: string };
+export type MemoryRow = { id: string; text: string; source?: "user" | "auto"; kind?: "fact" | "name" };
 
 export async function addMemory(chatId: string, text: string): Promise<MemoryRow | { error: string }> {
   const parsed = z
     .object({ chatId: z.string().uuid(), text: z.string().trim().min(1).max(300) })
     .safeParse({ chatId, text });
   if (!parsed.success) return { error: "Memories are 1–300 characters." };
-  await requireAdult(`/app/chats/${chatId}`);
+  const viewer = await requireAdult(`/app/chats/${chatId}`);
   const supabase = await createClient();
+  // Memories belong to the character (every chat with them remembers), not just this chat.
+  const { data: chat } = await supabase.from("chats").select("character_id").eq("id", chatId).maybeSingle();
+  if (!chat) return { error: "Chat not found." };
   const { count } = await supabase
     .from("memories")
     .select("id", { count: "exact", head: true })
-    .eq("chat_id", chatId);
-  if ((count ?? 0) >= 30) return { error: "Up to 30 memories per chat." };
+    .eq("character_id", chat.character_id);
+  if ((count ?? 0) >= MAX_MEMORIES) return { error: `Up to ${MAX_MEMORIES} memories per character.` };
   const { data, error } = await supabase
     .from("memories")
-    .insert({ chat_id: parsed.data.chatId, text: parsed.data.text })
-    .select("id,text")
+    .insert({
+      user_id: viewer.user.id,
+      character_id: chat.character_id,
+      chat_id: parsed.data.chatId,
+      text: parsed.data.text,
+      source: "user",
+    })
+    .select("id,text,source,kind")
     .single();
   if (error) return { error: "Couldn't save that memory." };
   revalidatePath(`/app/chats/${parsed.data.chatId}`);
-  return data;
+  return data as MemoryRow;
 }
 
 export async function deleteMemory(memoryId: string): Promise<{ ok: boolean }> {

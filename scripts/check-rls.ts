@@ -149,6 +149,28 @@ async function main() {
         await denied("users cannot call consume_message directly", () =>
           as(adult, () => tx`select public.consume_message(${adult}, 1000)`),
         );
+        await denied("users cannot write memories as someone else", () =>
+          as(
+            teen,
+            () =>
+              tx`insert into public.memories (user_id, character_id, text) values (${adult}, 'marie-curie', 'x')`,
+          ),
+        );
+        await denied("users cannot fake automatic memories", () =>
+          as(
+            adult,
+            () =>
+              tx`insert into public.memories (user_id, character_id, text, source) values (${adult}, 'marie-curie', 'x', 'auto')`,
+          ),
+        );
+        await tx`insert into public.memories (user_id, character_id, text) values (${adult}, 'marie-curie', 'secret')`;
+        const memPeek = (await as(
+          teen,
+          () => tx`select count(*)::int as n from public.memories where text = 'secret'`,
+        )) as {
+          n: number;
+        }[];
+        check("users cannot read someone else's memories", memPeek[0].n === 0);
         await denied("users cannot add memories to someone else's chat", () =>
           as(teen, () => tx`insert into public.memories (chat_id, text) values (${chatA}, 'x')`),
         );
