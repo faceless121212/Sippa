@@ -1,6 +1,8 @@
 import { ChevronRight, Clock, Flame, MessageCircle, Sparkles, TrendingUp } from "lucide-react";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Link from "next/link";
+import { isSegmentId, SEGMENT_COOKIE, type SegmentId } from "@/config/segments";
 import { CharacterAvatar } from "@/components/CharacterAvatar";
 import { CharacterCard } from "@/components/CharacterCard";
 import { CheckInCard } from "@/components/engage/CheckInCard";
@@ -19,6 +21,24 @@ import { isPaid, showUsageStats } from "@/config/site";
 import { cn, formatCount } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Home" };
+
+const FOR_YOU: Record<SegmentId, Collection> = {
+  love: {
+    title: "💘 Picked for you",
+    subtitle: "Romance that remembers you.",
+    query: { category: "lover" },
+    adultsOnly: true,
+  },
+  friends: {
+    title: "🫶 Picked for you",
+    subtitle: "Friends who are always around.",
+    query: { category: "friend" },
+  },
+  history: { title: "🏛️ Picked for you", subtitle: "Great minds, on call.", query: { category: "famous" } },
+};
+
+/** People who came through /love, /friends or /history (or a quiz) see their kind of characters first. */
+const forYou = (segment: SegmentId | null): Collection[] => (segment ? [FOR_YOU[segment]] : []);
 
 type Collection = { title: string; subtitle: string; query: ExploreQuery; adultsOnly?: boolean };
 
@@ -58,6 +78,8 @@ const COLLECTIONS: Collection[] = [
 
 export default async function HomePage() {
   const viewer = await getViewer();
+  const rawSegment = (await cookies()).get(SEGMENT_COOKIE)?.value;
+  const segment = isSegmentId(rawSegment) ? rawSegment : null;
   const adult = viewerIsAdult(viewer);
 
   // Everything on Home loads in one parallel round.
@@ -68,9 +90,9 @@ export default async function HomePage() {
     listCharacters({ sort: "popular", limit: 3 }, adult).then(withChatCounts),
     listCharacters({ sort: showUsageStats ? "trending" : "new", limit: 3 }, adult).then(withChatCounts),
     Promise.all(
-      COLLECTIONS.filter((c) => adult || !c.adultsOnly).map((c) =>
-        listCharacters({ ...c.query, limit: 8 }, adult).then((items) => ({ ...c, items })),
-      ),
+      [...forYou(segment), ...COLLECTIONS]
+        .filter((c) => adult || !c.adultsOnly)
+        .map((c) => listCharacters({ ...c.query, limit: 8 }, adult).then((items) => ({ ...c, items }))),
     ),
     viewer
       ? admin

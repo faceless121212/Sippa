@@ -14,7 +14,7 @@ export function Footer() {
   const socials = siteConfig.socials.filter((s) => s.href !== "#");
   return (
     <footer className="border-border border-t">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[2fr_1fr_1fr]">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[2fr_1fr_1fr_1fr]">
         <div>
           <Logo />
           <p className="text-muted mt-3 max-w-xs text-sm">{siteConfig.tagline}</p>
@@ -23,6 +23,22 @@ export function Footer() {
             professional advice. 18+ only.
           </p>
         </div>
+        <nav aria-label="Discover">
+          <h2 className="text-sm font-semibold">Discover</h2>
+          <ul className="mt-3 space-y-2">
+            {[
+              ["/love", "Sippa Love (18+)"],
+              ["/friends", "Sippa Friends"],
+              ["/history", "Sippa History"],
+            ].map(([href, label]) => (
+              <li key={href}>
+                <Link href={href} className="text-muted hover:text-text text-sm">
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
         <nav aria-label="Legal">
           <h2 className="text-sm font-semibold">Legal</h2>
           <ul className="mt-3 space-y-2">

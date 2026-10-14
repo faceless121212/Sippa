@@ -19,7 +19,20 @@ const BASE_PATH = process.env.BASE_PATH ?? "/Sippa";
 const DIST = process.env.DIST ?? ".next-pages";
 const OUT = process.env.OUT ?? "out-pages";
 
-const PAGES = ["/", "/legal/privacy", "/legal/terms", "/legal/cookies", "/legal/guidelines"];
+const PAGES = [
+  "/",
+  // Audience pages and their quizzes (one per ad campaign).
+  "/love",
+  "/friends",
+  "/history",
+  "/quiz/love",
+  "/quiz/friends",
+  "/quiz/history",
+  "/legal/privacy",
+  "/legal/terms",
+  "/legal/cookies",
+  "/legal/guidelines",
+];
 const FILES = [
   "/favicon.ico",
   "/icon.svg",
@@ -79,7 +92,7 @@ async function main() {
     for (const [, ref] of html.matchAll(new RegExp(`["'(](${BASE_PATH}/[^"'()?#\\s]+)`, "g"))) {
       // References inside embedded JSON end in an escaped quote (\) and may be URL-encoded.
       const rel = decodeURIComponent(ref.slice(BASE_PATH.length + 1).replace(/\\+$/, ""));
-      if (!rel || PAGES.includes(`/${rel}`) || rel.startsWith("legal/")) continue;
+      if (!rel || PAGES.includes(`/${rel}`) || rel.startsWith("legal/") || rel.startsWith("quiz/")) continue;
       if (!existsSync(join(OUT, rel))) missing.add(rel);
     }
   }

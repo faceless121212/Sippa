@@ -23,10 +23,7 @@ test("category tabs switch sample characters and deep links", async ({ page }) =
 
   await page.getByRole("tab", { name: /Famous/ }).click();
   await expect(panel).toContainText("Ada Lovelace");
-  await expect(panel.getByRole("link", { name: /Start chatting/ })).toHaveAttribute(
-    "href",
-    `/signup?next=${encodeURIComponent("/app/explore?category=famous")}`,
-  );
+  await expect(panel.getByRole("link", { name: /60-second quiz/ })).toHaveAttribute("href", "/quiz/history");
 
   // Arrow-key navigation (WAI-ARIA tabs pattern).
   await page.getByRole("tab", { name: /Famous/ }).press("ArrowLeft");
@@ -60,7 +57,7 @@ test("FAQ answers expand", async ({ page }) => {
   await expect(page.getByText(/Adults 18\+/)).toBeVisible();
 });
 
-test("every call-to-action on the landing page leads to sign-up", async ({ page }) => {
+test("every call-to-action on the landing page leads to sign-up or a quiz", async ({ page }) => {
   await page.goto("/");
   const ctas = page.locator(
     "main a[class*='rounded'], header a[class*='bg-primary'], main a:has-text('View all')",
@@ -70,7 +67,8 @@ test("every call-to-action on the landing page leads to sign-up", async ({ page 
   for (let i = 0; i < count; i++) {
     const href = await ctas.nth(i).getAttribute("href");
     if (href?.startsWith("#")) continue; // in-page anchors (nav) aren't CTAs
-    expect(href, await ctas.nth(i).innerText()).toMatch(/^\/signup\?next=/);
+    // Sign-up, or the no-sign-up quiz funnel (ad → quiz → match → sign-up).
+    expect(href, await ctas.nth(i).innerText()).toMatch(/^(\/signup\?next=|\/quiz\/(love|friends|history)$)/);
   }
   await page.getByRole("link", { name: "Create your character" }).first().click();
   await expect(page).toHaveURL(/\/signup\?next=%2Fapp%2Fcreate/);
@@ -125,9 +123,11 @@ test("SEO and PWA endpoints respond", async ({ request }) => {
 
 test("search engines find a favicon: /favicon.ico plus a 48px+ PNG icon", async ({ page, request }) => {
   await page.goto("/");
-  const icons = await page.locator('link[rel="icon"]').evaluateAll((ls) =>
-    ls.map((l) => `${l.getAttribute("href")} ${l.getAttribute("sizes")} ${l.getAttribute("type")}`),
-  );
+  const icons = await page
+    .locator('link[rel="icon"]')
+    .evaluateAll((ls) =>
+      ls.map((l) => `${l.getAttribute("href")} ${l.getAttribute("sizes")} ${l.getAttribute("type")}`),
+    );
   expect(icons.some((i) => i.startsWith("/favicon.ico"))).toBe(true);
   expect(icons.some((i) => i.includes("192x192") && i.includes("image/png"))).toBe(true);
   const ico = await request.get("/favicon.ico");

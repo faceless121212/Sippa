@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { categories, categoryStyles, type CategoryId } from "@/config/categories";
+import { segmentForCategory } from "@/config/segments";
 import { charactersByCategory } from "@/data/landing";
 import { exploreHref } from "@/lib/explore-params";
 import { signupHref } from "@/lib/signup";
@@ -130,8 +131,8 @@ export function PickYourVibe() {
           ))}
         </ul>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Link href={signupHref(`/app/explore?category=${active}`)} className={buttonClass()}>
-            Start chatting with a {current.label.toLowerCase()}
+          <Link href={`/quiz/${segmentForCategory(active)}`} className={buttonClass()}>
+            Find your {current.label.toLowerCase()} — 60-second quiz
           </Link>
           <Link
             href={signupHref(`/app/create?category=${active}`)}

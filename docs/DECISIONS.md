@@ -146,6 +146,15 @@ Shown on the signed-in Home and Moments pages. **Real data only — nothing seed
 - **Upgrading works:** Plus → Ultra is allowed; buying the plan you already have is not.
 - **Stripe:** `npm run stripe:setup` creates the USD and Ultra prices and moves the lookup keys over from the old EUR prices.
 
+## Audience pages and quiz funnel (owner decision 2026-10-14)
+
+- **Why:** feedback said the home page mixes romance, friends and history, and the planned flow (ad → quiz → match → paywall → chat) didn't exist.
+- **Three audience pages:** `/love` (18+), `/friends` and `/history`. Each one is meant for one ad campaign and only shows its own characters. The main landing page stays the general entry point.
+- **Quiz:** `/quiz/<audience>` asks 5 questions and picks 3 characters from the catalogue (`matchCharacters` in `src/lib/quiz.ts`). It runs in the browser, so no answers are sent or stored.
+- **Flow after the match:** "Reply to X" → sign-up → `/app/welcome` (age check, then the Plus offer with "Continue free") → the chat with that character. People who pay go straight to the chat after checkout.
+- **Remembering the audience:** a first-party `sippa_segment` cookie (1 year). It only changes which collection is shown first on Home.
+- **Not done:** voice is still "coming soon"; Apple sign-in was not chosen; Google sign-in waits for the owner's OAuth client.
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.

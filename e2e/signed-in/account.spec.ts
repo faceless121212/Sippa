@@ -67,3 +67,17 @@ test("admin area is hidden from non-admins", async ({ page }) => {
   const res = await page.goto("/app/admin");
   expect(res?.status()).toBe(404);
 });
+
+test("quiz match → offer page → 'Continue free' opens the chat with that character", async ({ page }) => {
+  await page.goto("/app/welcome?c=pip-marlow");
+  await expect(page.getByRole("heading", { name: /Your chat with Pip is ready/ })).toBeVisible();
+  const paid = await page.getByRole("button", { name: "Start chatting" }).count();
+  if (!paid) {
+    await expect(page.getByRole("heading", { name: /Make it unlimited with Sippa Plus/ })).toBeVisible();
+    await page.getByRole("button", { name: /Continue free/ }).click();
+  } else {
+    await page.getByRole("button", { name: "Start chatting" }).click();
+  }
+  await expect(page).toHaveURL(/\/app\/chats\/[0-9a-f-]{36}$/, { timeout: 15_000 });
+  await expect(page.getByRole("region", { name: /Chat with Pip Marlow/ })).toBeVisible();
+});

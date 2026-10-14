@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { buttonClass } from "@/components/ui/button";
 import { requireAdult } from "@/lib/auth";
@@ -14,6 +15,9 @@ export default async function SuccessPage({
   searchParams: Promise<{ session_id?: string; demo?: string; beans?: string }>;
 }) {
   const viewer = await requireAdult("/app/plus");
+  // Came from a quiz match? "Start chatting" goes back to that character.
+  const raw = (await cookies()).get("sippa_next_character")?.value;
+  const next = raw && /^[a-z0-9-]{2,64}$/.test(decodeURIComponent(raw)) ? decodeURIComponent(raw) : null;
   const { session_id, demo, beans } = await searchParams;
   const result = demo
     ? demoResult(demo, beans)
@@ -48,7 +52,7 @@ export default async function SuccessPage({
       <h1 className="mt-6 text-3xl font-extrabold tracking-[-0.03em]">{title}</h1>
       <p className="text-muted mt-2 text-sm">{body}</p>
       <div className="mt-8 flex gap-2">
-        <Link href="/app/explore" className={buttonClass()}>
+        <Link href={next ? `/app/c/${next}` : "/app/explore"} className={buttonClass()}>
           Start chatting
         </Link>
         <Link href="/app/plus" className={buttonClass({ variant: "secondary" })}>
