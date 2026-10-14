@@ -130,3 +130,15 @@ describe("quiz matching", () => {
         expect(m.age ?? 0).toBeGreaterThanOrEqual(21);
   });
 });
+
+describe("info screens", () => {
+  it("every info screen plays a short chat that ends with a highlight", () => {
+    for (const id of segmentIds)
+      for (const s of quizzes[id].steps)
+        if (s.kind === "info") {
+          expect(s.demo.length, s.id).toBeGreaterThanOrEqual(3);
+          expect(s.demo.some((l) => l.kind === "you") && s.demo.some((l) => l.kind === "them")).toBe(true);
+          expect(s.demo.some((l) => l.kind === "badge"), s.id).toBe(true);
+        }
+  });
+});

@@ -13,6 +13,7 @@ import {
   quizzes,
   STATEMENT_SCALE,
   type ChoiceStep,
+  type DemoLine,
   type InfoStep,
   type NameStep,
   type QuizOption,
@@ -180,7 +181,7 @@ function Progress({ sections, current, fraction }: { sections: string[]; current
 
 function Title({ children, hint }: { children: React.ReactNode; hint?: string }) {
   return (
-    <div className="mt-6 text-center">
+    <div className="animate-rise mt-6 text-center">
       <h1 className="text-[26px] leading-tight font-extrabold tracking-[-0.03em] sm:text-3xl">{children}</h1>
       {hint && <p className="text-muted mt-2 text-sm">{hint}</p>}
     </div>
@@ -239,10 +240,10 @@ function ChoiceScreen({
       <Title hint={step.hint}>{step.question}</Title>
       {step.layout === "cards" ? (
         <ul className={cn("mt-6 grid gap-3", step.options.length === 3 ? "grid-cols-3" : "grid-cols-2")}>
-          {step.options.map((o) => {
+          {step.options.map((o, i) => {
             const on = picked.includes(o.id);
             return (
-              <li key={o.id}>
+              <li key={o.id} className="animate-rise" style={{ animationDelay: `${100 + i * 60}ms` }}>
                 <button
                   type="button"
                   aria-pressed={on}
@@ -274,10 +275,10 @@ function ChoiceScreen({
         </ul>
       ) : (
         <ul className="mt-6 space-y-2.5">
-          {step.options.map((o) => {
+          {step.options.map((o, i) => {
             const on = picked.includes(o.id);
             return (
-              <li key={o.id}>
+              <li key={o.id} className="animate-rise" style={{ animationDelay: `${100 + i * 60}ms` }}>
                 <button
                   type="button"
                   aria-pressed={on}
@@ -414,10 +415,10 @@ function InfoScreen({ step, answers, onDone }: { step: InfoStep; answers: QuizAn
   const echo = echoed ? step.echo?.text[echoed] : undefined;
   return (
     <main className="flex flex-1 flex-col">
-      {echo && <p className="text-primary-ink mt-6 text-center text-sm font-bold">{echo}</p>}
+      {echo && <p className="text-primary-ink animate-rise mt-6 text-center text-sm font-bold">{echo}</p>}
       <div
         className={cn(
-          "relative mx-auto aspect-square w-full max-w-xs overflow-hidden rounded-3xl",
+          "animate-pop relative mx-auto aspect-[4/5] w-full max-w-[340px] overflow-hidden rounded-3xl",
           echo ? "mt-4" : "mt-6",
         )}
       >
@@ -425,17 +426,29 @@ function InfoScreen({ step, answers, onDone }: { step: InfoStep; answers: QuizAn
           src={quizImage(step.image)}
           alt=""
           fill
-          sizes="(min-width: 640px) 320px, 80vw"
-          className="object-cover"
+          sizes="(min-width: 640px) 340px, 90vw"
+          className="animate-kenburns object-cover"
           priority
         />
+        <ChatDemo lines={step.demo} />
       </div>
-      <h1 className="mt-6 text-center text-[26px] leading-tight font-extrabold tracking-[-0.03em]">{step.title}</h1>
-      <p className="text-muted mt-3 text-center leading-relaxed">{step.body}</p>
+      <h1
+        className="animate-rise mt-6 text-center text-[26px] leading-tight font-extrabold tracking-[-0.03em]"
+        style={{ animationDelay: "150ms" }}
+      >
+        {step.title}
+      </h1>
+      <p className="text-muted animate-rise mt-3 text-center leading-relaxed" style={{ animationDelay: "300ms" }}>
+        {step.body}
+      </p>
       {step.points && (
         <ul className="mx-auto mt-5 space-y-2">
-          {step.points.map((p) => (
-            <li key={p} className="flex items-center gap-2 text-sm font-semibold">
+          {step.points.map((p, i) => (
+            <li
+              key={p}
+              className="animate-rise flex items-center gap-2 text-sm font-semibold"
+              style={{ animationDelay: `${450 + i * 120}ms` }}
+            >
               <Check className="text-primary-ink h-4 w-4 shrink-0" strokeWidth={3} aria-hidden="true" />
               {p}
             </li>
@@ -444,6 +457,87 @@ function InfoScreen({ step, answers, onDone }: { step: InfoStep; answers: QuizAn
       )}
       <BottomButton onClick={onDone}>Continue</BottomButton>
     </main>
+  );
+}
+
+/**
+ * A short chat that plays over an info image: bubbles arrive one by one, the
+ * character "types" before each reply, and the highlight chip pops in.
+ */
+function ChatDemo({ lines }: { lines: DemoLine[] }) {
+  const [shown, setShown] = useState(0);
+  const [typing, setTyping] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      setShown(lines.length);
+      return;
+    }
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    let t = 600;
+    lines.forEach((line, i) => {
+      if (line.kind === "them") {
+        timers.push(setTimeout(() => setTyping(true), t));
+        t += 1000;
+      }
+      timers.push(
+        setTimeout(() => {
+          setTyping(false);
+          setShown(i + 1);
+        }, t),
+      );
+      t += line.kind === "note" ? 500 : line.kind === "badge" ? 1100 : 900;
+    });
+    return () => timers.forEach(clearTimeout);
+  }, [lines]);
+
+  return (
+    <div
+      role="img"
+      aria-label={lines.map((l) => l.text).join(" · ")}
+      className="absolute inset-0 flex flex-col justify-end gap-2 overflow-hidden bg-gradient-to-t from-black/85 via-black/35 to-transparent p-3"
+    >
+      {lines.slice(0, shown).map((line, i) =>
+        line.kind === "note" ? (
+          <p
+            key={i}
+            className="animate-msg self-center rounded-full bg-black/50 px-2.5 py-0.5 text-[10px] font-bold tracking-[0.08em] text-white/80 uppercase"
+          >
+            {line.text}
+          </p>
+        ) : line.kind === "badge" ? (
+          <p
+            key={i}
+            className="animate-pop bg-primary text-on-primary self-center rounded-full px-3 py-1.5 text-xs font-extrabold shadow-lg"
+          >
+            {line.text}
+          </p>
+        ) : (
+          <p
+            key={i}
+            className={cn(
+              "animate-msg max-w-[82%] rounded-2xl px-3 py-2 text-[13px] leading-snug shadow-md",
+              line.kind === "you"
+                ? "bg-primary text-on-primary self-end rounded-br-md font-semibold"
+                : "self-start rounded-bl-md bg-white/95 text-neutral-900",
+            )}
+          >
+            {line.text}
+          </p>
+        ),
+      )}
+      {typing && (
+        <span className="animate-msg flex gap-1 self-start rounded-2xl rounded-bl-md bg-white/95 px-3 py-2.5">
+          {[0, 1, 2].map((d) => (
+            <span
+              key={d}
+              className="h-1.5 w-1.5 animate-bounce rounded-full bg-neutral-500"
+              style={{ animationDelay: `${d * 120}ms` }}
+            />
+          ))}
+        </span>
+      )}
+    </div>
   );
 }
 

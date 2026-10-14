@@ -64,7 +64,12 @@ export type InfoStep = Base & {
   points?: string[];
   /** "Got it" line that echoes an earlier answer: option id → text. */
   echo?: { step: string; text: Record<string, string> };
+  /** A short chat that plays over the image, one line at a time. */
+  demo: DemoLine[];
 };
+
+/** "you"/"them" are chat bubbles, "note" a small divider (e.g. "Next day"), "badge" a highlight chip. */
+export type DemoLine = { kind: "you" | "them" | "note" | "badge"; text: string };
 
 export type QuizStep = ChoiceStep | StatementStep | NameStep | InfoStep;
 
@@ -152,6 +157,13 @@ const love: Quiz = {
       section: 0,
       kind: "info",
       image: "love/info-memory",
+      demo: [
+        { kind: "you", text: "My cat Mochi knocked my coffee over 😩" },
+        { kind: "them", text: "Poor you — and poor coffee! Is Mochi proud of herself?" },
+        { kind: "badge", text: "🧠 Remembered: your cat Mochi" },
+        { kind: "note", text: "Next day" },
+        { kind: "them", text: "Morning! Did Mochi spare your coffee today? ☕" },
+      ],
       echo: {
         step: "why",
         text: {
@@ -228,6 +240,11 @@ const love: Quiz = {
       section: 1,
       kind: "info",
       image: "love/info-control",
+      demo: [
+        { kind: "you", text: "Can we take things slow?" },
+        { kind: "them", text: "Of course. No rush — I like getting to know you." },
+        { kind: "badge", text: "✨ You set the pace" },
+      ],
       title: "You set the pace",
       body: "Your match is an AI and always says so. Slow down, change the story or start over whenever you like.",
       points: ["Private chats", "Romance at your pace, always respectful"],
@@ -407,6 +424,13 @@ const friends: Quiz = {
       section: 0,
       kind: "info",
       image: "friends/info-memory",
+      demo: [
+        { kind: "you", text: "Exam on Friday and I'm so stressed 😬" },
+        { kind: "them", text: "You've got this. Want to quiz each other tonight?" },
+        { kind: "badge", text: "🧠 Remembered: exam on Friday" },
+        { kind: "note", text: "Friday" },
+        { kind: "them", text: "Today's the day! Good luck — tell me how it goes 🍀" },
+      ],
       echo: {
         step: "life",
         text: {
@@ -483,6 +507,12 @@ const friends: Quiz = {
       section: 1,
       kind: "info",
       image: "friends/info-anytime",
+      demo: [
+        { kind: "note", text: "3:07 AM" },
+        { kind: "you", text: "Can't sleep…" },
+        { kind: "them", text: "I'm here. Want to talk about it, or shall I tell you something silly?" },
+        { kind: "badge", text: "🌙 Ready to chat any time" },
+      ],
       title: "There at 3 a.m.",
       body: "Morning, lunch break or the middle of the night — your friend is ready to chat, with no judgement.",
       points: ["Private chats", "Always clearly an AI"],
@@ -679,6 +709,11 @@ const history: Quiz = {
       section: 0,
       kind: "info",
       image: "history/info-ai",
+      demo: [
+        { kind: "you", text: "Why did you study radium?" },
+        { kind: "them", text: "Because it glowed in the dark — and I could not leave a mystery alone." },
+        { kind: "badge", text: "🤖 AI portrayal — and always says so" },
+      ],
       echo: {
         step: "why",
         text: {
@@ -754,6 +789,13 @@ const history: Quiz = {
       section: 1,
       kind: "info",
       image: "history/info-memory",
+      demo: [
+        { kind: "you", text: "I have a test on the Renaissance next week" },
+        { kind: "them", text: "Then let's begin in Florence, where it all started." },
+        { kind: "badge", text: "🧠 Remembered: Renaissance test" },
+        { kind: "note", text: "Next week" },
+        { kind: "them", text: "Ready for your test? A quick quiz first? 📜" },
+      ],
       title: "A mentor who remembers",
       body: "Tell them what you're studying or curious about — they'll pick up where you left off next time.",
       points: ["See everything they remember", "Delete any memory, any time"],
