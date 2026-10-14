@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdult } from "@/lib/auth";
 import { bondLevel, sceneById, XP } from "@/config/engagement";
-import { MAX_MEMORIES } from "@/lib/chat/memory";
+import { planLimits } from "@/config/site";
 import { createChat } from "@/lib/chat/service";
 import { writeSceneOpener } from "@/lib/scenes";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -64,7 +64,8 @@ export async function addMemory(chatId: string, text: string): Promise<MemoryRow
     .from("memories")
     .select("id", { count: "exact", head: true })
     .eq("character_id", chat.character_id);
-  if ((count ?? 0) >= MAX_MEMORIES) return { error: `Up to ${MAX_MEMORIES} memories per character.` };
+  const cap = planLimits[viewer.profile?.plan ?? "free"].memories;
+  if ((count ?? 0) >= cap) return { error: `Up to ${cap} memories per character.` };
   const { data, error } = await supabase
     .from("memories")
     .insert({

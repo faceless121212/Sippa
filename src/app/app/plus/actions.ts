@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { STRIPE_ITEMS, type StripeItem } from "@/config/site";
+import { STRIPE_ITEMS, type StripeItem, planForItem } from "@/config/site";
 import { requireAdult } from "@/lib/auth";
 import { demoCancel, demoFulfil } from "@/lib/billing/demo";
 import { paymentsMode } from "@/lib/billing/mode";
@@ -15,7 +15,8 @@ export async function confirmDemoPurchase(form: FormData) {
   if (paymentsMode() !== "demo") redirect("/app/plus");
   const item = itemSchema.parse(form.get("item"));
   const nonce = z.string().uuid().parse(form.get("nonce"));
-  if (STRIPE_ITEMS[item].mode === "subscription" && viewer.profile?.plan === "plus") redirect("/app/plus");
+  // Buying the plan you already have is a no-op; upgrading Plus → Ultra is allowed.
+  if (planForItem(item) && planForItem(item) === viewer.profile?.plan) redirect("/app/plus");
   const result = await demoFulfil(viewer.user.id, item, nonce);
   revalidatePath("/app", "layout"); // new plan / Flowers show everywhere straight away
   redirect(`/app/plus/success?demo=${result.kind}${result.kind === "beans" ? `&beans=${result.beans}` : ""}`);

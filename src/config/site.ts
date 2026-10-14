@@ -59,14 +59,53 @@ export const siteConfig = {
   ],
 } as const;
 
+/** Owner decision 2026-10-14: prices follow the pitch deck (USD), with an Ultra tier. */
 export const pricing = {
-  currency: "EUR",
-  plusMonthly: 7.99,
-  plusYearly: 59.99,
+  currency: "USD",
+  plusMonthly: 13.99,
+  plusYearly: 79.99,
+  ultraMonthly: 29.99,
+  ultraYearly: 199.99,
   freeMessagesPerDay: 30,
-  /** Beans granted with every paid Plus period (monthly, or monthly-equivalent on yearly). */
+  /** Flowers granted with every paid month (yearly plans get 12× up front). */
   plusMonthlyBeans: 300,
+  ultraMonthlyBeans: 1000,
 } as const;
+
+export type Plan = "free" | "plus" | "ultra";
+export type PaidPlan = Exclude<Plan, "free">;
+/** Plus and Ultra unlock everything paid; Ultra adds longer memory, more Flowers and voice (soon). */
+export const isPaid = (plan: Plan | null | undefined): plan is PaidPlan =>
+  plan === "plus" || plan === "ultra";
+
+/** What each paid plan unlocks beyond Free. */
+export const planLimits: Record<Plan, { memories: number; historyWindow: number }> = {
+  free: { memories: 60, historyWindow: 24 },
+  plus: { memories: 60, historyWindow: 24 },
+  ultra: { memories: 150, historyWindow: 48 },
+};
+
+export const planNames: Record<Plan, string> = { free: "Free", plus: "Sippa Plus", ultra: "Sippa Ultra" };
+
+/**
+ * What each plan includes, shown on the landing page and the Plus page. Only list what
+ * the code actually does (lib/chat/service.ts, lib/chat/memory.ts, lib/creator/server.ts).
+ */
+export const planFeatures: Record<Plan, string[]> = {
+  free: [
+    "30 messages a day",
+    "3 free character creations",
+    "Characters remember what you tell them",
+    "One light ad, never mid-chat",
+  ],
+  plus: ["Unlimited messages", "Unlimited character creations", "300 Flowers a month", "No ads"],
+  ultra: [
+    "Everything in Plus",
+    "Longer memory: 150 facts and twice the chat context",
+    "1,000 Flowers a month",
+    "Voice replies (coming soon)",
+  ],
+};
 
 /** What Beans buy (owner decision, Phase 5). */
 export const beanCosts = {
@@ -93,11 +132,20 @@ export const beanPacks: BeanPack[] = [
 export const STRIPE_ITEMS = {
   plus_monthly: { lookupKey: "sippa_plus_monthly", mode: "subscription" },
   plus_yearly: { lookupKey: "sippa_plus_yearly", mode: "subscription" },
+  ultra_monthly: { lookupKey: "sippa_ultra_monthly", mode: "subscription" },
+  ultra_yearly: { lookupKey: "sippa_ultra_yearly", mode: "subscription" },
   beans_200: { lookupKey: "sippa_beans_200", mode: "payment" },
   beans_600: { lookupKey: "sippa_beans_600", mode: "payment" },
   beans_1500: { lookupKey: "sippa_beans_1500", mode: "payment" },
 } as const;
 export type StripeItem = keyof typeof STRIPE_ITEMS;
+
+/** The plan a subscription item grants (null for Flowers packs). */
+export function planForItem(item: StripeItem): PaidPlan | null {
+  if (item.startsWith("ultra_")) return "ultra";
+  if (item.startsWith("plus_")) return "plus";
+  return null;
+}
 
 /** Percentage saved by paying yearly instead of 12 × monthly, rounded down. */
 export function yearlySavingsPercent(monthly: number, yearly: number): number {
@@ -107,5 +155,5 @@ export function yearlySavingsPercent(monthly: number, yearly: number): number {
 }
 
 export function formatPrice(amount: number, currency: string = pricing.currency): string {
-  return new Intl.NumberFormat("en-IE", { style: "currency", currency }).format(amount);
+  return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amount);
 }

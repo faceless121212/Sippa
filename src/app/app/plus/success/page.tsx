@@ -24,19 +24,21 @@ export default async function SuccessPage({
   const title =
     result.kind === "beans"
       ? `${result.beans} Flowers added 🌸`
-      : result.kind === "plus"
-        ? "Welcome to Sippa Plus ✨"
+      : result.kind === "plus" || result.kind === "ultra"
+        ? `Welcome to ${result.kind === "ultra" ? "Sippa Ultra" : "Sippa Plus"} ✨`
         : result.kind === "pending"
           ? "Payment processing…"
           : "We couldn't confirm that payment";
   const body =
     result.kind === "beans"
       ? "Use them for extra creations or messages past your daily limit."
-      : result.kind === "plus"
-        ? "Unlimited messages and creations are on, plus your monthly Flowers."
-        : result.kind === "pending"
-          ? "This can take a minute. Refresh this page shortly."
-          : "If you were charged, it'll show up shortly — or contact support.";
+      : result.kind === "ultra"
+        ? "Unlimited everything, the longest memory and 1,000 Flowers a month are on. Voice replies are coming soon."
+        : result.kind === "plus"
+          ? "Unlimited messages and creations are on, plus your monthly Flowers."
+          : result.kind === "pending"
+            ? "This can take a minute. Refresh this page shortly."
+            : "If you were charged, it'll show up shortly — or contact support.";
 
   return (
     <div className="mx-auto flex max-w-md flex-col items-center px-4 py-20 text-center">
@@ -61,6 +63,7 @@ export default async function SuccessPage({
 function demoResult(kind: string, beans?: string) {
   if (kind === "beans") return { kind: "beans" as const, beans: Number(beans) || 0 };
   if (kind === "plus") return { kind: "plus" as const, active: true };
+  if (kind === "ultra") return { kind: "ultra" as const, active: true };
   if (kind === "duplicate") return { kind: "pending" as const };
   return { kind: "error" as const };
 }

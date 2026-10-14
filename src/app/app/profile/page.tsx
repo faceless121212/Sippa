@@ -9,6 +9,7 @@ import { listFavorites } from "@/lib/characters";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { cn } from "@/lib/utils";
 import { deleteAccount, setNudges } from "./actions";
+import { planNames, type Plan } from "@/config/site";
 
 export const metadata: Metadata = { title: "Profile" };
 
@@ -43,7 +44,7 @@ export default async function ProfilePage() {
           href="/app/plus"
           className="bg-surface-2 hover:bg-border rounded-md px-2.5 py-1 text-xs font-bold"
         >
-          {p.plan === "plus" ? "SIPPA PLUS" : "FREE"} · {p.beans} Flowers
+          {planNames[p.plan as Plan].toUpperCase()} · {p.beans} Flowers
         </Link>
       </section>
 

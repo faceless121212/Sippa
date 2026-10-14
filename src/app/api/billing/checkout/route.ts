@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { STRIPE_ITEMS } from "@/config/site";
+import { STRIPE_ITEMS, planForItem, planNames } from "@/config/site";
 import { paymentsMode } from "@/lib/billing/mode";
 import { ensureCustomer, priceFor, stripe } from "@/lib/billing/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -34,8 +34,10 @@ export async function POST(request: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid item." }, { status: 400 });
   const item = parsed.data.item;
   const itemMode = STRIPE_ITEMS[item].mode;
-  if (itemMode === "subscription" && profile.plan === "plus") {
-    return NextResponse.json({ error: "You already have Sippa Plus." }, { status: 409 });
+  // Buying the plan you already have is refused; upgrading Plus → Ultra is fine.
+  const wanted = planForItem(item);
+  if (itemMode === "subscription" && wanted && wanted === profile.plan) {
+    return NextResponse.json({ error: `You already have ${planNames[wanted]}.` }, { status: 409 });
   }
 
   if (mode === "demo") return NextResponse.json({ url: `/app/plus/checkout?item=${item}` });

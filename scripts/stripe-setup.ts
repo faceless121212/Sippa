@@ -14,67 +14,81 @@ if (!key?.startsWith("sk_test_")) {
 const stripe = new Stripe(key);
 const cents = (n: number) => Math.round(n * 100);
 
-async function ensurePrice(lookupKey: string, create: () => Promise<Stripe.Price>) {
+/**
+ * Makes sure a price with this lookup key exists at this amount/currency. If an older
+ * price holds the key (e.g. the earlier EUR prices), a new one takes the key over.
+ */
+async function ensurePrice(
+  lookupKey: string,
+  spec: { amount: number; recurring?: "month" | "year" },
+  product: () => Promise<string>,
+) {
+  const currency = pricing.currency.toLowerCase();
   const { data } = await stripe.prices.list({ lookup_keys: [lookupKey], limit: 1 });
-  if (data[0]) return console.log(`= ${lookupKey} exists (${data[0].id})`);
-  const price = await create();
-  console.log(`+ ${lookupKey} created (${price.id})`);
+  const current = data[0];
+  if (current && current.unit_amount === cents(spec.amount) && current.currency === currency)
+    return console.log(`= ${lookupKey} exists (${current.id})`);
+  const price = await stripe.prices.create({
+    product: current ? (current.product as string) : await product(),
+    currency,
+    unit_amount: cents(spec.amount),
+    ...(spec.recurring ? { recurring: { interval: spec.recurring } } : {}),
+    lookup_key: lookupKey,
+    transfer_lookup_key: true,
+    tax_behavior: "inclusive",
+  });
+  console.log(`${current ? "~" : "+"} ${lookupKey} → ${price.id} (${spec.amount} ${currency})`);
+}
+
+async function plan(name: string, description: string, monthly: [string, number], yearly: [string, number]) {
+  let productId: string | null = null;
+  const product = async () => (productId ??= (await stripe.products.create({ name, description })).id);
+  await ensurePrice(monthly[0], { amount: monthly[1], recurring: "month" }, product);
+  await ensurePrice(yearly[0], { amount: yearly[1], recurring: "year" }, product);
 }
 
 async function main() {
-  const plus = await stripe.products.create({
-    name: "Sippa Plus",
-    description: "Unlimited messages & creations, no ads, 300 Flowers every month.",
-  });
-  await ensurePrice(STRIPE_ITEMS.plus_monthly.lookupKey, () =>
-    stripe.prices.create({
-      product: plus.id,
-      currency: "eur",
-      unit_amount: cents(pricing.plusMonthly),
-      recurring: { interval: "month" },
-      lookup_key: STRIPE_ITEMS.plus_monthly.lookupKey,
-      tax_behavior: "inclusive",
-    }),
+  await plan(
+    "Sippa Plus",
+    `Unlimited messages & creations, no ads, ${pricing.plusMonthlyBeans} Flowers every month.`,
+    [STRIPE_ITEMS.plus_monthly.lookupKey, pricing.plusMonthly],
+    [STRIPE_ITEMS.plus_yearly.lookupKey, pricing.plusYearly],
   );
-  await ensurePrice(STRIPE_ITEMS.plus_yearly.lookupKey, () =>
-    stripe.prices.create({
-      product: plus.id,
-      currency: "eur",
-      unit_amount: cents(pricing.plusYearly),
-      recurring: { interval: "year" },
-      lookup_key: STRIPE_ITEMS.plus_yearly.lookupKey,
-      tax_behavior: "inclusive",
-    }),
+  await plan(
+    "Sippa Ultra",
+    `Everything in Plus, longer memory, ${pricing.ultraMonthlyBeans} Flowers every month, voice replies (coming soon).`,
+    [STRIPE_ITEMS.ultra_monthly.lookupKey, pricing.ultraMonthly],
+    [STRIPE_ITEMS.ultra_yearly.lookupKey, pricing.ultraYearly],
   );
-  // If both prices already existed, the fresh product above is unused — archive it.
-  const used = await stripe.prices.list({ product: plus.id, limit: 1 });
-  if (!used.data.length) await stripe.products.update(plus.id, { active: false });
 
   for (const pack of beanPacks) {
     const lookup = STRIPE_ITEMS[pack.id].lookupKey;
-    await ensurePrice(lookup, async () => {
+    await ensurePrice(lookup, { amount: pack.price }, async () => {
       const product = await stripe.products.create({
         name: `${pack.beans} Flowers`,
-        description: "Sippa Flowers for extra creations and messages.",
+        description: "Sippa Flowers for gifts, extra creations and messages.",
       });
-      return stripe.prices.create({
-        product: product.id,
-        currency: "eur",
-        unit_amount: cents(pack.price),
-        lookup_key: lookup,
-        tax_behavior: "inclusive",
-      });
+      return product.id;
     });
   }
 
   const configs = await stripe.billingPortal.configurations.list({ limit: 100 });
   if (!configs.data.some((c) => c.metadata?.app === "sippa")) {
     const prices = await stripe.prices.list({
-      lookup_keys: [STRIPE_ITEMS.plus_monthly.lookupKey, STRIPE_ITEMS.plus_yearly.lookupKey],
+      lookup_keys: [
+        STRIPE_ITEMS.plus_monthly.lookupKey,
+        STRIPE_ITEMS.plus_yearly.lookupKey,
+        STRIPE_ITEMS.ultra_monthly.lookupKey,
+        STRIPE_ITEMS.ultra_yearly.lookupKey,
+      ],
     });
+    // One entry per product, so people can switch between Plus and Ultra in the portal.
+    const byProduct = new Map<string, string[]>();
+    for (const pr of prices.data)
+      byProduct.set(pr.product as string, [...(byProduct.get(pr.product as string) ?? []), pr.id]);
     await stripe.billingPortal.configurations.create({
       metadata: { app: "sippa" },
-      business_profile: { headline: "Manage your Sippa Plus subscription" },
+      business_profile: { headline: "Manage your Sippa subscription" },
       features: {
         invoice_history: { enabled: true },
         payment_method_update: { enabled: true },
@@ -82,7 +96,7 @@ async function main() {
         subscription_update: {
           enabled: true,
           default_allowed_updates: ["price"],
-          products: [{ product: prices.data[0].product as string, prices: prices.data.map((p) => p.id) }],
+          products: [...byProduct].map(([product, ids]) => ({ product, prices: ids })),
         },
       },
     });

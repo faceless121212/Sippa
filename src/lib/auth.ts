@@ -1,4 +1,5 @@
 import "server-only";
+import type { Plan } from "@/config/site";
 import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 import { supabaseConfigured } from "./supabase/config";
@@ -10,7 +11,7 @@ export type Profile = {
   display_name: string | null;
   dob: string | null;
   is_adult: boolean;
-  plan: "free" | "plus";
+  plan: Plan;
   beans: number;
   is_admin: boolean;
   banned_at: string | null;

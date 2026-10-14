@@ -20,6 +20,7 @@ import { NudgePopup } from "./NudgePopup";
 import { Logo, LogoMark } from "../Logo";
 import { ThemeToggle } from "../ThemeToggle";
 import { buttonClass } from "../ui/button";
+import { isPaid, type Plan } from "@/config/site";
 
 const NAV = [
   { href: "/app", label: "Home", icon: Home },
@@ -35,7 +36,7 @@ const MOBILE = ["/app", "/app/chats", "/app/create", "/app/explore", "/app/profi
 export type ShellViewer = {
   signedIn: boolean;
   name: string | null;
-  plan?: "free" | "plus";
+  plan?: Plan;
   isAdmin?: boolean;
   nudges?: boolean;
 };
@@ -142,7 +143,7 @@ export function AppShell({ viewer, children }: { viewer: ShellViewer; children: 
               <span className={cn(collapsed ? "sr-only" : "sr-only lg:not-sr-only")}>Moderation</span>
             </Link>
           )}
-          {viewer.signedIn && viewer.plan !== "plus" && (
+          {viewer.signedIn && !isPaid(viewer.plan) && (
             <Link
               href="/app/plus"
               title="Get Sippa Plus"

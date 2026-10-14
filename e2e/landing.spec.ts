@@ -44,10 +44,14 @@ test("creator demo brews a pre-made character", async ({ page }) => {
 test("pricing toggle shows yearly price", async ({ page }) => {
   await page.goto("/");
   const pricing = page.locator("#pricing");
-  await expect(pricing).toContainText("€7.99");
+  // Deck prices (owner decision 2026-10-14): Plus $13.99 / $79.99, Ultra $29.99 / $199.99.
+  await expect(pricing).toContainText("$13.99");
+  await expect(pricing).toContainText("$29.99");
+  await expect(pricing.getByRole("heading", { name: "Sippa Ultra" })).toBeVisible();
   await pricing.getByText(/Yearly/).click();
-  await expect(pricing).toContainText("€59.99");
-  await expect(pricing).toContainText("save 37%");
+  await expect(pricing).toContainText("$79.99");
+  await expect(pricing).toContainText("$199.99");
+  await expect(pricing).toContainText("save up to 52%");
 });
 
 test("FAQ answers expand", async ({ page }) => {

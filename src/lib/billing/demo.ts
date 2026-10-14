@@ -1,5 +1,13 @@
 import "server-only";
-import { beanPacks, pricing, STRIPE_ITEMS, type StripeItem } from "@/config/site";
+import {
+  beanPacks,
+  planForItem,
+  planNames,
+  pricing,
+  STRIPE_ITEMS,
+  type PaidPlan,
+  type StripeItem,
+} from "@/config/site";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
@@ -7,16 +15,25 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * purchase, recorded in the same ledger, keyed by a one-time nonce so a
  * double-submit can't grant twice.
  */
-export type DemoResult = { kind: "beans"; beans: number } | { kind: "plus" } | { kind: "duplicate" };
+export type DemoResult = { kind: "beans"; beans: number } | { kind: PaidPlan } | { kind: "duplicate" };
 
 export function describeItem(item: StripeItem) {
   const pack = beanPacks.find((p) => p.id === item);
   if (pack)
     return { title: `${pack.beans} Flowers`, price: pack.price, recurring: null as null | "month" | "year" };
-  const yearly = item === "plus_yearly";
+  const plan = planForItem(item)!;
+  const yearly = item.endsWith("_yearly");
+  const price =
+    plan === "ultra"
+      ? yearly
+        ? pricing.ultraYearly
+        : pricing.ultraMonthly
+      : yearly
+        ? pricing.plusYearly
+        : pricing.plusMonthly;
   return {
-    title: `Sippa Plus — ${yearly ? "yearly" : "monthly"}`,
-    price: yearly ? pricing.plusYearly : pricing.plusMonthly,
+    title: `${planNames[plan]} — ${yearly ? "yearly" : "monthly"}`,
+    price,
     recurring: (yearly ? "year" : "month") as "month" | "year",
   };
 }
@@ -34,15 +51,17 @@ export async function demoFulfil(userId: string, item: StripeItem, nonce: string
       p_type: "beans_pack",
       p_stripe_id: ref,
       p_amount_cents: Math.round(pack.price * 100),
-      p_currency: "eur",
+      p_currency: pricing.currency.toLowerCase(),
     });
     return ok ? { kind: "beans", beans: pack.beans } : { kind: "duplicate" };
   }
 
   const yearly = info.recurring === "year";
+  const plan = planForItem(item)!;
+  const monthly = plan === "ultra" ? pricing.ultraMonthlyBeans : pricing.plusMonthlyBeans;
   const { data: ok } = await admin.rpc("grant_beans", {
     p_user: userId,
-    p_beans: pricing.plusMonthlyBeans * (yearly ? 12 : 1),
+    p_beans: monthly * (yearly ? 12 : 1),
     p_type: "plus_bonus",
     p_stripe_id: ref,
     p_amount_cents: null,
@@ -55,13 +74,13 @@ export async function demoFulfil(userId: string, item: StripeItem, nonce: string
   await admin
     .from("profiles")
     .update({
-      plan: "plus",
+      plan,
       subscription_status: "demo",
       subscription_id: null,
       plus_until: until.toISOString(),
     })
     .eq("id", userId);
-  return { kind: "plus" };
+  return { kind: plan };
 }
 
 export async function demoCancel(userId: string) {

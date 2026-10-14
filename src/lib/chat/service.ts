@@ -1,4 +1,5 @@
 import "server-only";
+import { isPaid, planLimits, type Plan } from "@/config/site";
 import { after } from "next/server";
 import type { CategoryId } from "@/config/categories";
 import { bondLevel, bondPromptNote, XP } from "@/config/engagement";
@@ -28,7 +29,7 @@ export type ChatContext = {
   admin: Admin;
   userId: string;
   userName: string | null;
-  plan: "free" | "plus";
+  plan: Plan;
   chat: {
     id: string;
     character_id: string;
@@ -227,7 +228,7 @@ async function history(ctx: ChatContext): Promise<{ messages: HistoryMessage[]; 
     .select("id,role,content,flagged,flag_reason")
     .eq("chat_id", ctx.chat.id)
     .order("id", { ascending: false })
-    .limit(HISTORY_WINDOW + 10);
+    .limit(planLimits[ctx.plan].historyWindow + 10);
   const rows = (data ?? []).reverse();
   const recentCrisis = rows.slice(-10).some((r) => r.role === "system" && r.content === CRISIS_MARKER);
   const messages = rows
@@ -286,7 +287,7 @@ export type Allowance = number | null | { limit: true; beans: number };
  * Beans only when the user explicitly opted in (`useBeans`).
  */
 export async function consumeAllowance(ctx: ChatContext, useBeans = false): Promise<Allowance> {
-  if (ctx.plan === "plus") return null;
+  if (isPaid(ctx.plan)) return null;
   const limit = pricing.freeMessagesPerDay;
   const { data, error } = await ctx.admin.rpc("consume_message", { p_user: ctx.userId, p_limit: limit });
   if (error) throw error;
@@ -303,8 +304,8 @@ export async function consumeAllowance(ctx: ChatContext, useBeans = false): Prom
   return { limit: true, beans: p?.beans ?? 0 };
 }
 
-export async function remainingToday(userId: string, plan: "free" | "plus"): Promise<number | null> {
-  if (plan === "plus") return null;
+export async function remainingToday(userId: string, plan: Plan): Promise<number | null> {
+  if (isPaid(plan)) return null;
   const admin = createAdminClient();
   const today = new Date().toISOString().slice(0, 10);
   const { data } = await admin
@@ -347,7 +348,7 @@ export async function streamReply(
   // History, long-term memory and bond load together.
   const [{ messages, recentCrisis }, memory, { data: bond }] = await Promise.all([
     history(ctx),
-    loadMemories(ctx.admin, ctx.userId, ctx.character.id),
+    loadMemories(ctx.admin, ctx.userId, ctx.character.id, planLimits[ctx.plan].memories),
     ctx.admin
       .from("bonds")
       .select("xp")
@@ -373,7 +374,11 @@ export async function streamReply(
 
   let result;
   try {
-    result = streamChat({ system, messages: buildMessages(messages), signal: opts.signal });
+    result = streamChat({
+      system,
+      messages: buildMessages(messages, planLimits[ctx.plan].historyWindow),
+      signal: opts.signal,
+    });
   } catch (e) {
     if (e instanceof LlmUnavailableError)
       return ndjson([{ t: "error", message: "Chat is temporarily unavailable." }], 503);
@@ -430,6 +435,7 @@ export async function streamReply(
               chatId: ctx.chat.id,
               characterName: ctx.character.name,
               userText: opts.lastUserText,
+              cap: planLimits[ctx.plan].memories,
               previousCharacterLine:
                 typeof previousCharacterLine?.content === "string" ? previousCharacterLine.content : null,
             }).catch((e) => console.error("memory:", e)),

@@ -135,6 +135,17 @@ Shown on the signed-in Home and Moments pages. **Real data only — nothing seed
 - **Famous additions are "inspired-by" archetypes,** not real people: jazz singer, Victorian detective, aviator, knight, inventor, ronin.
 - **Reviewed by hand before publishing:** three were regenerated (two Lover portraits to look clearly adult and tastefully dressed, one for age fit).
 
+## Pricing follows the pitch deck (owner decision 2026-10-14)
+
+- **USD:** Plus **$13.99/mo** or **$79.99/yr**; new **Ultra $29.99/mo** or **$199.99/yr**. Flower packs are $1.99 / $4.99 / $9.99. This replaces €7.99 / €59.99 (feedback: the deck and the site disagreed).
+- **Ultra = everything in Plus, plus:**
+  - longer memory: 150 facts instead of 60, and 48 instead of 24 recent messages sent with each chat;
+  - 1,000 Flowers a month;
+  - voice replies, listed as "coming soon". The owner chose not to build voice yet.
+- **One source for plan features** (`planFeatures` in `site.ts`), used by the landing page and the Plus page, so they can't drift apart again.
+- **Upgrading works:** Plus → Ultra is allowed; buying the plan you already have is not.
+- **Stripe:** `npm run stripe:setup` creates the USD and Ultra prices and moves the lookup keys over from the old EUR prices.
+
 ## Flagged for later (need owner decision)
 
 - **Real age verification** (beyond DOB self-declaration) — hook `verifyAge()` stubbed; needed before any expansion of Lover features.

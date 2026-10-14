@@ -1,4 +1,5 @@
 import "server-only";
+import { isPaid, type Plan } from "@/config/site";
 import { NextResponse } from "next/server";
 import { beanCosts, siteConfig } from "@/config/site";
 import { createRateLimiter } from "@/lib/rate-limit";
@@ -7,7 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export type Creator = {
   userId: string;
-  plan: "free" | "plus";
+  plan: Plan;
   creationsUsed: number;
   beans: number;
   admin: ReturnType<typeof createAdminClient>;
@@ -43,7 +44,7 @@ export async function requireCreator(): Promise<Creator> {
 
 /** Free creations left (null = unlimited on Plus). */
 export function creationsLeft(c: Creator): number | null {
-  return c.plan === "plus" ? null : Math.max(0, siteConfig.freeCharacterCreations - c.creationsUsed);
+  return isPaid(c.plan) ? null : Math.max(0, siteConfig.freeCharacterCreations - c.creationsUsed);
 }
 
 /** Free creation, Plus, or enough Beans to pay for one. */

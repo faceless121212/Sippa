@@ -53,15 +53,17 @@ Like your favourite characters. Creators can see their characters' stats and cli
 
 ## Plans
 
-| | Free | Sippa Plus |
-|---|---|---|
-| Messages | 30 a day | Unlimited |
-| Create characters | 3 free | Unlimited |
-| Flowers | From the daily check-in | **300 every month** |
-| Ads | One light, unobtrusive house ad | None |
-| Price | €0 | **€7.99 / month** or **€59.99 / year** |
+| | Free | Sippa Plus | Sippa Ultra |
+|---|---|---|---|
+| Messages | 30 a day | Unlimited | Unlimited |
+| Create characters | 3 free | Unlimited | Unlimited |
+| Memory | Remembers what you tell it | Same | **Longer:** 150 facts and twice the chat context |
+| Flowers | From the daily check-in | **300 every month** | **1,000 every month** |
+| Voice replies | — | — | Coming soon |
+| Ads | One light, unobtrusive house ad | None | None |
+| Price | $0 | **$13.99 / month** or **$79.99 / year** | **$29.99 / month** or **$199.99 / year** |
 
-**Flowers 🌸** are Sippa's currency. Use them for extra messages, extra characters, or gifts. Packs cost €1.99, €4.99 and €9.99.
+**Flowers 🌸** are Sippa's currency. Use them for extra messages, extra characters, or gifts. Packs cost $1.99, $4.99 and $9.99.
 
 > Payments currently run in **demo mode**: checkout is simulated and no real money is taken.
 

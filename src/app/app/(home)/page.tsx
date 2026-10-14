@@ -15,7 +15,7 @@ import { buttonClass } from "@/components/ui/button";
 import { getViewer, viewerIsAdult } from "@/lib/auth";
 import { cachedChatCounts, listCharacters, type CharacterSummary, type ExploreQuery } from "@/lib/characters";
 import { exploreHref } from "@/lib/explore-params";
-import { showUsageStats } from "@/config/site";
+import { isPaid, showUsageStats } from "@/config/site";
 import { cn, formatCount } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Home" };
@@ -170,7 +170,7 @@ export default async function HomePage() {
 
       <LiveOnSippa proof={proof} />
 
-      {viewer?.profile?.plan !== "plus" && <HouseAd />}
+      {!isPaid(viewer?.profile?.plan) && <HouseAd />}
 
       {moments.length > 0 && (
         <section aria-labelledby="moments-title">

@@ -2,32 +2,25 @@
 
 import { Check } from "lucide-react";
 import { useState } from "react";
-import { formatPrice, pricing, siteConfig, yearlySavingsPercent } from "@/config/site";
+import { formatPrice, planFeatures, pricing, yearlySavingsPercent } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { signupHref } from "@/lib/signup";
 import { buttonClass } from "../ui/button";
 
 type Billing = "monthly" | "yearly";
 
-const freeFeatures = [
-  `${pricing.freeMessagesPerDay} messages a day`,
-  `${siteConfig.freeCharacterCreations} free character creations`,
-  "Memory you can see and edit",
-  "One light ad, never mid-chat",
-];
-
-// Only list what Plus actually changes (see lib/chat/service.ts and lib/creator/server.ts).
-const plusFeatures = [
-  "Unlimited messages",
-  "Unlimited character creations",
-  `${pricing.plusMonthlyBeans} Flowers a month for gifts and extras`,
-  "No ads",
-];
-
 export function Pricing() {
   const [billing, setBilling] = useState<Billing>("monthly");
-  const savings = yearlySavingsPercent(pricing.plusMonthly, pricing.plusYearly);
-  const price = billing === "monthly" ? pricing.plusMonthly : pricing.plusYearly;
+  const yearly = billing === "yearly";
+  const savings = Math.max(
+    yearlySavingsPercent(pricing.plusMonthly, pricing.plusYearly),
+    yearlySavingsPercent(pricing.ultraMonthly, pricing.ultraYearly),
+  );
+  const paid = (monthly: number, perYear: number) => ({
+    price: formatPrice(yearly ? perYear : monthly),
+    period: yearly ? "per year" : "per month",
+    note: yearly ? `${formatPrice(perYear / 12)} / month, billed yearly` : undefined,
+  });
 
   return (
     <section id="pricing" aria-labelledby="pricing-title" className="border-border bg-surface/50 border-y">
@@ -43,7 +36,7 @@ export function Pricing() {
           >
             Free to start
           </h2>
-          <p className="text-muted mt-3">Go Plus when you want more.</p>
+          <p className="text-muted mt-3">Go Plus for unlimited chats, or Ultra for the deepest memory.</p>
 
           <fieldset className="border-border bg-surface mt-6 inline-flex rounded-lg border p-1">
             <legend className="sr-only">Billing period</legend>
@@ -63,35 +56,37 @@ export function Pricing() {
                   onChange={() => setBilling(b)}
                   className="sr-only"
                 />
-                {b === "monthly" ? "Monthly" : `Yearly · save ${savings}%`}
+                {b === "monthly" ? "Monthly" : `Yearly · save up to ${savings}%`}
               </label>
             ))}
           </fieldset>
         </div>
 
-        <div className="mx-auto mt-10 grid max-w-4xl gap-4 md:grid-cols-2">
+        <div className="mx-auto mt-10 grid max-w-5xl gap-4 md:grid-cols-3">
           <PlanCard
             name="Free"
-            price="€0"
+            price="$0"
             period="forever"
-            features={freeFeatures}
+            features={planFeatures.free}
             cta="Create free account"
           />
           <PlanCard
             name="Sippa Plus"
-            price={formatPrice(price)}
-            period={billing === "monthly" ? "per month" : "per year"}
-            note={
-              billing === "yearly"
-                ? `${formatPrice(pricing.plusYearly / 12)} / month, billed yearly`
-                : undefined
-            }
-            features={plusFeatures}
+            {...paid(pricing.plusMonthly, pricing.plusYearly)}
+            features={planFeatures.plus}
             cta="Get Plus"
             highlight
+            badge="Most popular"
+          />
+          <PlanCard
+            name="Sippa Ultra"
+            {...paid(pricing.ultraMonthly, pricing.ultraYearly)}
+            features={planFeatures.ultra}
+            cta="Get Ultra"
+            upgrade
           />
         </div>
-        <p className="text-muted mt-6 text-center text-xs">Incl. VAT. Cancel anytime.</p>
+        <p className="text-muted mt-6 text-center text-xs">Taxes included. Cancel anytime.</p>
       </div>
     </section>
   );
@@ -105,6 +100,8 @@ function PlanCard({
   features,
   cta,
   highlight,
+  upgrade,
+  badge,
 }: {
   name: string;
   price: string;
@@ -113,14 +110,21 @@ function PlanCard({
   features: string[];
   cta: string;
   highlight?: boolean;
+  upgrade?: boolean;
+  badge?: string;
 }) {
   return (
     <article
       className={cn(
-        "bg-surface flex flex-col rounded-xl border p-6 sm:p-8",
+        "bg-surface relative flex flex-col rounded-xl border p-6 sm:p-8",
         highlight ? "border-text border-2" : "border-border",
       )}
     >
+      {badge && (
+        <span className="bg-primary text-on-primary absolute -top-2.5 right-5 rounded-md px-2 py-0.5 text-[11px] font-bold">
+          {badge}
+        </span>
+      )}
       <h3 className="font-display text-2xl font-bold">{name}</h3>
       <p className="mt-4">
         <span className="font-display text-4xl font-bold">{price}</span>{" "}
@@ -136,7 +140,7 @@ function PlanCard({
         ))}
       </ul>
       <a
-        href={highlight ? signupHref("/app/plus") : signupHref()}
+        href={highlight || upgrade ? signupHref("/app/plus") : signupHref()}
         className={buttonClass({ variant: highlight ? "primary" : "secondary", className: "mt-8" })}
       >
         {cta}

@@ -2,7 +2,7 @@ import { expect, test } from "./fixtures";
 
 test("demo Flowers purchase adds Flowers, then a gift spends them", async ({ page }) => {
   await page.goto("/app/plus");
-  await page.getByRole("button", { name: "Buy for €1.99" }).click();
+  await page.getByRole("button", { name: "Buy for $1.99" }).click();
   await expect(page).toHaveURL(/\/app\/plus\/checkout/);
   await expect(page.getByText("DEMO CHECKOUT — no real payment is taken")).toBeVisible();
   await page.getByRole("button", { name: "Confirm demo purchase" }).click();
@@ -22,7 +22,7 @@ test("Plus page offers monthly and yearly with the demo checkout", async ({ page
   await expect(page.getByRole("button", { name: "Go monthly" })).toBeVisible();
   await page.getByRole("button", { name: /Go yearly · save \d+%/ }).click();
   await expect(page).toHaveURL(/\/app\/plus\/checkout/);
-  await expect(page.getByText("€59.99")).toBeVisible();
+  await expect(page.getByText("$79.99")).toBeVisible();
   // Leave without buying so the test account stays on the free plan.
 });
 

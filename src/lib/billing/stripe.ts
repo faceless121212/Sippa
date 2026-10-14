@@ -1,6 +1,6 @@
 import "server-only";
 import Stripe from "stripe";
-import { beanPacks, pricing, STRIPE_ITEMS, type StripeItem } from "@/config/site";
+import { beanPacks, pricing, STRIPE_ITEMS, type PaidPlan, type StripeItem } from "@/config/site";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { expireDemoPlus } from "./demo";
 
@@ -64,6 +64,12 @@ async function userIdForCustomer(customerId: string): Promise<string | null> {
   return data?.id ?? null;
 }
 
+/** Ultra if any item is an Ultra price (by lookup key), otherwise Plus. */
+function planOfSubscription(sub: Stripe.Subscription): PaidPlan {
+  const ultraKeys: string[] = [STRIPE_ITEMS.ultra_monthly.lookupKey, STRIPE_ITEMS.ultra_yearly.lookupKey];
+  return sub.items.data.some((i) => ultraKeys.includes(i.price.lookup_key ?? "")) ? "ultra" : "plus";
+}
+
 /** Mirrors a subscription's state onto the profile. */
 export async function applySubscription(sub: Stripe.Subscription) {
   const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
@@ -74,7 +80,7 @@ export async function applySubscription(sub: Stripe.Subscription) {
   await createAdminClient()
     .from("profiles")
     .update({
-      plan: active ? "plus" : "free",
+      plan: active ? planOfSubscription(sub) : "free",
       subscription_id: sub.id,
       subscription_status: sub.status,
       plus_until: Number.isFinite(periodEnd) ? new Date(periodEnd * 1000).toISOString() : null,
@@ -82,7 +88,7 @@ export async function applySubscription(sub: Stripe.Subscription) {
     .eq("id", userId);
 }
 
-/** Plus includes monthly Beans: 300 per month, or 12 × 300 on a yearly invoice. */
+/** Paid plans include monthly Flowers (Plus 300, Ultra 1,000); yearly invoices get 12 months' worth. */
 export async function grantPlusBonus(invoice: Stripe.Invoice) {
   if (invoice.status !== "paid" || !invoice.id) return;
   const subId = invoice.parent?.subscription_details?.subscription;
@@ -92,7 +98,8 @@ export async function grantPlusBonus(invoice: Stripe.Invoice) {
   const userId = sub.metadata.user_id || (await userIdForCustomer(customerId));
   if (!userId) return;
   const yearly = sub.items.data.some((i) => i.price.recurring?.interval === "year");
-  const beans = pricing.plusMonthlyBeans * (yearly ? 12 : 1);
+  const monthly = planOfSubscription(sub) === "ultra" ? pricing.ultraMonthlyBeans : pricing.plusMonthlyBeans;
+  const beans = monthly * (yearly ? 12 : 1);
   await createAdminClient().rpc("grant_beans", {
     p_user: userId,
     p_beans: beans,
@@ -134,7 +141,10 @@ export async function fulfilCheckout(sessionId: string, expectUserId?: string) {
     await applySubscription(session.subscription);
     const inv = session.subscription.latest_invoice;
     if (inv && typeof inv !== "string") await grantPlusBonus(inv);
-    return { kind: "plus" as const, active: session.subscription.status === "active" };
+    return {
+      kind: planOfSubscription(session.subscription),
+      active: session.subscription.status === "active",
+    };
   }
   return { kind: "pending" as const };
 }

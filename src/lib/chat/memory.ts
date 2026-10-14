@@ -16,14 +16,14 @@ export type MemoryRow = { id: string; text: string; source: "user" | "auto"; kin
 
 type Admin = ReturnType<typeof createAdminClient>;
 
-export async function loadMemories(admin: Admin, userId: string, characterId: string) {
+export async function loadMemories(admin: Admin, userId: string, characterId: string, cap = MAX_MEMORIES) {
   const { data } = await admin
     .from("memories")
     .select("id,text,source,kind")
     .eq("user_id", userId)
     .eq("character_id", characterId)
     .order("created_at")
-    .limit(MAX_MEMORIES + 10);
+    .limit(cap + 10);
   const rows = (data ?? []) as MemoryRow[];
   const name = rows.filter((r) => r.kind === "name").at(-1)?.text ?? null;
   return { rows, name, facts: rows.filter((r) => r.kind === "fact").map((r) => r.text) };
@@ -95,6 +95,8 @@ export async function rememberFromMessage(opts: {
   userText: string;
   previousCharacterLine?: string | null;
   today?: string;
+  /** How many facts to keep (Ultra keeps more). */
+  cap?: number;
 }): Promise<{ added: string[]; name: string | null }> {
   const none = { added: [], name: null };
   const text = opts.userText.trim();
@@ -102,7 +104,8 @@ export async function rememberFromMessage(opts: {
   if (!aiLive() || text.length < 12) return none;
 
   const admin = createAdminClient();
-  const existing = await loadMemories(admin, opts.userId, opts.characterId);
+  const cap = opts.cap ?? MAX_MEMORIES;
+  const existing = await loadMemories(admin, opts.userId, opts.characterId, cap);
   const result = await extractFacts({
     characterName: opts.characterName,
     userText: text,
@@ -149,10 +152,10 @@ export async function rememberFromMessage(opts: {
 
   // Keep the list bounded: drop the oldest automatic facts beyond the cap.
   const total = existing.facts.length + added.length;
-  if (total > MAX_MEMORIES) {
+  if (total > cap) {
     const autoOldest = existing.rows
       .filter((r) => r.kind === "fact" && r.source === "auto")
-      .slice(0, total - MAX_MEMORIES)
+      .slice(0, total - cap)
       .map((r) => r.id);
     if (autoOldest.length) await admin.from("memories").delete().in("id", autoOldest);
   }

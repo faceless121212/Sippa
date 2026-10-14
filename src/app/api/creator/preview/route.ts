@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isPaid } from "@/config/site";
 import { pricing } from "@/config/site";
 import { buildMessages, buildSystem } from "@/lib/chat/prompt";
 import { checkDraft } from "@/lib/creator/rules";
@@ -51,7 +52,7 @@ export async function POST(request: Request) {
       ]);
     }
 
-    if (creator.plan !== "plus") {
+    if (!isPaid(creator.plan)) {
       const { data } = await creator.admin.rpc("consume_message", {
         p_user: creator.userId,
         p_limit: pricing.freeMessagesPerDay,
