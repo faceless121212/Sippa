@@ -132,7 +132,7 @@ export function PickYourVibe() {
         </ul>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <Link href={`/quiz/${segmentForCategory(active)}`} className={buttonClass()}>
-            Find your {current.label.toLowerCase()} — 60-second quiz
+            Find your {current.label.toLowerCase()} — 2-minute quiz
           </Link>
           <Link
             href={signupHref(`/app/create?category=${active}`)}

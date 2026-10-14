@@ -88,7 +88,7 @@ export function SegmentLanding({ id }: { id: SegmentId }) {
             <ol className="mt-6 grid gap-4 md:grid-cols-3">
               {[
                 [
-                  "Take the 60-second quiz",
+                  "Take the 2-minute quiz",
                   "Five quick questions about what you're looking for. No sign-up.",
                 ],
                 ["Meet your match", "We pick the character who fits you best — see who it is right away."],

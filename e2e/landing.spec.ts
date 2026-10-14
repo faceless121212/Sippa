@@ -23,7 +23,7 @@ test("category tabs switch sample characters and deep links", async ({ page }) =
 
   await page.getByRole("tab", { name: /Famous/ }).click();
   await expect(panel).toContainText("Ada Lovelace");
-  await expect(panel.getByRole("link", { name: /60-second quiz/ })).toHaveAttribute("href", "/quiz/history");
+  await expect(panel.getByRole("link", { name: /2-minute quiz/ })).toHaveAttribute("href", "/quiz/history");
 
   // Arrow-key navigation (WAI-ARIA tabs pattern).
   await page.getByRole("tab", { name: /Famous/ }).press("ArrowLeft");

@@ -150,7 +150,12 @@ Shown on the signed-in Home and Moments pages. **Real data only — nothing seed
 
 - **Why:** feedback said the home page mixes romance, friends and history, and the planned flow (ad → quiz → match → paywall → chat) didn't exist.
 - **Three audience pages:** `/love` (18+), `/friends` and `/history`. Each one is meant for one ad campaign and only shows its own characters. The main landing page stays the general entry point.
-- **Quiz:** `/quiz/<audience>` asks 5 questions and picks 3 characters from the catalogue (`matchCharacters` in `src/lib/quiz.ts`). It runs in the browser, so no answers are sent or stored.
+- **Quiz:** `/quiz/<audience>` picks 3 characters from the catalogue (`matchCharacters` in `src/lib/quiz.ts`). It runs in the browser; answers are kept only in the tab's sessionStorage and never sent.
+- **Quiz rebuilt as a web funnel (owner request 2026-10-14):** modelled on Headway / Genesis-style web quizzes (Noom, Calm and BetterMe teardowns too).
+  - 20 questions per audience (`src/config/quizzes.ts`) in 4 sections with a section progress bar, plus 2 info screens, a "Finding your match" screen and a personal result ("Kate, here's your match", "Why you two click").
+  - Screen types: image cards, emoji lists, multi-select (up to 3), "Do you relate?" statements on a 1–5 scale (4 counts once, 5 twice), and a first-name step that stays in the browser.
+  - 53 images made with fal.ai (`npm run quiz:images`, prompts in `scripts/quiz-images.ts`): photos for Love and Friends with fictional adults, oil paintings for History with no real people.
+  - **Left out on purpose (EU unfair-practices rules):** fake countdown timers, scarcity claims, invented statistics or reviews, and an email gate before the result. Info screens only state true things about Sippa.
 - **Flow after the match:** "Reply to X" → sign-up → `/app/welcome` (age check, then the Plus offer with "Continue free") → the chat with that character. People who pay go straight to the chat after checkout.
 - **Remembering the audience:** a first-party `sippa_segment` cookie (1 year). It only changes which collection is shown first on Home.
 - **Not done:** voice is still "coming soon"; Apple sign-in was not chosen; Google sign-in waits for the owner's OAuth client.
