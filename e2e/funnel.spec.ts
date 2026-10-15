@@ -1,5 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 
+// A 20-step quiz plus a ~5 s matching screen: give slow CI machines room.
+test.describe.configure({ timeout: 90_000 });
+const SLOW = { timeout: 20_000 };
+
 /** The deck's main flow: ad → segment page → quiz → match → sign-up → offer → chat. */
 test.beforeEach(async ({ context }) => {
   await context.addCookies([{ name: "sippa_consent", value: "essential", url: "http://localhost:3100" }]);
@@ -13,7 +17,9 @@ async function pickFirst(page: Page) {
   const before = await main.innerText();
   await main.locator("ul li button").first().click();
   // Either the screen moves on by itself, or a reaction appears with "Next".
-  await expect.poll(async () => (await main.innerText()) !== before || (await nextButton(page).isVisible())).toBe(true);
+  await expect
+    .poll(async () => (await main.innerText()) !== before || (await nextButton(page).isVisible()), SLOW)
+    .toBe(true);
   if ((await nextButton(page).isVisible()) && (await nextButton(page).isEnabled())) await nextButton(page).click();
 }
 
@@ -42,7 +48,7 @@ async function finishQuiz(page: Page) {
       // Info, comparison and "fair question" screens.
       await page.getByRole("button", { name: /^(Continue|Sounds good)$/ }).click();
     }
-    await expect.poll(() => main.innerText()).not.toBe(before);
+    await expect.poll(() => main.innerText(), SLOW).not.toBe(before);
   }
   throw new Error("The quiz never reached the matching screen");
 }
@@ -69,7 +75,7 @@ for (const [segment, headline] of [
     await expect(page.getByText("1/20")).toBeVisible();
     await expect(page.getByText(/20 quick questions/)).toBeVisible(); // the guide's first line
     await finishQuiz(page);
-    await expect(page.getByRole("heading", { name: /^Kate, meet / })).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByRole("heading", { name: /^Kate, meet / })).toBeVisible(SLOW);
     await expect(page.getByRole("list", { name: "Why you two click" })).toBeVisible();
     await expect(page.getByRole("region", { name: "Your first week" })).toBeVisible();
 
@@ -91,7 +97,7 @@ for (const [segment, headline] of [
 test("replying on the result carries the reply through sign-up (in a cookie, not the URL)", async ({ page, context }) => {
   await page.goto("/quiz/love");
   await finishQuiz(page);
-  await expect(page.getByRole("heading", { name: /^Kate, meet / })).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByRole("heading", { name: /^Kate, meet / })).toBeVisible(SLOW);
   await page.getByLabel(/^Your reply to/).fill("Okay, you've got my attention");
   await page.getByRole("button", { name: "Send" }).click();
 
