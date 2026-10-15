@@ -22,7 +22,8 @@ async function finishQuiz(page: Page) {
   const main = page.locator("main");
   for (let i = 0; i < 40; i++) {
     const before = await main.innerText();
-    if (before.includes("Finding your match") || before.includes("here's your match")) return;
+    if (before.includes("Finding your match") || (await page.getByRole("list", { name: "Quick replies" }).isVisible()))
+      return;
     const recap = page.getByRole("button", { name: "Looks right" });
     if (await recap.isVisible()) {
       await recap.click();
@@ -68,9 +69,9 @@ for (const [segment, headline] of [
     await expect(page.getByText("1/20")).toBeVisible();
     await expect(page.getByText(/20 quick questions/)).toBeVisible(); // the guide's first line
     await finishQuiz(page);
-    await expect(page.getByText("Kate, here's your match")).toBeVisible({ timeout: 10_000 });
-    await expect(page.getByText("Why you two click")).toBeVisible();
-    await expect(page.getByText(/What your first week with/)).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^Kate, meet / })).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByRole("list", { name: "Why you two click" })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Your first week" })).toBeVisible();
 
     // Tuning the vibe rewrites the first message.
     const message = page.locator('section[aria-label^="Your first message"] .animate-msg');
@@ -81,7 +82,7 @@ for (const [segment, headline] of [
     await expect.poll(() => message.innerText()).not.toBe(before);
 
     await expect(page.getByRole("list", { name: "Quick replies" })).toBeVisible();
-    await expect(page.getByText("Also a great fit")).toBeVisible();
+    await expect(page.getByRole("list", { name: "Also a great fit" })).toBeVisible();
     await page.getByRole("button", { name: /Retake the quiz/ }).click();
     await expect(page.getByText("1/20")).toBeVisible();
   });
@@ -90,7 +91,7 @@ for (const [segment, headline] of [
 test("replying on the result carries the reply through sign-up (in a cookie, not the URL)", async ({ page, context }) => {
   await page.goto("/quiz/love");
   await finishQuiz(page);
-  await expect(page.getByText("Kate, here's your match")).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByRole("heading", { name: /^Kate, meet / })).toBeVisible({ timeout: 10_000 });
   await page.getByLabel(/^Your reply to/).fill("Okay, you've got my attention");
   await page.getByRole("button", { name: "Send" }).click();
 

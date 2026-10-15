@@ -970,58 +970,57 @@ function ResultScreen({
   };
 
   return (
-    <main className="flex flex-1 flex-col py-6" aria-live="polite">
+    <main className="flex flex-1 flex-col py-5" aria-live="polite">
       <Confetti />
-      <p className="text-primary-ink animate-rise text-center text-xs font-bold tracking-[0.08em] uppercase">
-        {name ? `${name}, here's your match` : "Your match"}
-      </p>
-      <h1 className="animate-rise mt-1 text-center text-3xl font-extrabold tracking-[-0.03em]">
-        Meet {match.name}
+      <h1 className="animate-rise text-center text-3xl font-extrabold tracking-[-0.03em]">
+        {name ? `${name}, meet ${first}` : `Meet ${first}`}
         {match.age ? <span className="text-muted font-semibold">, {match.age}</span> : null}
       </h1>
-      <div className="animate-pop relative mx-auto mt-5 aspect-[3/4] w-56 overflow-hidden rounded-3xl">
-        <CharacterAvatar id={match.id} name={match.name} sizes="224px" priority />
+
+      {/* Portrait with the hook and why you click laid over it. */}
+      <div className="animate-pop relative mx-auto mt-4 aspect-[4/5] w-full max-w-[300px] overflow-hidden rounded-3xl">
+        <CharacterAvatar id={match.id} name={match.name} sizes="300px" priority />
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-3 pt-12">
+          <p className="text-sm leading-snug font-semibold text-white">{match.hook}</p>
+          {match.reasons.length > 0 && (
+            <ul className="mt-2 flex flex-wrap gap-1" aria-label="Why you two click">
+              {match.reasons.slice(0, 3).map((r) => (
+                <li key={r} className="bg-primary text-on-primary rounded-full px-2 py-0.5 text-[11px] font-bold">
+                  {r}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
-      <p className="mt-4 text-center font-semibold">{match.hook}</p>
 
-      {match.reasons.length > 0 && (
-        <section className="mt-5">
-          <h2 className="text-muted text-center text-xs font-bold tracking-[0.08em] uppercase">Why you two click</h2>
-          <ul className="mt-2 flex flex-wrap justify-center gap-1.5">
-            {match.reasons.slice(0, 4).map((r) => (
-              <li key={r} className="border-primary/50 bg-primary/10 rounded-full border px-3 py-1 text-xs font-semibold">
-                {r}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      <section aria-label={`Your first message from ${first}`} className="border-border mt-6 rounded-3xl border p-4">
+      {/* The first message: scene + vibe in one slim row, then the message and your reply. */}
+      <section aria-label={`Your first message from ${first}`} className="mt-5">
         {scene && (
-          <p className="text-muted flex items-center gap-1 text-xs font-semibold">
-            <MapPin className="h-3.5 w-3.5" aria-hidden="true" /> {scene.label}
-          </p>
-        )}
-        {scene && (
-          <div className="mt-3 flex gap-1.5" role="group" aria-label="Tune the first message">
-            {VIBES.map((v) => (
-              <button
-                key={v}
-                type="button"
-                aria-pressed={vibe === v}
-                onClick={() => setVibe(v)}
-                className={cn(
-                  "rounded-full border-2 px-3 py-1 text-xs font-bold transition-colors",
-                  vibe === v ? "border-primary bg-primary text-on-primary" : "border-border hover:border-text",
-                )}
-              >
-                {quiz.vibes[v]}
-              </button>
-            ))}
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-muted flex min-w-0 items-center gap-1 truncate text-xs font-semibold">
+              <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              <span className="truncate">{scene.label}</span>
+            </p>
+            <div className="flex shrink-0 gap-1" role="group" aria-label="Tune the first message">
+              {VIBES.map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  aria-pressed={vibe === v}
+                  onClick={() => setVibe(v)}
+                  className={cn(
+                    "rounded-full border px-2 py-0.5 text-[11px] font-bold transition-colors",
+                    vibe === v ? "border-primary bg-primary text-on-primary" : "border-border text-muted hover:text-text",
+                  )}
+                >
+                  {quiz.vibes[v]}
+                </button>
+              ))}
+            </div>
           </div>
         )}
-        <div className="mt-3 flex gap-2">
+        <div className="mt-2 flex gap-2">
           <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full">
             <CharacterAvatar id={match.id} name={match.name} sizes="32px" />
           </span>
@@ -1034,21 +1033,18 @@ function ResultScreen({
         </div>
 
         {isStaticLanding ? (
-          <Link
-            href={signupHref(next)}
-            className={buttonClass({ size: "lg", className: "mt-5 w-full" })}
-          >
+          <Link href={signupHref(next)} className={buttonClass({ size: "lg", className: "mt-4 w-full" })}>
             Reply to {first}
           </Link>
         ) : (
           <>
-            <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Quick replies">
+            <ul className="mt-3 flex flex-wrap justify-end gap-1.5" aria-label="Quick replies">
               {quiz.quickReplies.map((q) => (
                 <li key={q}>
                   <button
                     type="button"
                     onClick={() => go(q)}
-                    className="border-border bg-surface hover:border-text rounded-full border px-3 py-1.5 text-sm font-semibold"
+                    className="border-primary/60 hover:bg-primary/10 rounded-full border px-3 py-1.5 text-sm font-semibold"
                   >
                     {q}
                   </button>
@@ -1056,7 +1052,7 @@ function ResultScreen({
               ))}
             </ul>
             <form
-              className="mt-3 flex gap-2"
+              className="mt-2 flex gap-2"
               onSubmit={(e) => {
                 e.preventDefault();
                 go(reply);
@@ -1082,76 +1078,74 @@ function ResultScreen({
                 <SendHorizontal className="h-5 w-5" aria-hidden="true" />
               </button>
             </form>
-            <Link
-              href={signupHref(next)}
-              onClick={() => remember()}
-              className="text-muted hover:text-text mt-3 block text-center text-sm underline underline-offset-2"
-            >
-              Or just meet {first} first
-            </Link>
           </>
         )}
+        <p className="text-muted mt-2 text-center text-xs">
+          Free · {adultsOnly ? "18+ · " : ""}always an AI
+          {!isStaticLanding && (
+            <>
+              {" · "}
+              <Link href={signupHref(next)} onClick={() => remember()} className="underline underline-offset-2">
+                Skip
+              </Link>
+            </>
+          )}
+        </p>
       </section>
-      <p className="text-muted mt-2 text-center text-xs">
-        {isStaticLanding ? "" : `${first} will answer as soon as you've signed up · `}Free account ·{" "}
-        {adultsOnly ? "18+ · " : ""}always an AI
-      </p>
 
-      <section className="mt-8" aria-labelledby="week">
-        <h2 id="week" className="text-lg font-extrabold">
-          What your first week with {first} can look like
-        </h2>
-        <ol className="border-border mt-3 ml-2 border-l-2">
+      {/* First week: a row of dots with a few words each. */}
+      <section aria-label="Your first week" className="mt-7">
+        <ol className="grid grid-cols-4 gap-1 text-center">
           {quiz.week.map((w, i) => (
-            <li
-              key={w.day}
-              className="animate-rise relative pb-4 pl-5 last:pb-0"
-              style={{ animationDelay: `${200 + i * 150}ms` }}
-            >
+            <li key={w.day} className="animate-rise relative" style={{ animationDelay: `${200 + i * 120}ms` }}>
+              {i > 0 && <span className="bg-border absolute top-[5px] right-1/2 h-0.5 w-full" aria-hidden="true" />}
               <span
                 className={cn(
-                  "absolute top-1 -left-[7px] h-3 w-3 rounded-full border-2",
+                  "relative mx-auto block h-3 w-3 rounded-full border-2",
                   i === 0 ? "border-primary bg-primary" : "border-border bg-bg",
                 )}
                 aria-hidden="true"
               />
-              <span className="text-muted text-xs font-bold tracking-[0.08em] uppercase">{w.day}</span>
-              <p className="text-sm font-semibold">{w.text.replaceAll("{name}", first)}</p>
+              <span className="text-muted mt-1.5 block text-[10px] font-bold tracking-[0.08em] uppercase">{w.day}</span>
+              <span className="block text-xs leading-tight font-semibold">{w.text.replaceAll("{name}", first)}</span>
             </li>
           ))}
         </ol>
       </section>
 
-      {matches.length > 1 && (
-        <div className="mt-8">
-          <p className="text-sm font-semibold">Also a great fit</p>
-          <ul className="mt-2 grid grid-cols-2 gap-2">
-            {matches.map((m, i) =>
-              i === pick ? null : (
-                <li key={m.id}>
-                  <button
-                    type="button"
-                    onClick={() => setPick(i)}
-                    className="border-border bg-surface hover:border-text flex w-full items-center gap-2 rounded-xl border p-2 text-left"
-                  >
-                    <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
+      <div className="mt-7 flex items-center justify-center gap-3">
+        {matches.length > 1 && (
+          <>
+            <span className="text-muted text-xs font-semibold">Or meet</span>
+            <ul className="flex gap-2" aria-label="Also a great fit">
+              {matches.map((m, i) =>
+                i === pick ? null : (
+                  <li key={m.id}>
+                    <button
+                      type="button"
+                      onClick={() => setPick(i)}
+                      aria-label={`Meet ${m.name} instead`}
+                      title={m.name}
+                      className="border-border hover:border-primary relative block h-10 w-10 overflow-hidden rounded-full border-2"
+                    >
                       <CharacterAvatar id={m.id} name={m.name} sizes="40px" />
-                    </span>
-                    <span className="min-w-0 truncate text-sm font-semibold">{m.name}</span>
-                  </button>
-                </li>
-              ),
-            )}
-          </ul>
-        </div>
-      )}
-      <button
-        type="button"
-        onClick={onRestart}
-        className="text-muted hover:text-text mt-8 flex items-center gap-1 self-center text-sm"
-      >
-        <RotateCcw className="h-4 w-4" aria-hidden="true" /> Retake the quiz
-      </button>
+                    </button>
+                  </li>
+                ),
+              )}
+            </ul>
+            <span className="bg-border h-5 w-px" aria-hidden="true" />
+          </>
+        )}
+        <button
+          type="button"
+          onClick={onRestart}
+          aria-label="Retake the quiz"
+          className="text-muted hover:text-text flex items-center gap-1 text-xs font-semibold"
+        >
+          <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> Retake
+        </button>
+      </div>
     </main>
   );
 }

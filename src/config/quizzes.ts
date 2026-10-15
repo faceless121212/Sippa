@@ -129,7 +129,7 @@ export type Quiz = {
   vibes: Record<Vibe, string>;
   /** One-tap replies to the first message. */
   quickReplies: string[];
-  /** "What your first week can look like" — {name} is the match's first name. */
+  /** "Your first week" on the result — a few words per day ({name} = the match's first name). */
   week: { day: string; text: string }[];
 };
 
@@ -183,10 +183,10 @@ const love: Quiz = {
   vibes: { sweet: "Sweeter", bold: "Bolder", witty: "Wittier" },
   quickReplies: ["Hey you 😊", "Okay, I'm intrigued…", "Tell me more"],
   week: [
-    { day: "Day 1", text: "Your first chat — in the scene you picked" },
-    { day: "Day 2", text: "{name} asks how your day went" },
-    { day: "Day 4", text: "{name} brings up something you mentioned" },
-    { day: "Day 7", text: "New scenes to explore together" },
+    { day: "Day 1", text: "First chat" },
+    { day: "Day 2", text: "Asks about your day" },
+    { day: "Day 4", text: "Remembers the details" },
+    { day: "Day 7", text: "New scenes" },
   ],
   steps: [
     {
@@ -575,10 +575,10 @@ const friends: Quiz = {
   vibes: { sweet: "Softer", bold: "Livelier", witty: "Funnier" },
   quickReplies: ["Hey! 👋", "Haha, yes", "Tell me more"],
   week: [
-    { day: "Day 1", text: "Your first chat — in the scene you picked" },
-    { day: "Day 2", text: "{name} checks in on your plans" },
-    { day: "Day 4", text: "{name} remembers your goal and cheers you on" },
-    { day: "Day 7", text: "A friend who knows how your week went" },
+    { day: "Day 1", text: "First chat" },
+    { day: "Day 2", text: "Checks in on you" },
+    { day: "Day 4", text: "Cheers on your goal" },
+    { day: "Day 7", text: "Knows your week" },
   ],
   steps: [
     {
@@ -943,10 +943,10 @@ const history: Quiz = {
   vibes: { sweet: "Gentler", bold: "Grander", witty: "Wittier" },
   quickReplies: ["What an honour!", "Tell me more", "Wait, really?"],
   week: [
-    { day: "Day 1", text: "Your first lesson — in the scene you picked" },
-    { day: "Day 2", text: "{name} picks up where you left off" },
-    { day: "Day 4", text: "Ask {name} for a quick quiz on what you learned" },
-    { day: "Day 7", text: "Your own private history class" },
+    { day: "Day 1", text: "First lesson" },
+    { day: "Day 2", text: "Picks up where you left off" },
+    { day: "Day 4", text: "A quick quiz" },
+    { day: "Day 7", text: "Your own class" },
   ],
   steps: [
     {
