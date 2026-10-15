@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronLeft, ChevronRight, RotateCcw } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, MapPin, Pencil, RotateCcw, SendHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -10,31 +10,48 @@ import { Logo } from "@/components/Logo";
 import { buttonClass } from "@/components/ui/button";
 import {
   isQuestion,
+  quizScene,
   quizzes,
   STATEMENT_SCALE,
+  VIBES,
   type ChoiceStep,
+  type CompareStep,
   type DemoLine,
   type InfoStep,
   type NameStep,
   type QuizOption,
+  type QuizStep,
+  type ReassureStep,
+  type RecapStep,
+  type SliderStep,
   type StatementStep,
+  type Vibe,
 } from "@/config/quizzes";
 import { segments, type SegmentId } from "@/config/segments";
-import { withBase } from "@/lib/paths";
-import { matchFromAnswers, type QuizAnswers } from "@/lib/quiz";
+import { seedCharacters } from "@/data/characters";
+import { isStaticLanding, withBase } from "@/lib/paths";
+import { defaultVibe, matchFromAnswers, type QuizAnswers } from "@/lib/quiz";
+import { MAX_FIRST_REPLY, saveQuizStart, welcomePath } from "@/lib/quiz-start";
 import { signupHref } from "@/lib/signup";
 import { cn } from "@/lib/utils";
 import { SegmentMark } from "./SegmentMark";
+import { TrustChips } from "./TrustChips";
 
 type Phase = "steps" | "matching" | "result";
-type Saved = { index: number; answers: QuizAnswers; phase: Phase };
+/** `back`: the recap screen to return to after changing an answer from it. */
+type Saved = { index: number; answers: QuizAnswers; phase: Phase; back?: number };
+type Openers = Record<string, Record<string, Record<Vibe, string>>>;
 
 const quizImage = (key: string) => withBase(`/quiz/${key}.jpg`);
+const reducedMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 
 /**
- * Web-funnel quiz (Headway-style): one screen per step, a progress bar split into
- * sections, image cards, "Do you relate?" statements, info screens, a matching
- * screen and a personal result. Answers never leave the browser (sessionStorage only).
+ * Web-funnel quiz (Headway / Noom / Simple-style): one screen per step, a progress bar
+ * split into sections with a guide line at the start of each, image cards, sliders,
+ * "Do you relate?" statements, reactions from your future match, info and comparison
+ * screens, an honest answer to your biggest doubt, a "so far" recap, a matching screen
+ * and a personal result where you can tune the first message and reply before sign-up.
+ * Answers stay in the browser (sessionStorage); only the reply you send is carried on.
  */
 export function Quiz({ segment }: { segment: SegmentId }) {
   const seg = segments[segment];
@@ -65,19 +82,34 @@ export function Quiz({ segment }: { segment: SegmentId }) {
     window.scrollTo({ top: 0 });
   }, [index, phase]);
 
+  // First messages for the result, loaded in the background while you answer.
+  const [openers, setOpeners] = useState<Openers | null>(null);
+  useEffect(() => {
+    import("@/data/quiz-openers.json").then((m) => setOpeners(m.default as Openers)).catch(() => {});
+  }, []);
+
   const goNext = (patch?: QuizAnswers) =>
     setState((s) => {
       const nextAnswers = patch ? { ...s.answers, ...patch } : s.answers;
+      if (s.back !== undefined) return { ...s, answers: nextAnswers, index: s.back, back: undefined };
       return s.index + 1 < quiz.steps.length
         ? { ...s, answers: nextAnswers, index: s.index + 1 }
         : { ...s, answers: nextAnswers, phase: "matching" };
     });
   const goBack = () =>
-    setState((s) => (s.phase !== "steps" ? { ...s, phase: "steps" } : { ...s, index: Math.max(0, s.index - 1) }));
+    setState((s) =>
+      s.phase !== "steps"
+        ? { ...s, phase: "steps" }
+        : s.back !== undefined
+          ? { ...s, index: s.back, back: undefined }
+          : { ...s, index: Math.max(0, s.index - 1) },
+    );
+  const editFromRecap = (target: number) => setState((s) => ({ ...s, back: s.index, index: target }));
   const restart = () => setState({ index: 0, answers: {}, phase: "steps" });
 
   const questionNumber = quiz.steps.slice(0, index + 1).filter(isQuestion).length;
   const name = typeof answers.name === "string" ? answers.name : "";
+  const sectionStart = phase === "steps" && (index === 0 || quiz.steps[index - 1].section !== step.section);
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-xl flex-col px-4 pt-4 pb-6 sm:px-6">
@@ -110,13 +142,16 @@ export function Quiz({ segment }: { segment: SegmentId }) {
       {phase === "steps" && (
         <Progress sections={quiz.sections} current={step.section} fraction={sectionFraction(quiz.steps, index)} />
       )}
+      {sectionStart && <HostBubble key={step.section} text={quiz.host[step.section]} />}
+      {phase === "steps" && index === 0 && <TrustChips className="mt-3 justify-center" />}
 
       {phase === "steps" &&
         (step.kind === "single" || step.kind === "multi" ? (
           <ChoiceScreen
             key={step.id}
             step={step}
-            chosen={(answers[step.id] as string[] | undefined) ?? []}
+            segment={segment}
+            answers={answers}
             onDone={(ids) => goNext({ [step.id]: ids })}
           />
         ) : step.kind === "statement" ? (
@@ -126,14 +161,38 @@ export function Quiz({ segment }: { segment: SegmentId }) {
             chosen={answers[step.id] as number | undefined}
             onDone={(v) => goNext({ [step.id]: v })}
           />
+        ) : step.kind === "slider" ? (
+          <SliderScreen
+            key={step.id}
+            step={step}
+            chosen={answers[step.id] as number | undefined}
+            onDone={(v) => goNext({ [step.id]: v })}
+          />
         ) : step.kind === "name" ? (
           <NameScreen key={step.id} step={step} initial={name} onDone={(n) => goNext({ [step.id]: n })} />
         ) : step.kind === "info" ? (
           <InfoScreen key={step.id} step={step} answers={answers} onDone={() => goNext()} />
+        ) : step.kind === "reassure" ? (
+          <ReassureScreen key={step.id} step={step} answers={answers} onDone={() => goNext()} />
+        ) : step.kind === "recap" ? (
+          <RecapScreen
+            key={step.id}
+            step={step}
+            steps={quiz.steps}
+            answers={answers}
+            onEdit={editFromRecap}
+            onDone={() => goNext()}
+          />
+        ) : step.kind === "compare" ? (
+          <CompareScreen key={step.id} step={step} onDone={() => goNext()} />
         ) : null)}
 
       {phase === "matching" && (
-        <MatchingScreen lines={quiz.matching} onDone={() => setState((s) => ({ ...s, phase: "result" }))} />
+        <MatchingScreen
+          segment={segment}
+          lines={quiz.matching}
+          onDone={() => setState((s) => ({ ...s, phase: "result" }))}
+        />
       )}
 
       {phase === "result" && (
@@ -142,6 +201,7 @@ export function Quiz({ segment }: { segment: SegmentId }) {
           answers={answers}
           name={name}
           adultsOnly={seg.adultsOnly}
+          openers={openers}
           onRestart={restart}
         />
       )}
@@ -179,6 +239,17 @@ function Progress({ sections, current, fraction }: { sections: string[]; current
   );
 }
 
+/** The Sippa guide (the flower) says one line at the start of each section. */
+function HostBubble({ text }: { text: string }) {
+  return (
+    <div className="animate-rise mt-3 flex items-start gap-2">
+      {/* eslint-disable-next-line @next/next/no-img-element -- tiny static icon */}
+      <img src={withBase("/icon.svg")} alt="" className="h-8 w-8 shrink-0 rounded-full" />
+      <p className="border-border bg-surface rounded-2xl rounded-tl-md border px-3 py-2 text-sm font-semibold">{text}</p>
+    </div>
+  );
+}
+
 function Title({ children, hint }: { children: React.ReactNode; hint?: string }) {
   return (
     <div className="animate-rise mt-6 text-center">
@@ -201,7 +272,7 @@ function BottomButton({
   type?: "button" | "submit";
 }) {
   return (
-    <div className="from-bg sticky bottom-0 -mx-4 mt-auto bg-gradient-to-t from-70% to-transparent px-4 pt-6 pb-2 sm:-mx-6 sm:px-6">
+    <div className="from-bg sticky bottom-0 -mx-4 mt-auto self-stretch bg-gradient-to-t from-70% to-transparent px-4 pt-6 pb-2 sm:-mx-6 sm:px-6">
       <button type={type} disabled={disabled} onClick={onClick} className={buttonClass({ size: "lg", className: "w-full" })}>
         {children}
       </button>
@@ -211,28 +282,38 @@ function BottomButton({
 
 function ChoiceScreen({
   step,
-  chosen,
+  segment,
+  answers,
   onDone,
 }: {
   step: ChoiceStep;
-  chosen: string[];
+  segment: SegmentId;
+  answers: QuizAnswers;
   onDone: (ids: string[]) => void;
 }) {
+  const chosen = (answers[step.id] as string[] | undefined) ?? [];
   const [picked, setPicked] = useState<string[]>(chosen);
   const multi = step.kind === "multi";
   const max = step.max ?? step.options.length;
   const leaving = useRef(false);
+  const reaction = !multi ? step.options.find((o) => o.id === picked[0])?.reaction : undefined;
+
+  // Who's reacting: the character you'd be matched with right now.
+  const reacting = useMemo(
+    () => (reaction ? matchFromAnswers(segment, { ...answers, [step.id]: picked }, 1)[0] : undefined),
+    [reaction, segment, answers, step.id, picked],
+  );
 
   const choose = (o: QuizOption) => {
-    if (!multi) {
-      if (leaving.current) return;
-      leaving.current = true;
-      setPicked([o.id]);
-      // A beat to see the selection, then move on (no extra tap needed).
-      setTimeout(() => onDone([o.id]), 220);
+    if (multi) {
+      setPicked((p) => (p.includes(o.id) ? p.filter((x) => x !== o.id) : p.length < max ? [...p, o.id] : p));
       return;
     }
-    setPicked((p) => (p.includes(o.id) ? p.filter((x) => x !== o.id) : p.length < max ? [...p, o.id] : p));
+    setPicked([o.id]);
+    // Answers with a reaction wait for "Next"; the rest move on by themselves.
+    if (o.reaction || leaving.current) return;
+    leaving.current = true;
+    setTimeout(() => onDone([o.id]), 220);
   };
 
   return (
@@ -313,9 +394,20 @@ function ChoiceScreen({
           })}
         </ul>
       )}
-      {multi && (
+      {reaction && reacting && (
+        <div key={picked[0]} className="animate-msg mt-5 flex items-end gap-2" aria-live="polite">
+          <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full">
+            <CharacterAvatar id={reacting.id} name={reacting.name} sizes="36px" />
+          </span>
+          <p className="bg-surface-2 rounded-2xl rounded-bl-md px-3.5 py-2.5 text-[15px] leading-snug">
+            <span className="text-muted block text-[11px] font-bold">{reacting.name.split(" ")[0]}</span>
+            {reaction}
+          </p>
+        </div>
+      )}
+      {(multi || reaction) && (
         <BottomButton disabled={!picked.length} onClick={() => onDone(picked)}>
-          Continue
+          {multi ? "Continue" : "Next"}
         </BottomButton>
       )}
     </main>
@@ -336,7 +428,7 @@ function StatementScreen({
   return (
     <main className="flex flex-1 flex-col">
       <Title>Do you relate to this?</Title>
-      <figure className="border-border bg-surface mt-6 rounded-3xl border px-6 pt-4 pb-7 text-center">
+      <figure className="border-border bg-surface animate-rise mt-6 rounded-3xl border px-6 pt-4 pb-7 text-center">
         <span className="text-primary-ink text-6xl leading-none font-black" aria-hidden="true">
           “
         </span>
@@ -370,6 +462,63 @@ function StatementScreen({
         <span>{STATEMENT_SCALE[0].label}</span>
         <span>{STATEMENT_SCALE[4].label}</span>
       </div>
+    </main>
+  );
+}
+
+/** Where a slider value sits, in words. */
+export function sliderLabel(step: SliderStep, v: number) {
+  if (v <= 15) return `Totally ${step.left.label.toLowerCase()}`;
+  if (v <= 35) return `Mostly ${step.left.label.toLowerCase()}`;
+  if (v >= 85) return `Totally ${step.right.label.toLowerCase()}`;
+  if (v >= 65) return `Mostly ${step.right.label.toLowerCase()}`;
+  return "Somewhere in between";
+}
+
+function SliderScreen({
+  step,
+  chosen,
+  onDone,
+}: {
+  step: SliderStep;
+  chosen?: number;
+  onDone: (value: number) => void;
+}) {
+  const [value, setValue] = useState(chosen ?? 50);
+  const [moved, setMoved] = useState(chosen !== undefined);
+  // The card warms up the further you lean either way.
+  const lean = Math.abs(value - 50) / 50;
+  return (
+    <main className="flex flex-1 flex-col">
+      <Title>{step.question}</Title>
+      <div
+        className="border-border animate-rise mt-8 rounded-3xl border px-5 py-7 transition-colors"
+        style={{ background: `color-mix(in oklab, var(--primary) ${Math.round(lean * 28)}%, var(--surface))` }}
+      >
+        <div className="flex justify-between gap-4 text-sm font-extrabold">
+          <span className={cn("transition-opacity", value > 60 && "opacity-50")}>{step.left.label}</span>
+          <span className={cn("text-right transition-opacity", value < 40 && "opacity-50")}>{step.right.label}</span>
+        </div>
+        <input
+          type="range"
+          min={0}
+          max={100}
+          value={value}
+          aria-label={`${step.left.label} to ${step.right.label}`}
+          aria-valuetext={sliderLabel(step, value)}
+          onChange={(e) => {
+            setValue(Number(e.target.value));
+            setMoved(true);
+          }}
+          className="accent-primary mt-5 h-2 w-full cursor-pointer"
+        />
+        <p className="mt-4 text-center text-lg font-bold" aria-hidden="true">
+          {moved ? sliderLabel(step, value) : "Drag to choose"}
+        </p>
+      </div>
+      <BottomButton disabled={!moved} onClick={() => onDone(value)}>
+        Continue
+      </BottomButton>
     </main>
   );
 }
@@ -410,6 +559,23 @@ function NameScreen({ step, initial, onDone }: { step: NameStep; initial: string
   );
 }
 
+function Points({ points, delay = 450 }: { points: string[]; delay?: number }) {
+  return (
+    <ul className="mx-auto mt-5 space-y-2">
+      {points.map((p, i) => (
+        <li
+          key={p}
+          className="animate-rise flex items-center gap-2 text-sm font-semibold"
+          style={{ animationDelay: `${delay + i * 120}ms` }}
+        >
+          <Check className="text-primary-ink h-4 w-4 shrink-0" strokeWidth={3} aria-hidden="true" />
+          {p}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function InfoScreen({ step, answers, onDone }: { step: InfoStep; answers: QuizAnswers; onDone: () => void }) {
   const echoed = step.echo ? (answers[step.echo.step] as string[] | undefined)?.[0] : undefined;
   const echo = echoed ? step.echo?.text[echoed] : undefined;
@@ -441,35 +607,143 @@ function InfoScreen({ step, answers, onDone }: { step: InfoStep; answers: QuizAn
       <p className="text-muted animate-rise mt-3 text-center leading-relaxed" style={{ animationDelay: "300ms" }}>
         {step.body}
       </p>
-      {step.points && (
-        <ul className="mx-auto mt-5 space-y-2">
-          {step.points.map((p, i) => (
-            <li
-              key={p}
-              className="animate-rise flex items-center gap-2 text-sm font-semibold"
-              style={{ animationDelay: `${450 + i * 120}ms` }}
+      {step.points && <Points points={step.points} />}
+      <BottomButton onClick={onDone}>Continue</BottomButton>
+    </main>
+  );
+}
+
+/** An honest answer to the doubt you picked. */
+function ReassureScreen({ step, answers, onDone }: { step: ReassureStep; answers: QuizAnswers; onDone: () => void }) {
+  const picked = (answers[step.step] as string[] | undefined)?.[0];
+  const v = (picked && step.variants[picked]) || Object.values(step.variants)[0];
+  return (
+    <main className="flex flex-1 flex-col items-center">
+      <span
+        className="animate-pop bg-primary/15 border-primary/40 mt-10 grid h-28 w-28 place-items-center rounded-full border-2 text-6xl"
+        aria-hidden="true"
+      >
+        {v.emoji}
+      </span>
+      <p className="text-muted animate-rise mt-6 text-xs font-bold tracking-[0.08em] uppercase">Fair question</p>
+      <h1
+        className="animate-rise mt-1 text-center text-[26px] leading-tight font-extrabold tracking-[-0.03em]"
+        style={{ animationDelay: "120ms" }}
+      >
+        {v.title}
+      </h1>
+      <p className="text-muted animate-rise mt-3 text-center leading-relaxed" style={{ animationDelay: "240ms" }}>
+        {v.body}
+      </p>
+      <Points points={v.points} delay={380} />
+      <BottomButton onClick={onDone}>Sounds good</BottomButton>
+    </main>
+  );
+}
+
+/** Answers so far, as chips you can tap to change. */
+export function recapChips(steps: QuizStep[], answers: QuizAnswers, until: number) {
+  const chips: { label: string; index: number }[] = [];
+  steps.slice(0, until).forEach((s, index) => {
+    const a = answers[s.id];
+    if (a === undefined || s.id === "doubt") return;
+    if ((s.kind === "single" || s.kind === "multi") && Array.isArray(a))
+      s.options.filter((o) => a.includes(o.id)).forEach((o) => chips.push({ label: o.label, index }));
+    else if (s.kind === "slider" && typeof a === "number" && (a <= 35 || a >= 65))
+      chips.push({ label: (a <= 35 ? s.left : s.right).label, index });
+  });
+  return chips;
+}
+
+function RecapScreen({
+  step,
+  steps,
+  answers,
+  onEdit,
+  onDone,
+}: {
+  step: RecapStep;
+  steps: QuizStep[];
+  answers: QuizAnswers;
+  onEdit: (index: number) => void;
+  onDone: () => void;
+}) {
+  const here = steps.findIndex((s) => s.id === step.id);
+  const chips = recapChips(steps, answers, here).slice(-12);
+  return (
+    <main className="flex flex-1 flex-col">
+      <Title hint="Tap anything to change it.">{step.title}</Title>
+      <ul className="mt-6 flex flex-wrap justify-center gap-2">
+        {chips.map((c, i) => (
+          <li key={`${c.index}-${c.label}`} className="animate-pop" style={{ animationDelay: `${i * 70}ms` }}>
+            <button
+              type="button"
+              onClick={() => onEdit(c.index)}
+              className="border-border bg-surface hover:border-text flex items-center gap-1.5 rounded-full border-2 px-3.5 py-2 text-sm font-semibold"
             >
-              <Check className="text-primary-ink h-4 w-4 shrink-0" strokeWidth={3} aria-hidden="true" />
-              {p}
-            </li>
-          ))}
-        </ul>
-      )}
+              {c.label}
+              <Pencil className="text-muted h-3 w-3" aria-hidden="true" />
+              <span className="sr-only">(change)</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+      <BottomButton onClick={onDone}>Looks right</BottomButton>
+    </main>
+  );
+}
+
+/** A forgetful chatbot next to your match, both playing out. */
+function CompareScreen({ step, onDone }: { step: CompareStep; onDone: () => void }) {
+  return (
+    <main className="flex flex-1 flex-col">
+      <Title>{step.title}</Title>
+      <div className="mt-6 grid grid-cols-2 gap-3">
+        <section aria-label="A typical chatbot" className="animate-rise">
+          <p className="text-muted text-center text-xs font-bold tracking-[0.08em] uppercase">Typical chatbot</p>
+          <div className="bg-surface-2 mt-2 flex h-64 flex-col justify-end gap-2 rounded-3xl p-3 grayscale">
+            {step.theirs.map((t, i) => (
+              <p
+                key={t}
+                className="animate-msg text-muted self-start rounded-2xl rounded-bl-md bg-white/10 px-3 py-2 text-[13px] leading-snug"
+                style={{ animationDelay: `${700 + i * 1100}ms` }}
+              >
+                {t}
+              </p>
+            ))}
+            <p
+              className="animate-pop text-muted self-center rounded-full border border-current px-2.5 py-1 text-[11px] font-bold"
+              style={{ animationDelay: "2600ms" }}
+            >
+              😶 Forgets you
+            </p>
+          </div>
+        </section>
+        <section aria-label="Your Sippa match" className="animate-rise" style={{ animationDelay: "120ms" }}>
+          <p className="text-primary-ink text-center text-xs font-bold tracking-[0.08em] uppercase">Your Sippa match</p>
+          <div className="relative mt-2 h-64 overflow-hidden rounded-3xl bg-neutral-900">
+            <ChatDemo lines={step.ours} />
+          </div>
+        </section>
+      </div>
+      <p className="text-muted animate-rise mt-5 text-center leading-relaxed" style={{ animationDelay: "300ms" }}>
+        {step.body}
+      </p>
       <BottomButton onClick={onDone}>Continue</BottomButton>
     </main>
   );
 }
 
 /**
- * A short chat that plays over an info image: bubbles arrive one by one, the
- * character "types" before each reply, and the highlight chip pops in.
+ * A short chat that plays over an image: bubbles arrive one by one, the character
+ * "types" before each reply, and the highlight chip pops in.
  */
 function ChatDemo({ lines }: { lines: DemoLine[] }) {
   const [shown, setShown] = useState(0);
   const [typing, setTyping] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+    if (reducedMotion()) {
       setShown(lines.length);
       return;
     }
@@ -508,7 +782,7 @@ function ChatDemo({ lines }: { lines: DemoLine[] }) {
         ) : line.kind === "badge" ? (
           <p
             key={i}
-            className="animate-pop bg-primary text-on-primary self-center rounded-full px-3 py-1.5 text-xs font-extrabold shadow-lg"
+            className="animate-pop bg-primary text-on-primary self-center rounded-full px-3 py-1.5 text-center text-xs font-extrabold shadow-lg"
           >
             {line.text}
           </p>
@@ -516,7 +790,7 @@ function ChatDemo({ lines }: { lines: DemoLine[] }) {
           <p
             key={i}
             className={cn(
-              "animate-msg max-w-[82%] rounded-2xl px-3 py-2 text-[13px] leading-snug shadow-md",
+              "animate-msg max-w-[88%] rounded-2xl px-3 py-2 text-[13px] leading-snug shadow-md",
               line.kind === "you"
                 ? "bg-primary text-on-primary self-end rounded-br-md font-semibold"
                 : "self-start rounded-bl-md bg-white/95 text-neutral-900",
@@ -541,14 +815,28 @@ function ChatDemo({ lines }: { lines: DemoLine[] }) {
   );
 }
 
-/** "Finding your match…" — three bars fill one after another, then the result. */
-function MatchingScreen({ lines, onDone }: { lines: string[]; onDone: () => void }) {
+/** First lines of the segment's characters, to rotate while matching. */
+function snippetsFor(segment: SegmentId) {
+  return seedCharacters
+    .filter((c) => c.category === segments[segment].category)
+    .map((c) => ({
+      id: c.id,
+      name: c.name.split(" ")[0],
+      text: c.firstMessage.replace(/\*[^*]*\*/g, "").trim().split(/(?<=[.!?])\s/)[0].slice(0, 90),
+    }))
+    .filter((s) => s.text.length > 12);
+}
+
+/** "Finding your match…" — a percentage, three bars and lines from real characters, then the result. */
+function MatchingScreen({ segment, lines, onDone }: { segment: SegmentId; lines: string[]; onDone: () => void }) {
   const [progress, setProgress] = useState(0); // 0..lines.length
+  const snippets = useMemo(() => snippetsFor(segment), [segment]);
+  const [snippet, setSnippet] = useState(0);
   const done = useRef(onDone);
   done.current = onDone;
+
   useEffect(() => {
-    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    const total = reduced ? 600 : 4200;
+    const total = reducedMotion() ? 600 : 4800;
     const start = performance.now();
     let frame = 0;
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -559,13 +847,16 @@ function MatchingScreen({ lines, onDone }: { lines: string[]; onDone: () => void
       else timer = setTimeout(() => done.current(), 300);
     };
     frame = requestAnimationFrame(tick);
+    const rotate = setInterval(() => setSnippet((n) => n + 1), 1500);
     return () => {
       cancelAnimationFrame(frame);
       clearTimeout(timer);
+      clearInterval(rotate);
     };
   }, [lines.length]);
 
   const percent = Math.round((progress / lines.length) * 100);
+  const s = snippets.length ? snippets[(snippet * 7) % snippets.length] : null;
   return (
     <main className="flex flex-1 flex-col justify-center py-10">
       <p className="text-center text-6xl font-black tabular-nums" aria-hidden="true">
@@ -594,7 +885,49 @@ function MatchingScreen({ lines, onDone }: { lines: string[]; onDone: () => void
           );
         })}
       </ul>
+      {s && (
+        <div key={snippet} className="animate-msg mt-8 flex items-end gap-2" aria-hidden="true">
+          <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full">
+            <CharacterAvatar id={s.id} name={s.name} sizes="32px" />
+          </span>
+          <p className="bg-surface-2 rounded-2xl rounded-bl-md px-3 py-2 text-sm">
+            <span className="text-muted block text-[11px] font-bold">{s.name}</span>“{s.text}”
+          </p>
+        </div>
+      )}
     </main>
+  );
+}
+
+const CONFETTI_COLORS = ["#C3FF00", "#FF6B9A", "#7CC4FF", "#FFD166", "#B69CFF"];
+
+/** A one-off burst when your match appears. */
+function Confetti() {
+  const [on, setOn] = useState(true);
+  useEffect(() => {
+    if (reducedMotion()) setOn(false);
+    const t = setTimeout(() => setOn(false), 2200);
+    return () => clearTimeout(t);
+  }, []);
+  if (!on) return null;
+  return (
+    <div className="pointer-events-none fixed inset-x-0 top-0 z-50 h-0" aria-hidden="true">
+      {Array.from({ length: 36 }, (_, i) => (
+        <span
+          key={i}
+          className="animate-confetti absolute top-0 block h-2.5 w-1.5 rounded-sm"
+          style={
+            {
+              left: `${(i * 37) % 100}%`,
+              background: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+              animationDelay: `${(i % 6) * 60}ms`,
+              "--dx": `${((i * 53) % 120) - 60}px`,
+              "--rot": `${360 + ((i * 97) % 360)}deg`,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+    </div>
   );
 }
 
@@ -603,30 +936,50 @@ function ResultScreen({
   answers,
   name,
   adultsOnly,
+  openers,
   onRestart,
 }: {
   segment: SegmentId;
   answers: QuizAnswers;
   name: string;
   adultsOnly: boolean;
+  openers: Openers | null;
   onRestart: () => void;
 }) {
+  const quiz = quizzes[segment];
   const matches = useMemo(() => matchFromAnswers(segment, answers), [segment, answers]);
   const [pick, setPick] = useState(0);
+  const [vibe, setVibe] = useState<Vibe>(() => defaultVibe(segment, answers));
+  const [reply, setReply] = useState("");
   const match = matches[pick];
+  const sceneId = (answers.scene as string[] | undefined)?.[0];
+  const scene = quizScene(segment, sceneId);
   if (!match) return null;
+
   const first = match.name.split(" ")[0];
+  const opener = (sceneId && openers?.[match.id]?.[sceneId]?.[vibe]) || match.firstMessage;
+  const next = welcomePath(match.id, scene?.id, scene ? vibe : undefined);
+
+  // The scene, vibe and (optional) first reply travel to the app in a short-lived cookie.
+  const remember = (r?: string) => saveQuizStart({ c: match.id, s: scene?.id, v: scene ? vibe : undefined, r });
+  const go = (text: string) => {
+    const r = text.trim().slice(0, MAX_FIRST_REPLY);
+    if (!r) return;
+    remember(r);
+    location.assign(signupHref(next));
+  };
 
   return (
     <main className="flex flex-1 flex-col py-6" aria-live="polite">
-      <p className="text-primary-ink text-center text-xs font-bold tracking-[0.08em] uppercase">
+      <Confetti />
+      <p className="text-primary-ink animate-rise text-center text-xs font-bold tracking-[0.08em] uppercase">
         {name ? `${name}, here's your match` : "Your match"}
       </p>
-      <h1 className="mt-1 text-center text-3xl font-extrabold tracking-[-0.03em]">
+      <h1 className="animate-rise mt-1 text-center text-3xl font-extrabold tracking-[-0.03em]">
         Meet {match.name}
         {match.age ? <span className="text-muted font-semibold">, {match.age}</span> : null}
       </h1>
-      <div className="relative mx-auto mt-5 aspect-[3/4] w-56 overflow-hidden rounded-3xl">
+      <div className="animate-pop relative mx-auto mt-5 aspect-[3/4] w-56 overflow-hidden rounded-3xl">
         <CharacterAvatar id={match.id} name={match.name} sizes="224px" priority />
       </div>
       <p className="mt-4 text-center font-semibold">{match.hook}</p>
@@ -644,21 +997,130 @@ function ResultScreen({
         </section>
       )}
 
-      <div className="mt-5 flex gap-2">
-        <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full">
-          <CharacterAvatar id={match.id} name={match.name} sizes="32px" />
-        </span>
-        <div className="border-border bg-surface rounded-2xl rounded-tl-sm border p-4 text-[15px] leading-relaxed">
-          <MessageText text={match.firstMessage} />
+      <section aria-label={`Your first message from ${first}`} className="border-border mt-6 rounded-3xl border p-4">
+        {scene && (
+          <p className="text-muted flex items-center gap-1 text-xs font-semibold">
+            <MapPin className="h-3.5 w-3.5" aria-hidden="true" /> {scene.label}
+          </p>
+        )}
+        {scene && (
+          <div className="mt-3 flex gap-1.5" role="group" aria-label="Tune the first message">
+            {VIBES.map((v) => (
+              <button
+                key={v}
+                type="button"
+                aria-pressed={vibe === v}
+                onClick={() => setVibe(v)}
+                className={cn(
+                  "rounded-full border-2 px-3 py-1 text-xs font-bold transition-colors",
+                  vibe === v ? "border-primary bg-primary text-on-primary" : "border-border hover:border-text",
+                )}
+              >
+                {quiz.vibes[v]}
+              </button>
+            ))}
+          </div>
+        )}
+        <div className="mt-3 flex gap-2">
+          <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full">
+            <CharacterAvatar id={match.id} name={match.name} sizes="32px" />
+          </span>
+          <div
+            key={`${match.id}-${vibe}`}
+            className="animate-msg bg-surface-2 rounded-2xl rounded-tl-sm px-4 py-3 text-[15px] leading-relaxed"
+          >
+            <MessageText text={opener} />
+          </div>
         </div>
-      </div>
 
-      <Link href={signupHref(`/app/welcome?c=${match.id}`)} className={buttonClass({ size: "lg", className: "mt-6" })}>
-        Reply to {first}
-      </Link>
+        {isStaticLanding ? (
+          <Link
+            href={signupHref(next)}
+            className={buttonClass({ size: "lg", className: "mt-5 w-full" })}
+          >
+            Reply to {first}
+          </Link>
+        ) : (
+          <>
+            <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Quick replies">
+              {quiz.quickReplies.map((q) => (
+                <li key={q}>
+                  <button
+                    type="button"
+                    onClick={() => go(q)}
+                    className="border-border bg-surface hover:border-text rounded-full border px-3 py-1.5 text-sm font-semibold"
+                  >
+                    {q}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <form
+              className="mt-3 flex gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                go(reply);
+              }}
+            >
+              <label className="sr-only" htmlFor="first-reply">
+                Your reply to {first}
+              </label>
+              <input
+                id="first-reply"
+                value={reply}
+                maxLength={MAX_FIRST_REPLY}
+                onChange={(e) => setReply(e.target.value)}
+                placeholder={`Reply to ${first}…`}
+                className="border-border bg-surface focus:border-primary min-w-0 flex-1 rounded-full border-2 px-4 py-3 outline-none"
+              />
+              <button
+                type="submit"
+                disabled={!reply.trim()}
+                aria-label="Send"
+                className={buttonClass({ size: "lg", className: "aspect-square shrink-0 rounded-full px-0" })}
+              >
+                <SendHorizontal className="h-5 w-5" aria-hidden="true" />
+              </button>
+            </form>
+            <Link
+              href={signupHref(next)}
+              onClick={() => remember()}
+              className="text-muted hover:text-text mt-3 block text-center text-sm underline underline-offset-2"
+            >
+              Or just meet {first} first
+            </Link>
+          </>
+        )}
+      </section>
       <p className="text-muted mt-2 text-center text-xs">
-        Free account · 30 messages a day · {adultsOnly ? "18+ · " : ""}always an AI
+        {isStaticLanding ? "" : `${first} will answer as soon as you've signed up · `}Free account ·{" "}
+        {adultsOnly ? "18+ · " : ""}always an AI
       </p>
+
+      <section className="mt-8" aria-labelledby="week">
+        <h2 id="week" className="text-lg font-extrabold">
+          What your first week with {first} can look like
+        </h2>
+        <ol className="border-border mt-3 ml-2 border-l-2">
+          {quiz.week.map((w, i) => (
+            <li
+              key={w.day}
+              className="animate-rise relative pb-4 pl-5 last:pb-0"
+              style={{ animationDelay: `${200 + i * 150}ms` }}
+            >
+              <span
+                className={cn(
+                  "absolute top-1 -left-[7px] h-3 w-3 rounded-full border-2",
+                  i === 0 ? "border-primary bg-primary" : "border-border bg-bg",
+                )}
+                aria-hidden="true"
+              />
+              <span className="text-muted text-xs font-bold tracking-[0.08em] uppercase">{w.day}</span>
+              <p className="text-sm font-semibold">{w.text.replaceAll("{name}", first)}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
 
       {matches.length > 1 && (
         <div className="mt-8">

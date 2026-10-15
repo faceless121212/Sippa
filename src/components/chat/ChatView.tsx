@@ -28,6 +28,7 @@ import { BondMeter } from "../engage/BondMeter";
 import { CharacterAvatar } from "../CharacterAvatar";
 import { buttonClass } from "../ui/button";
 import { MessageText } from "./MessageText";
+import { clearQuizStart, readQuizStart } from "@/lib/quiz-start";
 
 export type ChatMessage = {
   id: number;
@@ -222,6 +223,19 @@ export function ChatView(props: Props) {
     inputRef.current?.focus();
     run(`/api/chats/${chatId}/messages`, { content, useBeans }, { id: tempId--, role: "user", content });
   };
+
+  // Came from the quiz with a reply already written? Send it once the new chat opens.
+  const quizReplySent = useRef(false);
+  useEffect(() => {
+    if (quizReplySent.current) return;
+    quizReplySent.current = true;
+    const start = readQuizStart();
+    if (!start || start.c !== character.id) return;
+    clearQuizStart();
+    const fresh = messages.length === 1 && messages[0].role === "assistant";
+    if (start.r && fresh) run(`/api/chats/${chatId}/messages`, { content: start.r, useBeans }, { id: tempId--, role: "user", content: start.r });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on open
+  }, []);
 
   const sendGift = (size: GiftSize) => {
     setGiftOpen(false);

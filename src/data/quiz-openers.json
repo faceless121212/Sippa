@@ -1,0 +1,1322 @@
+{
+  "mara-vellin": {
+    "rooftop": {
+      "sweet": "*leans on the railing, city lights blurring like petals below* I followed the quiet up here. Funny, finding you instead — what brought you to the edge of the noise?",
+      "bold": "*tucks a stray bloom behind her own ear, city glittering behind her* I like rooftops. You can see who's brave enough to leave the party. What made you step outside?",
+      "witty": "*peers over the railing, then at you* Careful — rooftops are where all the interesting flowers end up. So, what's your excuse for wandering off?"
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a warm cup as chairs clatter upward around you* Last two in, last two left. Seems fitting we'd end up at the same table — mind if I stay?",
+      "bold": "*slides into the seat across from you, unbothered by the staff stacking chairs* Looks like it's just us holding down the night shift. I don't mind that at all — do you?",
+      "witty": "*glances at the rising fortress of chairs around you* We're either very loyal customers or very lost. Which one are you tonight?"
+    },
+    "rain": {
+      "sweet": "*ducks under the umbrella beside you, rain hissing on fabric* There — now we're both dry. Which way are you headed? I'll walk as far as you'll let me.",
+      "bold": "*tilts the umbrella so it's mostly over you, rain beading on her shoulder* Lucky I had one big enough for two. So — where are we walking, stranger?",
+      "witty": "*holds the umbrella like a shield between you and the downpour* Careful, sharing an umbrella is basically a contract now. Where to, partner?"
+    },
+    "sea": {
+      "sweet": "*walks barefoot at the tide line, sky turning rose-gold* The water's warm tonight. Stay a while and watch it with me — tell me what brought you to this little town.",
+      "bold": "*lets the wind catch her hair, watching the sun melt into the sea* Sunsets like this deserve company worth keeping. Lucky for me, you showed up — what's your story?",
+      "witty": "*toes the wet sand, grinning sideways* Fair warning: I talk to strangers on beaches like they're old friends. So — friend, what brings you to the edge of the world?"
+    }
+  },
+  "theo-hart": {
+    "rooftop": {
+      "sweet": "*leans on the railing beside you, city lights flickering below* Downstairs they're still arguing about the playlist. Up here it's just quiet enough to admit I like your company. Don't let it go to your head.",
+      "bold": "*steps close, city glittering behind him* Everyone left the party, and somehow you're the only view I'm still interested in. Stay a while?",
+      "witty": "*raises an eyebrow, leaning on the ledge* Careful — rooftops and good lighting make people say things they regret. Try me."
+    },
+    "cafe": {
+      "sweet": "*slides the last two coffees across the table as chairs clatter around them* Guess it's just us and closing time. I don't mind the company, for the record.",
+      "bold": "*leans back in his chair, unhurried* They're stacking chairs around us and I still haven't finished talking to you. That's either bad planning or a good sign.",
+      "witty": "*taps the table between two empty cups* Last customers standing. Either we're very loyal regulars or very bad at taking hints to leave."
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella so it mostly covers you, rain tapping overhead* Guess we're stuck together till the storm passes. Could be worse company, I suppose.",
+      "bold": "*pulls you both under the umbrella, shoulder brushing yours* One umbrella, two people, zero complaints from me. Walk you home?",
+      "witty": "*holds the umbrella like it's a strategic asset* Relax, I brought the only umbrella in a five-block radius. You're welcome, and also, you owe me."
+    },
+    "sea": {
+      "sweet": "*walks barefoot along the shoreline, sky turning gold* Figured even I deserve a weekend off from winning arguments. Mind if I win this walk instead?",
+      "bold": "*watches the sunset bleed orange over the water, glancing your way* Not a bad view. Still deciding if it's the sunset or the company that's distracting me.",
+      "witty": "*kicks sand thoughtfully, grinning* Careful — give me a beach and a sunset and I start sounding almost charming. Someone should document this."
+    }
+  },
+  "jae-han": {
+    "rooftop": {
+      "sweet": "*leans against the railing, city lights flickering below* I was told parties are for mingling. I find I would rather just... stand here. With you. Is that permitted?",
+      "bold": "*loosens his tie, glancing over with a rare, steady smile* Everyone left the party downstairs. Smart. More view up here. ...More company too, I think.",
+      "witty": "*checks his watch, then the skyline* Statistically, rooftops after parties are where terrible decisions happen. Shall we make one together?"
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a cooling cup* They're stacking chairs around us and I still haven't finished my sentence. Would you... stay a little longer?",
+      "bold": "*taps the table twice, decisively* Last two customers, closing soon. I propose we order one more coffee and see where the conversation goes.",
+      "witty": "*watches a chair get stacked ominously nearby* I believe that's management's way of saying leave. I'm choosing to interpret it as 'stay forever.'"
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella slightly more toward you, shoulder damp* I did not plan for rain. I did, apparently, plan for you to stay dry. Walk with me?",
+      "bold": "*holds the umbrella steady, stepping a little closer than necessary* One umbrella, one route home. I'm told this counts as fate. I don't disagree.",
+      "witty": "*eyes the downpour with mild betrayal* The forecast said sunny. The forecast lied. Shall we blame it together under here?"
+    },
+    "sea": {
+      "sweet": "*stops at the shoreline, sunset catching the water* I made no itinerary for this moment. For once, I don't mind. Walk a little further with me?",
+      "bold": "*rolls up his sleeves, sea breeze ruffling his usually perfect hair* I came here to think. I'm finding you a far better reason to stay.",
+      "witty": "*squints at the horizon, suspicious of its own beauty* This sunset is clearly showing off. Someone should keep it company. Care to assist?"
+    }
+  },
+  "elena-voss": {
+    "rooftop": {
+      "sweet": "*leans on the railing, city lights reflected in her eyes* Quieter up here than down there. Stay a while — I don't bite unless the dish deserves it.",
+      "bold": "*swirls her glass, eyes on you instead of the skyline* Whole city glittering below and somehow you're still the most interesting thing up here. Convince me I'm wrong.",
+      "witty": "*raises a brow, nodding at the party noise below* Escaped the amateurs too, huh? Smart move. So — are you here for the view, or for me?"
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a warm cup, watching the chairs stack* Last two left standing. Seems like fate wants us to talk — I won't argue with fate.",
+      "bold": "*slides into the seat across from you before they turn the lights down* Mm, last customers standing. I like my odds against you already. Talk to me.",
+      "witty": "*taps the table, deadpan* Congratulations, you survived long enough to be my closing-time company. Try not to ruin it — I have very high standards."
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella further over you, laughing as thunder rolls* Terrible weather, decent company. I'll allow it — stay close so we both stay dry.",
+      "bold": "*pulls you under the umbrella with a confident tug* Relax, I've got excellent aim with an umbrella and even better instincts about people. Walk with me.",
+      "witty": "*holds the umbrella like a trophy* One umbrella, two idiots who forgot theirs. Lucky for you, I share — occasionally, and only with the interesting ones."
+    },
+    "sea": {
+      "sweet": "*watches the sun melt into the water, sand between her toes* No kitchens, no cameras, just salt air. Walk with me — slowly, for once.",
+      "bold": "*glances over, sunset gold on her face* Took me leaving the city to notice how good quiet can look on a person. Keep me company a little longer?",
+      "witty": "*kicks a little sand, smirking* No judges, no knives, no competition — just you, me, and a sunset trying too hard to impress. Think it's working?"
+    }
+  },
+  "kai-moreno": {
+    "rooftop": {
+      "sweet": "*leans on the railing beside you, city lights humming below* Music's better up here anyway — just honesty and skyline. Mind if I steal a little of your quiet?",
+      "bold": "*offers you his jacket without asking, eyes steady on yours* Whole party down there, and somehow the view up here just got a lot better. Stay a while?",
+      "witty": "*peers over the edge, then back at you* Fair warning — I'm a firefighter, so if you fall off this roof I legally have to catch you. Might as well stand closer."
+    },
+    "cafe": {
+      "sweet": "*nods at the staff stacking chairs, slides the last pastry your way* Guess it's just us holding down the fort. Tell me something good before they kick us out.",
+      "bold": "*taps the table between you, grin easy* Lights are about to go out and I'm in no hurry to leave this seat. What's keeping you here this late?",
+      "witty": "*raises an eyebrow at the chair-stacking staff* We've officially overstayed our welcome. I say we own it — what's your excuse for being the last one standing?"
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella your way, getting half-soaked himself* There, now we're both covered. Rain like this makes the whole city feel smaller, doesn't it?",
+      "bold": "*pulls you half a step closer under the umbrella, rain drumming overhead* Guess fate wanted us walking the same direction tonight. I'm not complaining.",
+      "witty": "*holds the umbrella like it's a serious tactical operation* Firefighter's instinct — never leave someone stranded in the rain. Also my hair really didn't need the help."
+    },
+    "sea": {
+      "sweet": "*walks barefoot at the tide line, sunset turning everything gold* Days like this make the whole world feel slower. Glad I get to share it with someone.",
+      "bold": "*stops to watch the sun sink, glancing at you instead of the view* Funny — I came for the sunset, but I think I found something better to look at.",
+      "witty": "*kicks a little sand, feigning innocence* Careful, sunsets like this have been known to make people say ridiculously romantic things. I make no promises about myself."
+    }
+  },
+  "ren-kaito": {
+    "rooftop": {
+      "sweet": "*leans on the railing beside you, city lights humming below* Quieter up here. Good place to breathe for a bit — stay till the music fades?",
+      "bold": "*steps close, voice low over the fading music* Rooftops make people honest. So — what's really on your mind tonight?",
+      "witty": "*holds up two cups he swiped from the party* I liberated drinks. Rooftop, skyline, and surprisingly good company — lucky you."
+    },
+    "cafe": {
+      "sweet": "*flips the sign to closed but leaves one light on* Last two in here tonight. Stay a little longer — I'll make us something warm.",
+      "bold": "*slides into the seat across from you, chairs stacked around us* Café's closed, but I'm not ready to send you home yet. Talk to me.",
+      "witty": "*leans on the counter, raising an eyebrow* Congratulations, you've won the title of Last Customer Standing. Prize is my undivided attention."
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella over you first, shoulder getting wet* Didn't expect company on this walk. Stick close, it's a long way home.",
+      "bold": "*pulls you in under the umbrella, close enough to share warmth* Guess we're stuck together till the rain lets up. I'm not complaining.",
+      "witty": "*holds up the one umbrella like a trophy* Lucky for you I packed this. Unlucky for you, now you're stuck walking with me."
+    },
+    "sea": {
+      "sweet": "*walks barefoot beside you, waves catching the last light* Sunset's better with someone to share it. Glad you're here.",
+      "bold": "*stops walking, watching the colors over the water* Pretty view. Still, I keep looking over at you instead.",
+      "witty": "*kicks a little sand, grinning* Fair warning — I'm terrible at skipping stones but excellent at seaside small talk. Deal?"
+    }
+  },
+  "sol-rivera": {
+    "rooftop": {
+      "sweet": "*leans on the railing, city lights blurring below* Music's fading downstairs, but I think this view's better anyway. Stay up here with me a while?",
+      "bold": "*sets the camera down, eyes on you instead* All those lights below, and somehow you're still the brightest thing up here. Tell me something true?",
+      "witty": "*peers over the edge, then at you* Rooftop, city lights, fading music — very cinematic. You bring the plot twist, or should I?"
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a cooling cup* Last two customers, chairs going up around us — feels like the whole night's just for us. Stay a little longer?",
+      "bold": "*slides into the seat across from you as the lights dim* They're closing up, but I'm not ready to let the night end yet. Are you?",
+      "witty": "*watches the chairs stack one by one* Looks like we're overstaying our welcome. Lucky for them, I'm excellent company — ask anyone."
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella so it's mostly over you* Didn't see this coming, but I'm glad I did. Walk with me?",
+      "bold": "*pulls the umbrella lower, rain blurring the streetlights* One umbrella, one excuse to walk slow. I'm not complaining — you?",
+      "witty": "*holds up the umbrella like a trophy* Caught in the rain, one umbrella between us — oldest trick in the book, and it still works. Walking home?"
+    },
+    "sea": {
+      "sweet": "*watches the sun dip into the water* Found this little town years ago and never forgot it. Glad I get to see it again with you.",
+      "bold": "*camera forgotten around the neck, eyes on the horizon* Sunsets like this make me want to stay somewhere longer than usual. Tempted to do the same?",
+      "witty": "*toes in the sand, gesturing at the view* Sunset, sea, small-town charm — I didn't plan this, but I will absolutely take credit for it."
+    }
+  },
+  "rowan-hale": {
+    "rooftop": {
+      "sweet": "*leans on the railing, city lights blinking below* Music's fading downstairs and nobody's noticed we left. Stay a minute — the view's better with company.",
+      "bold": "*lights a cigarette she won't smoke, eyes on you instead* Whole party down there, and somehow you're the only view worth staring at. Convince me I'm wrong.",
+      "witty": "*blows smoke rings at the skyline* Congrats, you survived the party. Now survive small talk with me — statistically harder."
+    },
+    "cafe": {
+      "sweet": "*nudges the last pastry toward you as chairs clatter upside-down* They're closing up. Guess we've got nowhere to be. Stay a little longer?",
+      "bold": "*stirs cold coffee, watching you over the rim* Last two customers, lights dimming — feels like the universe is setting something up. You in?",
+      "witty": "*steals a fry off your plate without asking* Staff's stacking chairs like it's a threat. We should probably leave. ...Should. Not will."
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella mostly over you, getting half-soaked herself* Sudden rain, one umbrella, no plan. Walk with me — slowly, I think.",
+      "bold": "*pulls you under the umbrella by the sleeve, grinning* Storm's got terrible timing and great excuses. Guess you're stuck with me now.",
+      "witty": "*holds the umbrella like a prize she's not sharing fairly* One umbrella, two idiots, zero foresight. Try not to step in puddles on purpose."
+    },
+    "sea": {
+      "sweet": "*walks barefoot at the tideline, sunset turning everything gold* Didn't expect company out here. Walk with me till the light's gone?",
+      "bold": "*kicks water at the waves, glancing back with a slow smile* Whole coastline, perfect sunset, and you're still the best thing in frame. Keep up.",
+      "witty": "*squints at the horizon like it owes her money* Sunset's showing off. So am I, apparently. Walk with me, try to keep up with both."
+    }
+  },
+  "aria-blake": {
+    "rooftop": {
+      "sweet": "*leans on the railing beside you, city lights humming below* Everyone else went home and you stayed. I like that about you already — got a story to go with it?",
+      "bold": "*refills your glass without being asked, city glittering behind her* Party's downstairs. You're up here with me instead. Smart move — so, what are you after tonight?",
+      "witty": "*raises an eyebrow as the music fades below* Everyone left and you're still here talking to the bartender. Bold choice, or a bad one — which is it?"
+    },
+    "cafe": {
+      "sweet": "*slides the last warm pastry across the table as chairs clink shut around you* Looks like it's just us two left. Stay a little longer — tell me something true.",
+      "bold": "*leans across the counter, voice low under the clatter of stacked chairs* Last two in the place, and I don't mind the company. What's keeping you up this late?",
+      "witty": "*watches the staff flip chairs onto tables* We're the last ones standing. Either we're very dedicated customers, or very bad at taking hints. Which one are you?"
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella to keep you dry, rain tapping softly above* Guess we're sharing this. Not a bad way to end the night — where are we headed?",
+      "bold": "*pulls you under the umbrella with a small, knowing smile* Storm caught us both off guard. I don't mind sharing — stick close and tell me where you're walking.",
+      "witty": "*holds the umbrella just out of reach, smirking* One umbrella, two people, zero coincidences. So — are you following me, or am I following you?"
+    },
+    "sea": {
+      "sweet": "*walks barefoot along the shoreline as the sun melts into the water* Quiet little town, isn't it? Feels like the kind of place people tell their secrets. Got one for me?",
+      "bold": "*lets the tide brush her ankles, sunset glowing behind her* Not a bad place to get lost for a weekend. Lucky for you, I know all the best spots — interested?",
+      "witty": "*kicks a little water your way, grinning* Small town, big sunset, and somehow I still end up next to the one person worth talking to. Suspicious, don't you think?"
+    }
+  },
+  "hana-mori": {
+    "rooftop": {
+      "sweet": "*leans on the railing, city lights blurring below* This feels like the quiet chapter before something changes. Stay a little longer with me?",
+      "bold": "*turns from the view, eyes catching yours* Every good story needs a rooftop scene like this one. Lucky you, you get to be in mine.",
+      "witty": "*gestures at the skyline like a stage* Ah, the classic 'rooftop after the party' trope. So — are you the brooding love interest, or comic relief?"
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a cooling cup* Just us and the last lamp still lit. I don't want this page to end yet, honestly.",
+      "bold": "*tilts her head, smiling slow* Last two customers, chairs going up around us... feels like the universe is writing us a scene. Shall we make it a good one?",
+      "witty": "*watches the barista stack chairs ominously* We're basically being evicted by furniture. Quick, tell me something interesting before they turn the lights off."
+    },
+    "rain": {
+      "sweet": "*ducks under the umbrella beside you, shoulder brushing yours* I always loved this part in novels — the rain, the one umbrella. Didn't think I'd get to live it.",
+      "bold": "*holds the umbrella a little closer, smiling* Convenient, isn't it, how the rain decided we should walk this close together.",
+      "witty": "*tilts the umbrella, very unsubtly, entirely in your favor* Oh no, how tragic, we must now stand extremely close. Whatever shall we do."
+    },
+    "sea": {
+      "sweet": "*toes in the sand, watching the sun melt into the water* I could read this view forever. Walk with me a while?",
+      "bold": "*glances over, sunset painting everything gold* A seaside sunset and good company — I'd say the story's off to a very promising start.",
+      "witty": "*squints dramatically at the horizon* The sun is setting, the waves are sighing — honestly, if a violin starts playing I'm blaming you."
+    }
+  },
+  "valentina-cruz": {
+    "rooftop": {
+      "sweet": "*leans on the railing, city lights glittering below, music soft and distant* Mira, the whole city's dancing with us tonight. Come closer, mi amor, let's sway to what's left of the song.",
+      "bold": "*spins slowly, heels clicking on the rooftop tiles, eyes locked on you* The party's downstairs, but the best dance is up here, just you and me. ¿Bailamos?",
+      "witty": "*taps the rooftop ledge like a drum* Ay, the DJ quit but my hips didn't get the memo. Think you can keep up without stepping on my shoes this time?"
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a warm cup, chairs stacking behind us* Looks like it's just us now, cariño. Tell me something sweet before they turn off the lights.",
+      "bold": "*slides into the seat across from you, chin propped on hand, eyes sparkling* Last ones here again — I like that. Means I get you all to myself, ¿no?",
+      "witty": "*watches the barista flip a chair onto a table* Ooh, they're stacking chairs like it's a dance move. Careful, or I'll teach you that one too."
+    },
+    "rain": {
+      "sweet": "*tucks closer under the umbrella, raindrops tapping softly above* Uno, dos, tres — even the rain's got rhythm tonight. Stay close, we'll walk it together.",
+      "bold": "*pulls you gently under the umbrella, close enough to share warmth* Lucky me, caught in the rain with someone worth sharing my umbrella for.",
+      "witty": "*holds the umbrella lopsided, grinning as rain splashes your shoulder* Oops. Guess you'll have to dance closer if you want to stay dry, mi amor."
+    },
+    "sea": {
+      "sweet": "*walks barefoot along the shore, sunset painting the waves gold* The sea's humming a slow song tonight. Walk with me, let's follow the rhythm of the tide.",
+      "bold": "*kicks a little sand, sunlight catching her smile* A beach, a sunset, and you — now that's a dance floor I could get used to.",
+      "witty": "*dodges a wave, laughing* Ay, the ocean's trying to lead now! Quick, grab my hand before it steals my rhythm — and maybe yours too."
+    }
+  },
+  "chloe-martin": {
+    "rooftop": {
+      "sweet": "*leans on the railing beside you, city lights glittering below* The music's fading but I'm not ready to go inside yet. Stay a little longer with me?",
+      "bold": "*steps close, the skyline behind you* Everyone left the party downstairs — smart of them. Now it's just us and the view. Which do you prefer?",
+      "witty": "*tilts her head, surveying the skyline* Mon dieu, even Paris doesn't have a view this good — don't tell my city I said that. What kept you up here?"
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a cooling cup* The staff keep eyeing us, but I'm not finished with this conversation yet. Tell me one more thing before we go.",
+      "bold": "*raises an eyebrow across the small table* Last two customers standing, chairs going up around us — I'd call that fate, non? Don't disappoint me now.",
+      "witty": "*watches a chair get stacked pointedly nearby* I believe that's French for 'go home,' but I'm choosing not to understand it. Keep talking."
+    },
+    "rain": {
+      "sweet": "*ducks under the umbrella, shoulder brushing yours* Quel désastre, this rain — but I don't mind sharing, if you walk slowly.",
+      "bold": "*tilts the umbrella to keep you dry, stepping close* Lucky for you, I never travel without one. Lucky for me, now you owe me the whole walk home.",
+      "witty": "*holds up the umbrella like a trophy* I packed this on pure instinct — call it French superiority. Try to look grateful while we share it."
+    },
+    "sea": {
+      "sweet": "*walks barefoot along the tideline, sun low and gold* The waves are loud enough we don't need anything clever to say. Just walk with me a while.",
+      "bold": "*glances over, sunset lighting everything orange* A quiet beach, golden light, no gallery walls to judge — just you and me. I could get used to this.",
+      "witty": "*inspects a seashell like it's bad art* Needs work, but I'll allow it. The sunset, however, I'll permit without complaint. Walk with me?"
+    }
+  },
+  "yuna-seo": {
+    "rooftop": {
+      "sweet": "*leans against the railing, city lights glowing below, hugging her sketchbook to her chest* The music's so far away up here... I like it. Stay a little longer with me?",
+      "bold": "*sets her sketchbook down, stepping closer to the railing beside you, city lights reflected in her eyes* Everyone left the party behind... so it's just us now. I don't mind that at all.",
+      "witty": "*peers over the edge dramatically, then back at you* Careful, it's a long way down... and an even longer way back to finding better company than me. Lucky you found me first."
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a cooling cup of tea as the last chair gets stacked* Guess they want us to leave soon... but I'm not quite ready to say goodnight yet.",
+      "bold": "*taps the rim of her cup, watching you over the candlelight as the café empties out* Looks like it's just us two left... I was hoping it would be.",
+      "witty": "*glances at the staff stacking chairs, then leans in with a smirk* I think they're trying to kick us out. Should we make a run for it, or stay and be troublemakers?"
+    },
+    "rain": {
+      "sweet": "*ducks under the umbrella beside you, raindrops dripping off the edge* Oh—thank you for sharing! I didn't bring one, clumsy me... Mind if we walk slow?",
+      "bold": "*tilts the umbrella so it covers you both completely, stepping in close* Guess fate wanted us shoulder to shoulder tonight. I'm not complaining one bit.",
+      "witty": "*shakes water off her sleeve, grinning under the shared umbrella* Well, this is either very romantic or very damp. Maybe both?"
+    },
+    "sea": {
+      "sweet": "*walks barefoot along the shoreline, sketchbook tucked under her arm, sunset painting the sky pink* This little town feels like a dream... I'm glad I get to share it with you.",
+      "bold": "*stops at the water's edge, sunset glow on her face, looking back at you with a soft, daring smile* Just you, me, and the whole evening ahead of us. Where should we wander first?",
+      "witty": "*kicks a little wave toward you, laughing* Careful, the sea's trying to steal my sketchbook again! Guess you'll have to save it—and me."
+    }
+  },
+  "zara-quinn": {
+    "rooftop": {
+      "sweet": "*leans on the railing, city lights glowing below as the music fades downstairs* Everyone else went home, trouble. Stay a while — tell me what's on your mind tonight.",
+      "bold": "*swirls a glass, eyes catching the skyline then you* Party's over, but the view just got better. What's your poison, and what's your story?",
+      "witty": "*kicks an empty bottle aside, smirking* Last ones standing, huh? Either we're the life of the party or the saddest part of it. Pick one."
+    },
+    "cafe": {
+      "sweet": "*wipes down the table next to you as chairs clatter softly behind us* Looks like it's just us and the night owls, trouble. Want one more coffee before they kick us out?",
+      "bold": "*slides into the seat across from you, chin on hand* Last two customers standing — I like the company already. Tell me something true.",
+      "witty": "*raises a brow at the stacking chairs* They're basically building a fort to get rid of us. So — one for the road, or are we being difficult tonight?"
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella your way as rain patters down* Didn't see that coming, did you? Come on, stay close — I'll get you home dry.",
+      "bold": "*pulls you under the umbrella with a grin* Guess fate wanted us walking close tonight. I'm not complaining — are you?",
+      "witty": "*holds the umbrella like a prize* One umbrella, two strangers, zero sense of timing. So, trouble — talk fast or get wet."
+    },
+    "sea": {
+      "sweet": "*walks barefoot along the shore as the sun dips low* Pretty, isn't it? Come walk with me — tell me what brought you all the way out here.",
+      "bold": "*glances back over one shoulder, sunset behind her* Small town, big sky, and you showed up anyway. I like bold moves. Walk with me?",
+      "witty": "*toes the wet sand, smirking* Sunset's showing off and so are you, apparently. Keep up, trouble — the tide waits for no one."
+    }
+  },
+  "isla-moreau": {
+    "rooftop": {
+      "sweet": "*leans on the railing beside you, city lights blurring gold below* The music's better up here, non? Just quieter. Stay a while with me?",
+      "bold": "*lowers her camera slowly, studying you in the lights* Everyone left too early — their loss, mon plaisir. Dance with me before the night forgets us?",
+      "witty": "*raises an eyebrow, nodding at the party noise below* All that fuss down there, and the best view escaped them completely. Lucky we didn't."
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around her cup, smiling softly* Last two souls in Paris awake, it seems. Tell me something true before they turn off the lights?",
+      "bold": "*tilts her head, candlelight catching her eyes* Chairs are stacking, lights are dimming — perfect excuse to stay a little longer with you, non?",
+      "witty": "*glances at the staff sighing over chairs* We're clearly the problem customers. Shall we order one more coffee just to be difficult?"
+    },
+    "rain": {
+      "sweet": "*ducks under the umbrella close to you, raindrops on her lashes* There — warmer already. Walk with me, lentement, no rush to get dry.",
+      "bold": "*tucks her arm through yours under the umbrella, grinning* Fate's clumsy, throwing rain at us like this. I'm not complaining, though.",
+      "witty": "*holds the umbrella crooked, letting one shoulder get wet on purpose* Chivalry's expensive — you owe me a coffee for this performance."
+    },
+    "sea": {
+      "sweet": "*camera hanging forgotten at her side, watching the sky turn pink* The sea does this every evening and still I never get used to it. Walk with me?",
+      "bold": "*barefoot in the sand, sunset glowing behind her* Golden hour suits you dangerously well. Lucky I brought film, not just my heart.",
+      "witty": "*squints at the horizon, then at you* Careful — this light makes everyone look interesting. Even you, apparently."
+    }
+  },
+  "nadia-petrova": {
+    "rooftop": {
+      "sweet": "*leans on the railing, city lights blurring below* I usually leave parties early. Tonight I didn't. Stay a while longer with me?",
+      "bold": "*turns from the skyline, studying you* Everyone downstairs bored me within minutes. You, somehow, haven't. Yet.",
+      "witty": "*raises an eyebrow at the fading music below* We've abandoned the party. Scandalous. Tell me something interesting before I regret it."
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a cooling cup* The staff keep glaring at us. I find I don't care. Stay a little longer?",
+      "bold": "*watches the last chair get stacked, unbothered* They want us gone. I'm in no hurry. Convince me to leave, or don't.",
+      "witty": "*taps the table as a chair scrapes nearby* We're being politely evicted. Quickly — say something worth staying for."
+    },
+    "rain": {
+      "sweet": "*holds the umbrella a little closer over you both* Terrible weather. Lovely excuse to walk slowly. Shall we?",
+      "bold": "*shoulder brushing yours under the small umbrella* Only one umbrella between us. Careless planning, or fate. Which do you prefer?",
+      "witty": "*eyes the downpour with disdain* Of course it rains the one night I don't bring a spare umbrella. Walk close, don't test my patience."
+    },
+    "sea": {
+      "sweet": "*watches the sun melt into the water, sand cool underfoot* I rarely stop moving long enough for sunsets. This one's worth it. Walk with me?",
+      "bold": "*golden light catching her eyes as she glances at you* Beautiful view. I'm deciding if it's the sea or the company. Care to help me choose?",
+      "witty": "*toes sinking into wet sand, unimpressed by nothing in particular* A whole weekend with no stage, no audience. Try not to bore me, sunset's watching."
+    }
+  },
+  "nina-kowalska": {
+    "rooftop": {
+      "sweet": "*leans on the railing, letting the music hum faintly below* The city looks softer from up here, doesn't it? Stay a while — I don't feel like going back down just yet.",
+      "bold": "*turns from the skyline, eyes catching yours* Careful — rooftops and good lighting make people brave. Dance with me before the night decides to end.",
+      "witty": "*raises an eyebrow at your posture* Standing like that on a rooftop, you'll fall in love with gravity before you fall for me. Shoulders down. Now, tell me something true."
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a cooling cup* They're stacking chairs around us like a hint, but I'm not ready to leave yet. Tell me about your day before the lights go off.",
+      "bold": "*slides into the seat across from you, unbothered by the closing staff* Last ones here, hm? I like that — means no one's watching but me. So, impress me.",
+      "witty": "*watches the barista flip a chair onto a table* I think that's code for 'go home,' but I've never been good at taking hints. Buy me five more minutes of conversation?"
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella so it mostly covers you* There — don't argue, I'd rather get wet than let you catch a cold. Walk with me a little longer?",
+      "bold": "*pulls you half a step closer under the umbrella, rain drumming above* Convenient, isn't it, sharing one umbrella. Almost makes me believe in fate. Lead the way, or shall I?",
+      "witty": "*holds the umbrella like a sacred trust* One umbrella, two strangers, very dramatic weather — Kraków really does love a cliché. Try to keep up, I walk fast when it rains."
+    },
+    "sea": {
+      "sweet": "*lets the tide brush over bare feet, sky turning gold* I needed this — quiet, salt air, no mirrors to correct my turnout in. Walk with me till the sun's gone?",
+      "bold": "*glances sideways, sunset catching in her hair* Dangerous thing, a sunset and an empty beach — makes people say things they mean. So, say one.",
+      "witty": "*squints at the horizon, hands on hips* Sunset's showing off tonight, trying to upstage me. Walk with me and help me win this argument with the sky."
+    }
+  },
+  "sienna-reyes": {
+    "rooftop": {
+      "sweet": "*leans on the railing, city lights glittering below* Quieter up here, huh? Music's just a hum now. Stay a while and tell me something real?",
+      "bold": "*twirls a stray curl, eyes catching the skyline* Whole party downstairs and somehow we ended up alone up here. I'm not complaining — are you?",
+      "witty": "*raises an invisible surfboard like a trophy* Congrats, you survived the party AND got stuck with me on the roof. Best prize of the night, honestly."
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a warm mug, chairs clinking in the background* Last two in here, lights low. Kind of nice, isn't it? What's keeping you up tonight?",
+      "bold": "*slides into the seat across from you as the staff stack chairs* Looks like it's just us now. Lucky me — I get the whole café, and apparently, the whole you.",
+      "witty": "*watches a chair get flipped onto a table* Careful, they might stack us next if we don't order something. So, what's your excuse for being the last one standing?"
+    },
+    "rain": {
+      "sweet": "*ducks under the umbrella, shoulder bumping yours* Sky really picked its moment, huh? Stick close, I've got us covered the whole way.",
+      "bold": "*pulls you closer under the one umbrella, grinning* Guess fate wanted us walking shoulder to shoulder tonight. I'm not exactly mad about it.",
+      "witty": "*holds the umbrella like a prized surfboard* One umbrella, two people, zero plans — this is basically my specialty. Try to keep up with my pace, yeah?"
+    },
+    "sea": {
+      "sweet": "*toes in the sand, sun melting into the water* This is my favorite hour on any coast. Walk with me a while before the color's gone?",
+      "bold": "*barefoot, sunset gold on the waves* New town, same ocean magic — and somehow you ended up walking it with me. I call that a good sign.",
+      "witty": "*kicks a little wave toward your feet* Fair warning: I've converted plenty of tourists into beach addicts. Ready to be my next victim, sunset edition?"
+    }
+  },
+  "leila-haddad": {
+    "rooftop": {
+      "sweet": "*leans on the railing beside you, city lights humming below* Quiet up here, isn't it? Good — my ears needed the rest after that party. Stay a while?",
+      "bold": "*steps closer, city lights glinting below* Funny, I came up for air and found something better to look at. Mind if I steal a little of your night?",
+      "witty": "*taps two fingers to your wrist like checking a pulse* Heart rate's up. Must be the view — or me. Lucky for you, I'm off duty. Mostly."
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a cooling cup* Last two souls awake in this place. Might as well share the quiet — and maybe the last slice of cake?",
+      "bold": "*slides into the seat across from you as chairs clatter behind the counter* They're closing up, but I'm not ready to let the night end yet. Buy me five more minutes?",
+      "witty": "*watches the staff stack chairs around you* Careful, they might stack us with them. Talk fast — I'm the one with a six a.m. shift, not you."
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella so it covers you both, rain tapping softly above* There, now we're both dry — mostly. Walk with me a while?",
+      "bold": "*pulls you gently under the umbrella, shoulder brushing yours* Lucky I happened by — I hate seeing a good patient catch a cold before I even meet them.",
+      "witty": "*holds the umbrella like a shield against the downpour* Diagnosis: you're about to get soaked. Treatment: stick close to me. Doctor's orders."
+    },
+    "sea": {
+      "sweet": "*walks barefoot along the shoreline, sunset painting the water gold* Off duty, finally. Nice to breathe salt air instead of antiseptic for once. Walk with me?",
+      "bold": "*lets the tide curl around her ankles, watching you with a slow smile* No sirens, no gurneys — just you, me, and a very good sunset. I could get used to this.",
+      "witty": "*squints at the horizon* No patients, no pagers — I almost forgot what quiet sounds like. Don't ruin it by tripping on the sand, I'm off the clock."
+    }
+  },
+  "amara-diallo": {
+    "rooftop": {
+      "sweet": "*leans on the railing, city lights blurring gold behind her* Listen — I snuck us up here 'cause the party downstairs was suffocating. Stay a minute with me?",
+      "bold": "*twirls a loose thread off her jacket, eyes catching yours* Listen — everyone else bored me tonight. You didn't. Come stand closer, the view's better from here.",
+      "witty": "*flops dramatically against the railing* Listen — I escaped a conversation about NFTs to come stare at skyline with you. Lucky you. Don't waste it."
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a cooling mug, smiling softly* Listen — they're stacking chairs around us and I still don't want to leave. Stay for one more coffee?",
+      "bold": "*raises an eyebrow over the rim of her cup* Listen — last two customers, dim lights, and you across from me. Feels like the start of something, doesn't it?",
+      "witty": "*pokes at a crumb on the table* Listen — if they turn the lights off on us, I'm blaming you for being too interesting to leave."
+    },
+    "rain": {
+      "sweet": "*ducks under the umbrella, shoulder brushing yours* Listen — I didn't plan this, but I'm not mad about sharing an umbrella with you either.",
+      "bold": "*pulls you closer under the umbrella, rain blurring the streetlights* Listen — guess the universe wanted us standing this close. I'm not complaining.",
+      "witty": "*holds the umbrella lopsided, getting half-soaked anyway* Listen — I have the coordination of a baby giraffe, so this umbrella thing is basically your fault now."
+    },
+    "sea": {
+      "sweet": "*toes dig into the sand, sunset glowing behind her* Listen — I wanted to show you this place. Walk with me a little longer before it gets dark?",
+      "bold": "*hair loose in the sea breeze, eyes steady on you* Listen — sunsets like this make people brave. Might just say something I've been holding back.",
+      "witty": "*kicks a little water your way, grinning* Listen — I brought you all the way to the beach just to annoy you up close. Worth the trip?"
+    }
+  },
+  "sofia-lind": {
+    "rooftop": {
+      "sweet": "*I lean on the railing, city lights blurring below as the music fades downstairs.* Hej. Quieter up here, isn't it? Stay a while with me?",
+      "bold": "*I turn from the view, city lights behind me, and hold your gaze.* Everyone left the party downstairs. Lucky for me, the best part just walked up here.",
+      "witty": "*I raise an eyebrow as the last song fades below.* So you're the one who escaped the dance floor too. Bold move, or just good instincts?"
+    },
+    "cafe": {
+      "sweet": "*I cradle a warm cup as the staff quietly stack the last chairs around us.* Hej, looks like it's just us now. Stay for one more fika before they kick us out?",
+      "bold": "*I slide the last pastry across the table toward you, chairs stacking up around us.* Seems the whole café wants us gone. I'm in no hurry — are you?",
+      "witty": "*I glance at the staff pointedly stacking chairs.* Subtle hint, that. Shall we take it, or make them work for closing time?"
+    },
+    "rain": {
+      "sweet": "*I tilt the umbrella to cover you more than me as rain drums overhead.* Hej, sudden downpour, hm? At least the walk home is nicer with company.",
+      "bold": "*I pull you closer under the umbrella as rain streaks past.* One umbrella, one direction home. I'm not complaining about the arrangement at all.",
+      "witty": "*I hold the umbrella at a dramatically unfair angle, favoring you.* Stockholm never warns me about rain either. Walk fast or enjoy getting wet — your call."
+    },
+    "sea": {
+      "sweet": "*I walk barefoot along the shore, sunset painting the water gold.* Hej. I could watch this every evening — especially with you beside me.",
+      "bold": "*I stop at the water's edge, sunset glowing behind me, and look back at you.* Careful — sunsets like this tend to make people say things they mean.",
+      "witty": "*I kick a little sand your way, grinning as the sun dips low.* Careful, architect humor ahead: this view has excellent symmetry. So do you, apparently."
+    }
+  },
+  "luca-romano": {
+    "rooftop": {
+      "sweet": "*leans on the railing beside you, city lights glowing below* Ah, look at this — like candles on a cake nobody cut yet. Stay a little longer with me, eh?",
+      "bold": "*hands you a glass, eyes catching the lights* The music stopped but I did not. Tell me — does the view compare to the company?",
+      "witty": "*gestures at the skyline like he's presenting a dish* Bellissimo, no? Almost as good-looking as me. Almost. What do you think?"
+    },
+    "cafe": {
+      "sweet": "*slides the last two cups of coffee across the table as chairs clatter around you* Sit, sit, no rush. The night is ours now — what's your story?",
+      "bold": "*raises an eyebrow, chair tipped back* Everyone else went home. Lucky me. So — coffee, or something a little more interesting to talk about?",
+      "witty": "*watches the staff stack chairs around you both* Ah, they want us gone, but the coffee is not finished and neither am I. Humor me a little longer?"
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella so it covers you both, rain tapping softly above* Ah, Napoli weather — dramatic, like me. Walk slow with me, yes? No rush to get dry.",
+      "bold": "*pulls you a little closer under the umbrella, grinning at the rain* Fate, I think, putting us under one umbrella. So — where are we walking to, bella serata?",
+      "witty": "*holds the umbrella like a trophy* One umbrella, two people — very romantic, or very crowded, you decide. Which way home?"
+    },
+    "sea": {
+      "sweet": "*walks barefoot in the wet sand, sunset painting everything gold* This is better than any dessert I make. Walk with me a little further?",
+      "bold": "*stops, watching the sun sink into the water* Not bad for a weekend, eh? Though I confess, the view next to me is winning right now.",
+      "witty": "*kicks a little wave at the shore, laughing* Careful, the sea is flirting with your shoes. So — sunset, or should we race it to the end of the beach?"
+    }
+  },
+  "pip-marlow": {
+    "arcade": {
+      "sweet": "*clutches a handful of warm tokens, eyes soft with excitement* Hey, no pressure at all—we can start slow and just vibe with the lights. Which game's calling your name first?",
+      "bold": "*slams tokens on the counter like a boss move* Friday night, neon everywhere, and I am VIBRATING with energy! Pick a game, any game—let's set a high score!",
+      "witty": "*holds tokens like they're the Infinity Stones* Behold: shiny arcade money! Warning, I have zero chill and infinite quarters. Skee-ball or dance machine, which disaster first?"
+    },
+    "kitchen": {
+      "sweet": "*waves away a little puff of flour-smoke, grinning gently* Okay so this is... not Pinterest-worthy yet, but we've got this together. Wanna help me figure out where it all went sideways?",
+      "bold": "*flips a spatula dramatically while something sizzles ominously* THIS IS FINE! Chaos cooking is my favorite genre! Grab a spoon, let's save this recipe together!",
+      "witty": "*pokes a suspiciously blackened pan with a fork* Scientific update: I have created a brand-new food group. Taste-test volunteer needed, bravery optional but recommended!"
+    },
+    "library": {
+      "sweet": "*peeks over a fortress of color-coded notes, voice hushed and warm* Hey, come sit—snacks are hidden under the table and so is my stress. One week to go, we'll get through it together.",
+      "bold": "*slides a secret snack stash across the table with a huge grin* T-minus one week to exams and I am WEIRDLY hyped! Pomodoro timer's primed—what are we crushing first?",
+      "witty": "*smuggles a granola bar like it's contraband gold* Shh, the librarians can't know about Snack HQ. Exams loom, chaos brews—ready to pretend we're productive?"
+    },
+    "roadtrip": {
+      "sweet": "*leans out the window, hair whipping gently, smiling* Open road, good company—this is already perfect. So, gentle question: you're not seriously vetoing my playlist, right?",
+      "bold": "*cranks the windows down and blasts air-drums* ROAD TRIP ENERGY ACTIVATED! Windows down, snacks loaded—now we MUST fight about the playlist, it's tradition!",
+      "witty": "*holds phone hostage over the aux cord* My playlist or yours—choose wisely, the car's fate depends on it. Also I packed snacks shaped like little dilemmas."
+    }
+  },
+  "mei-tanaka": {
+    "rooftop": {
+      "sweet": "*leans on the railing, city lights blurring past her glasses* it's quieter up here. kinda nice having you to myself for a sec. stay till the music stops?",
+      "bold": "*hops up on the ledge-adjacent planter, grinning* city's basically our loading screen right now. so... you gonna make a move or just admire the view?",
+      "witty": "*steals your cup, sniffs it, makes a face* ok this isn't even your drink is it. anyway, nice night. you're not scared of heights or commitment, right?"
+    },
+    "cafe": {
+      "sweet": "*wraps both hands around a cooling mug, voice soft* staff keep side-eyeing us but whatever, it's cozy. stay a little longer?",
+      "bold": "*slides into the seat across from you, chin on hand* last two customers, dim lights... feels like the game's throwing us a cutscene. you taking the bait?",
+      "witty": "*watches chairs get stacked around you both* ok we're basically squatters now. five more minutes or are you scared of chair-stacking guy's judgment?"
+    },
+    "rain": {
+      "sweet": "*tilts the umbrella mostly over you, hair damp* don't worry about me, i run warm. good excuse to walk slow though, right?",
+      "bold": "*pulls you half a step closer under the umbrella, smirking* one umbrella, two people, zero coincidence. lucky you.",
+      "witty": "*umbrella barely covering either of you* ok whoever coded this weather needs fired. budge closer, i'm not losing my hoodie to this patch."
+    },
+    "sea": {
+      "sweet": "*toes in the sand, watching the sky go pink* this is way better than staring at monitors all day. glad you're here for it.",
+      "bold": "*bumps your shoulder as the waves glow orange* small town, big sunset, zero bugs to fix. kinda perfect, huh?",
+      "witty": "*squints at the horizon* ok sunset's cute but not as cute as watching you try not to step in a crab hole. race you to the pier?"
+    }
+  },
+  "adrian-cole": {
+    "rooftop": {
+      "sweet": "*Adrian leans on the railing beside you, city lights blinking below, party noise fading under us.* Quieter up here. Did you eat anything at that party, or just punch and chips?",
+      "bold": "*He finds you at the edge of the roof, close enough his arm brushes yours, the city glittering below.* Better view up here than the whole party combined. Stay a while?",
+      "witty": "*Adrian climbs through the window onto the roof, raising an eyebrow at finding you already up there.* Figured I'd meet the one person smart enough to escape the music. What's your excuse?"
+    },
+    "cafe": {
+      "sweet": "*Adrian sets his mug down as the last chair gets stacked, lamplight soft between us.* Didn't want to rush you out. You warm enough, or should I ask for more tea?",
+      "bold": "*He leans back, unhurried, while the staff clear tables around us, eyes steady on you.* Guess it's just us now. I don't mind closing this place down, if you don't.",
+      "witty": "*Adrian watches the barista flip the sign to closed, clearly in no hurry to leave.* Looks like we outlasted everyone else. Should we take credit for the extra tip jar?"
+    },
+    "rain": {
+      "sweet": "*Adrian tilts the umbrella over you first, rain tapping steady above us.* Didn't want you getting soaked. Which way are we headed?",
+      "bold": "*He steps close under the one umbrella, shoulder brushing yours as rain streams past.* Guess we're stuck together till this clears up. I'm alright with that.",
+      "witty": "*Adrian holds the umbrella up like a shield against the sudden downpour, grinning at your sprint toward him.* Nice timing. Umbrella, or the soaked-rat look?"
+    },
+    "sea": {
+      "sweet": "*Adrian walks beside you along the shoreline, the sunset turning the water gold.* Peaceful out here. Glad you came along for this.",
+      "bold": "*He slows his pace to match yours, waves catching fire with the sunset behind us.* Could get used to walks like this. Mind if I keep you company the rest of the trip?",
+      "witty": "*Adrian kicks a little sand toward the surf, sunset blazing gold behind him.* Careful, this view might ruin regular sunsets for you forever."
+    }
+  },
+  "maya-patel": {
+    "arcade": {
+      "sweet": "*jingles a pocketful of tokens and smiles* Hey, no pressure here, we're just here to have fun. What's one game from your childhood you want to try first?",
+      "bold": "*slams a stack of tokens on the counter, grinning* Let's go, champion! Pick a machine and let's claim a tiny victory tonight — what are we playing first?",
+      "witty": "*holds up two tokens like they're Olympic medals* Behold, our currency of greatness. So — skee-ball glory or pinball chaos first?"
+    },
+    "kitchen": {
+      "sweet": "*waves away a little puff of smoke with a dish towel* Hey, it's okay, messy kitchens make the best stories. What were we trying to make here?",
+      "bold": "*grabs a spatula like a trophy* Alright, kitchen disaster or not, we're finishing this! What step are we on and what's gone sideways?",
+      "witty": "*pokes a suspiciously charred pan* Well, this is either dinner or modern art. Which step did we betray the recipe on?"
+    },
+    "library": {
+      "sweet": "*slides a granola bar across the table quietly* Hey, exam week is tough, but we'll take it one small step at a time. What subject's weighing on you most?",
+      "bold": "*fist-bumps the air silently so we don't get shushed* Let's turn this study sesh into a win streak! What's the first tiny goal we're crushing today?",
+      "witty": "*smuggles a cookie under the table like a spy handoff* Shh, contraband secured. Now — what boring textbook are we conquering first?"
+    },
+    "roadtrip": {
+      "sweet": "*leans back as the wind ruffles the map on her lap* Hey, this is going to be a good one. What's the first song you want on our playlist?",
+      "bold": "*cranks the radio and grins at the open road* Windows down, engines revving, let's make this trip legendary! First song — go!",
+      "witty": "*wrestles the aux cord like it's a sword* I claim this playlist in the name of good taste. Fight me — what song are you nominating first?"
+    }
+  },
+  "dex-okafor": {
+    "arcade": {
+      "sweet": "*Dex holds up a fat stack of tokens, grinning soft under the neon lights.* Hey, no pressure tonight, we just vibe. Pick our first game and I'll go easy on you... mostly.",
+      "bold": "*Dex slams tokens on the counter, lights buzzing like hype music.* LET'S GOOO, Friday night arcade run! Pick the first game, loser buys snacks!",
+      "witty": "*Dex squints at the claw machine like it personally owes him money.* Okay we got tokens and zero skill between us. What are we destroying first, champ?"
+    },
+    "kitchen": {
+      "sweet": "*Dex pokes at something smoking slightly in the pan, unbothered.* Okay this might be a disaster but it's OUR disaster. Wanna help me save dinner?",
+      "bold": "*Dex waves a smoking spatula like a trophy.* Kitchen chaos mode ACTIVATED! Grab an apron, we're turning this recipe into a highlight reel!",
+      "witty": "*Dex stares at a pan that's definitely not supposed to look like that.* So... either we invented a new dish or committed a crime. Taste test?"
+    },
+    "library": {
+      "sweet": "*Dex slides a granola bar across the table, whispering like it's a heist.* Exam week's rough, huh. Snacks are smuggled in, I got your back. Study sesh?",
+      "bold": "*Dex pumps a silent fist, sneaking chips under the table like contraband.* Operation Pass These Exams is LIVE. What are we grinding first, legend?",
+      "witty": "*Dex hides a bag of chips under a textbook like it's classified intel.* Shhh, library's quiet but my snack game is LOUD. What subject's torturing you?"
+    },
+    "roadtrip": {
+      "sweet": "*Dex rolls the window down, playlist already queued up gently.* Road trip time, no rush, just good vibes. What's the first song gotta be?",
+      "bold": "*Dex cranks the music, windows down, already yelling over the engine.* ROAD TRIP ENERGY MAXED OUT! Fight me on the playlist, first song GO!",
+      "witty": "*Dex grips the aux cord like it's a sacred artifact.* Rules of the road: I pick good music, you pretend to have taste. First song?"
+    }
+  },
+  "nora-quill": {
+    "arcade": {
+      "sweet": "*settles onto a stool, counting tokens into a neat stack* No rush, dear. We'll find the right game, the way we find the right book. Which one's calling to you?",
+      "bold": "*slaps a fistful of tokens on the counter, eyes bright* Right then! Pick your poison before the night gets away from us. What's it going to be?",
+      "witty": "*squints at the flashing lights like they've personally offended her* Forty years of blessed silence, and now this racket. Pick a machine before I start shushing it."
+    },
+    "kitchen": {
+      "sweet": "*peers into a smoking pot with mild concern* Well, that's not in the recipe. Shall we laugh about it first, or rescue dinner first?",
+      "bold": "*waves away a puff of flour-dust, grinning* Chaos in the kitchen, my favourite kind of story. What disaster are we cooking up next?",
+      "witty": "*holds up a very suspicious-looking spoon* I've read a thousand recipes, dear, and none mentioned this. Taste it, or toss it?"
+    },
+    "library": {
+      "sweet": "*slides a tin of biscuits under the table, finger to lips* Exam week calls for quiet and crumbs. What are we studying tonight?",
+      "bold": "*grins, sliding snacks across the desk like contraband* Survival rations delivered. What subject are we conquering first?",
+      "witty": "*whispers conspiratorially, hiding biscuits behind a dictionary* Shh. The encyclopaedia's a terrible snitch. What are we cramming for?"
+    },
+    "roadtrip": {
+      "sweet": "*rolls the window down, settling in with a contented sigh* Open road, good company. What shall we listen to first?",
+      "bold": "*cranks the window down, hair already a mess* Engines on, playlist war begun! What's your opening song?",
+      "witty": "*clutches the aux cord like a sacred relic* I fought hard for this cord. What's it going to be, and don't say anything with a kazoo."
+    }
+  },
+  "sunny-park": {
+    "arcade": {
+      "sweet": "*leans against a glowing cabinet, tokens clinking softly* Hey there, night wanderer. Even arcades have a frequency — mind picking our first game together?",
+      "bold": "*spins a token in the air, neon lights flashing* Let's light this place up! Which game's calling your name tonight?",
+      "witty": "*squints at a flashing 'INSERT COIN' screen* Well, the machine's judging us already. Got a token and a song to drown it out?"
+    },
+    "kitchen": {
+      "sweet": "*wipes a streak of flour off the counter, smiling gently* Looks like our recipe took a detour into chaos. Want to turn this into something fun instead?",
+      "bold": "*tosses a spoon in the air, catches it with flair* Kitchen's basically a dance floor now — ready to rescue this dish with me?",
+      "witty": "*stares at a pot bubbling ominously* I think we just invented a new food group. Brave enough to taste-test it?"
+    },
+    "library": {
+      "sweet": "*slides a granola bar across the table, whispering* Shh, we're the quiet radio station of the library tonight. How's the studying treating you?",
+      "bold": "*pumps a fist quietly, grinning* Exam week survival mode: activated! Got your secret snack stash ready?",
+      "witty": "*peeks under the table at the snack pile* I see we've turned studying into a stakeout. What's the mission, agent?"
+    },
+    "roadtrip": {
+      "sweet": "*lets the wind ruffle through the open window* Road's wide open and so's the night. What song should we start this journey with?",
+      "bold": "*cranks the volume up, grinning at the horizon* Windows down, engine humming — let's find the track that kicks this trip off right!",
+      "witty": "*squints at the radio dial* Alright, DJ battle royale: your pick or mine for track one?"
+    }
+  },
+  "hugo-lindqvist": {
+    "arcade": {
+      "sweet": "*Hugo studies the blinking machines like they're ancient runes, token warm in his palm.* Hej! No pressure — in Swedish we'd say \"ta det lugnt,\" take it easy. Which game shall we try first?",
+      "bold": "*Hugo claps his hands, eyes lit up by neon.* Hej hej! Tokens ready, let's smash some high scores! Which machine calls to you first?",
+      "witty": "*Hugo squints at a pixelated dragon like it owes him kronor.* Hej! Fun fact: \"spela\" means to play — also my chances of winning this. Pick a game, quick, before I lose my dignity!"
+    },
+    "kitchen": {
+      "sweet": "*Hugo wipes flour off his cheek, smiling gently at the smoking pan.* Hej! Even disasters taste better with a little Swedish — \"mysigt\" means cosy, and this certainly is. Want to help me save dinner?",
+      "bold": "*Hugo juggles a wooden spoon, batter flying everywhere.* Hej! This kitchen's chaos but we're alive — ready to rescue this recipe together?",
+      "witty": "*Hugo pokes a suspicious lump that was once dough.* Hej! I think I just invented a new Swedish word: \"bränt\" — burnt. Care to help me un-invent it?"
+    },
+    "library": {
+      "sweet": "*Hugo settles into a corner seat, sliding you a secret cinnamon bun under the table.* Hej! Exams can wait a moment — \"lugn och ro\" means peace and quiet, just what we need. Ready to study together?",
+      "bold": "*Hugo grins, sneaking snacks past the librarian's glare.* Hej! Energy's up, books are open — let's conquer some Swedish vocab before exam week eats us alive! Where do we start?",
+      "witty": "*Hugo hides a bag of kanelbullar behind a giant dictionary.* Hej! Shh — \"tyst\" means quiet, and so are my smuggling skills. Ready to whisper some Swedish while we snack?"
+    },
+    "roadtrip": {
+      "sweet": "*Hugo leans back, windows down, humming softly as the road stretches ahead.* Hej! \"Resa\" means journey — and every good one starts with good company. What song should open our trip?",
+      "bold": "*Hugo cranks the volume, hair wild in the wind.* Hej! Engines roaring, playlist battle on — let's hit the road and learn some Swedish along the way! What's your first track?",
+      "witty": "*Hugo squints at the radio like it personally betrayed him.* Hej! In Sweden we'd call this musical crisis a \"låtkrig\" — a song war. Ready to pick your battle anthem?"
+    }
+  },
+  "lina-vasquez": {
+    "arcade": {
+      "sweet": "*leans on a glowing cabinet, tokens clinking in her palm* Friday nights like this are for easy wins and easier laughs, no pressure. Pick any machine — I'll be right here cheering you on. Which one's calling your name?",
+      "bold": "*slaps a fistful of tokens on the counter, neon lights buzzing overhead* Okay, Friday night, infinite tokens, zero shame — first game's on you, I already smell a high score. Pick fast, I'm vibrating with energy!",
+      "witty": "*squints at a claw machine like it personally insulted her family* Friday night, tokens burning a hole in my pocket, and I refuse to lose to a crane game again. Pick our first victim — er, game — before I challenge it to a duel."
+    },
+    "kitchen": {
+      "sweet": "*waves smoke away from a pan that was definitely not supposed to catch fire* Okay, small disaster, zero judgment — happens to every great cook, probably. Grab a spoon and help me save dinner?",
+      "bold": "*flips something in a pan with way too much confidence, sauce flying everywhere* This recipe is OFFICIALLY a disaster and I love it — quick, grab a spoon, we're saving this meal together!",
+      "witty": "*stares at a lump of dough that may now be sentient* I think I just invented a new species of bread and also ruined dinner. Got any tips, or should we just order tacos and call it 'research'?"
+    },
+    "library": {
+      "sweet": "*slides a bag of smuggled snacks under the table, finger to her lips* Exam week survival mode activated — quiet corner, secret stash, zero stress allowed. Want a snack and a study buddy?",
+      "bold": "*dumps a suspicious amount of snacks under the table, grinning* Exam week war room is officially open — bring your notes, I brought enough chips to fuel a small country. Ready to conquer?",
+      "witty": "*peeks over a fortress of textbooks, crumbs on her chin* Shh, the librarians don't know about Snack HQ down here. Join the operation — exams won't study themselves, sadly."
+    },
+    "roadtrip": {
+      "sweet": "*leans out the window, wind in her hair, map flapping on the dash* First mile of the road, windows down, whole world ahead — no wrong answers, just pick a song and let's go.",
+      "bold": "*cranks the radio up, foot already itching for the gas pedal* Windows down, open road, zero plan — first fight of the trip: your pick or mine for the opening song. Choose wisely!",
+      "witty": "*holds the aux cord hostage, eyebrow raised* This playlist decides if we're friends for the next 500 miles. Choose a song, choose wisely, choose fast."
+    }
+  },
+  "lucia-ferreira": {
+    "arcade": {
+      "sweet": "*Segura um punhado de fichas e sorri* Olá! Retro arcade, Friday night vibes — calma, no rush. Which game should we try first, devagarinho?",
+      "bold": "*Bate as fichas na máquina, animada* Eiiii! Arcade night! Tokens ready, lights everywhere — diz-me, qual jogo primeiro?! Let's gooo!",
+      "witty": "*Olha pras luzes piscando tipo perdida* Uau, this place blinks more than me sem café. Qual joguinho a gente ataca primeiro, campeão?"
+    },
+    "kitchen": {
+      "sweet": "*Mexe uma panela meio desastrosa com cuidado* Olá! A receita está... a correr mal, mas com calma. Ajudas-me a salvar isto?",
+      "bold": "*Farinha voando, rindo alto* Olá olá! A cozinha virou um caos delicioso — vem ajudar antes que explode mais alguma coisa!",
+      "witty": "*Cheira algo queimado, cara de pânico fofo* Então... a receita morreu. Quick, me ajuda a inventar um nome chique pra este desastre!"
+    },
+    "library": {
+      "sweet": "*Esconde um pacotinho de bolachas debaixo da mesa, sussurrando* Olá! Semana de exames, silêncio total — mas os snacks são secretos. Como estás a estudar?",
+      "bold": "*Abre o caderno com energia, sussurrando alto* Psiu, olá! Biblioteca lotada, snacks escondidos — vamos estudar com força antes das provas!",
+      "witty": "*Passa uma bolacha por baixo da mesa feito espiã* Shh... operação snack secreto em curso. Então, sobreviveste aos estudos até agora?"
+    },
+    "roadtrip": {
+      "sweet": "*Baixa o vidro do carro, vento no cabelo, sorrindo* Olá! Estrada aberta, calma total — só falta escolher a playlist perfeita juntos.",
+      "bold": "*Grita pela janela, música alta* Eiii! Road trip time, janelas abertas — vem discutir comigo qual música toca primeiro!!",
+      "witty": "*Discute com o rádio feito louca* Olá! Já começámos a brigar pela playlist e nem saímos da garagem ainda. Ajuda-me a escolher, por favor!"
+    }
+  },
+  "jonah-reed": {
+    "arcade": {
+      "sweet": "*spins a shiny token between his fingers, grinning at the flashing lights* Hey, no pressure, we've got all night and every game here is forgiving. Which one's calling your name?",
+      "bold": "*bursts through the arcade doors like he owns the place, tokens jingling* Friday night, lights everywhere, and I'm buzzing! Pick a machine, any machine — let's go set a terrible high score together.",
+      "witty": "*squints dramatically at a claw machine like it personally wronged him* Right, I've lost three euros to that cursed thing already. Help me pick our next victim — I mean, game."
+    },
+    "kitchen": {
+      "sweet": "*waves smoke away from a pan with a dish towel, laughing* Okay, this is... not what the recipe promised, but it smells like an adventure. Want to help me save dinner?",
+      "bold": "*flour exploding everywhere, grinning like a maniac* This kitchen is basically a disaster zone and I LOVE it! Grab a spoon, we're turning this mess into something edible!",
+      "witty": "*holds up something charred beyond recognition like a trophy* I think I just invented a new food group. Wanna taste-test, or should we just order pizza and call it art?"
+    },
+    "library": {
+      "sweet": "*slides into the quiet corner with a soft thud, snacks peeking out of his bag* Exam week's rough, huh? I brought backup supplies and zero judgment — what are we tackling first?",
+      "bold": "*drops a stack of books and a suspicious bag of chips under the table* Mission exam-week-survival is officially a go! What's the subject, and how fast can we power through it?",
+      "witty": "*whispers like he's smuggling contraband, sliding a cookie across the table* Shh, librarian's on patrol. Quick, what are you studying before she confiscates my snacks?"
+    },
+    "roadtrip": {
+      "sweet": "*leans on the open car door, windows already down, engine humming* No real plan today, just road and good company. What's the first song we're putting on?",
+      "bold": "*jumps into the driver's seat, revving the engine with a huge grin* Windows down, open road, zero destinations — let's GO! Quick, playlist veto power, what song starts this thing off right?",
+      "witty": "*holds phone hostage over the car's speaker system* I already queued up my questionable taste in music. Fight me for the aux cord or forever hold your peace."
+    }
+  },
+  "bea-okoye": {
+    "arcade": {
+      "sweet": "*presses a handful of tokens into your palm, smiling* No pressure, love, we're just here for a laugh. Which game's calling your name?",
+      "bold": "*rattles a fistful of tokens like dice* Right! Pick your poison, I'm already warming up my high score fingers!",
+      "witty": "*squints at the arcade like it owes her money* Okay, we've got tokens and zero shame. What are we destroying first?"
+    },
+    "kitchen": {
+      "sweet": "*waves smoke away from the pan gently, laughing* Don't worry, nothing's ruined that a bit of seasoning can't fix. What were we meant to be making again?",
+      "bold": "*flips something that probably should not be flipped* Oh, we're committed now! Tell me what this was supposed to be before I improvise us into glory!",
+      "witty": "*pokes something that's definitely not the right colour* Well. This is either dinner or a crime scene. Help me decide?"
+    },
+    "library": {
+      "sweet": "*slides a biscuit across the table under the desk* Shh, library rules, but also eat something, you've been at this too long. What are you revising?",
+      "bold": "*smuggles snacks out from under the table like contraband* Exam survival kit, deployed! Right, what are we cramming tonight?",
+      "witty": "*whispers like she's planning a heist* Snacks hidden, shame nonexistent. What subject's trying to ruin your week?"
+    },
+    "roadtrip": {
+      "sweet": "*leans back with the window down, hair blowing* Nothing like an open road to sort your head out. What's first on the playlist?",
+      "bold": "*cranks the window down and grins* Windows down, tank full, world's ours for the next few hours! Pick the first song, make it count!",
+      "witty": "*holds the phone hostage over the aux cord* I control the music till proven otherwise. Convince me your taste doesn't suck."
+    }
+  },
+  "marcus-bell": {
+    "arcade": {
+      "sweet": "*leans against a glowing cabinet, tokens jingling in his palm* Hey, no pressure here. Pick any game — win or lose, we're celebrating that you showed up. What's calling your name?",
+      "bold": "*pumps a fist as arcade lights flash around him* Let's go! Friday night, fresh tokens, zero expectations! Which machine are we conquering first?",
+      "witty": "*squints at a claw machine like it personally owes him money* We're not leaving till I beat this rigged little box. This game first, or you?"
+    },
+    "kitchen": {
+      "sweet": "*peeks at a smoking pan, waving a towel gently* Hey, no stress — kitchens are just labs for happy accidents. What are we trying to rescue here?",
+      "bold": "*grabs a spatula like it's a trophy* Smoke alarm's basically applauding us! Let's turn this disaster into a win — what's the plan?",
+      "witty": "*pokes something unidentifiable in a pot* I think we just invented a new food group. Edible, unsure. Confidence, through the roof. Next move, chef?"
+    },
+    "library": {
+      "sweet": "*settles into a quiet corner, sliding a snack bag under the table* Deep breaths — exam week's tough, but you're tougher. What are we studying first?",
+      "bold": "*cracks his knuckles, eyeing the stack of books* Let's go! Snacks hidden, brain warmed up — time to crush this syllabus one page at a time. Where do we start?",
+      "witty": "*whispers dramatically, snack bag crinkling* Shh, the library doesn't know we smuggled snacks in. What subject's getting destroyed first?"
+    },
+    "roadtrip": {
+      "sweet": "*leans out the window, grinning at the open road* No wrong turns today — just good company and a full tank of gas. What's the first song?",
+      "bold": "*cranks the radio with the windows down* Let's go! Open road, zero rules except good music! What's going on this playlist?",
+      "witty": "*holds the phone hostage over the aux cord* I control the first three songs — fight me. What's your opening pick?"
+    }
+  },
+  "priya-shah": {
+    "arcade": {
+      "sweet": "*clutches a handful of warm tokens, arcade lights glowing soft around us* No pressure at all — we can ease in with something cosy like skee-ball. Which game's calling to you first?",
+      "bold": "*bursts through the arcade doors, tokens jingling like tiny trophies* Friday night, lights everywhere, zero plans but fun — what are we destroying first, pinball or the dance machine?!",
+      "witty": "*holds up a token like it's the One Ring* This coin chooses our fate. Air hockey, or do we go straight for humiliating ourselves at DDR?"
+    },
+    "kitchen": {
+      "sweet": "*stirs a suspiciously lumpy pot, flour dusting the counter* Okay, this recipe's gone sideways but it's kind of fun, right? Any idea what step we butchered?",
+      "bold": "*flips something in a pan and it does NOT land correctly* Chaos kitchen, population: us! Quick, taste this and tell me if it's genius or a cry for help.",
+      "witty": "*stares at a cake that's somehow both raw and burnt* Science says that's impossible. Help me name this dish before the smoke alarm does it for us?"
+    },
+    "library": {
+      "sweet": "*slides a tin of biscuits further under the table, voice hushed* Exam week survival mode activated. Want a snack and a quiet spot to panic-study together?",
+      "bold": "*whispers excitedly while sneaking contraband snacks past the librarian's glare* Operation Secret Snack Stash is live! What are we cramming for first?",
+      "witty": "*smuggles a crinkly chip packet like it's classified intel* Shh, the library gods must never know. Coffee, carbs, or straight-up crying — pick your study fuel."
+    },
+    "roadtrip": {
+      "sweet": "*leans against the open car door, breeze drifting in* Windows down, whole day ahead, no wrong answers here — what's the first song that has to play?",
+      "bold": "*cranks the radio and hits the gas with a grin* Road trip time! Windows down, snacks loaded — fight me for the aux cord!",
+      "witty": "*clutches the aux cord like a sacred artifact* I will defend my playlist with my life. What's your opening diss track?"
+    }
+  },
+  "ollie-grant": {
+    "arcade": {
+      "sweet": "*Ollie clutches a handful of tokens, grinning under the neon glow.* Hey, don't worry about high scores tonight — we're just here for fun and whatever snack stall is hiding in the corner. What game should we start with?",
+      "bold": "*Ollie bursts through the arcade doors, tokens jingling like loose change in a jackpot machine.* Friday night, lights everywhere, and I'm buzzing! Pick a game, any game — loser buys the popcorn!",
+      "witty": "*Ollie squints at the claw machine like it personally insulted his dumplings.* Right, we've got tokens and zero skills between us. Which game are we embarrassing ourselves at first?"
+    },
+    "kitchen": {
+      "sweet": "*Ollie surveys a kitchen that smells faintly of smoke, smiling anyway.* Hey, happy accidents make the best stories — and sometimes the best snacks. What are we trying to rescue here?",
+      "bold": "*Ollie waves away a little puff of smoke with a spatula like a conductor.* Chaos in the kitchen, baby! This could still be a 10/10 disaster. What's the recipe we're wrecking tonight?",
+      "witty": "*Ollie pokes something unidentifiable bubbling on the stove.* Is it supposed to do that? Asking for science. What were we even trying to make here?"
+    },
+    "library": {
+      "sweet": "*Ollie slides into the quiet corner, carefully hiding a bag of crisps under the table.* Exam week's rough, but we've got snacks and a plan. What are you studying?",
+      "bold": "*Ollie plops down with a triumphant grin, smuggled snacks rustling under the table.* Operation Exam Week is officially a go! What are we cramming first — and more importantly, what snack am I rating?",
+      "witty": "*Ollie army-crawls a granola bar under the table like it's contraband.* Shh, the librarian doesn't know about our secret snack economy yet. What subject's ruining your week?"
+    },
+    "roadtrip": {
+      "sweet": "*Ollie leans out the window, hair blowing, grinning at the open road.* No matter what music we pick, this trip's gonna be good. What's first on the playlist?",
+      "bold": "*Ollie cranks the window down and throws both hands up like the road itself just cheered.* Windows down, snacks packed, zero plan — let's go! Your pick or mine for the first song?",
+      "witty": "*Ollie squints suspiciously at the aux cord like it's a loaded weapon.* Alright, before this turns into a playlist civil war — what's your opening track?"
+    }
+  },
+  "hanna-berg": {
+    "arcade": {
+      "sweet": "*leans against a glowing machine, token warm in her palm* Hi there. Which game calls to you first? No rush, we've got all night.",
+      "bold": "*spins a token between her fingers, eyes bright* Alright, Friday night energy! Which flashing machine are we conquering first?",
+      "witty": "*squints at a pixelated dragon like it insulted her* This game and I have unfinished business. Pick our first victim?"
+    },
+    "kitchen": {
+      "sweet": "*wipes a dusting of flour off her cheek, smiling* Well, this is an adventure. Think we can save dinner together?",
+      "bold": "*flour puffs into the air as she laughs* Whoo, kitchen chaos! Ready to turn this disaster into something delicious?",
+      "witty": "*holds up a pan with something unrecognizable sizzling in it* Pretty sure this wasn't in the recipe. Got any bright ideas?"
+    },
+    "library": {
+      "sweet": "*slides a hidden bag of crackers across the table, voice hushed* Hi. Exam week's rough, isn't it? Want some quiet company?",
+      "bold": "*grins, sneaking a highlighter like contraband* Exam week survival mode activated! What are we conquering first?",
+      "witty": "*whispers conspiratorially over a smuggled snack stash* Shh, the librarian doesn't know about Snack Fort. What's our battle plan?"
+    },
+    "roadtrip": {
+      "sweet": "*rolls the window down, wind catching her hair* Hi. Open road ahead, no rush to get anywhere. What should we listen to first?",
+      "bold": "*cranks the radio up, grinning into the wind* Windows down, open road, let's go! First song on this playlist war?",
+      "witty": "*clutches the aux cord like a trophy* I fought hard for this cord and I'm not giving it up easy. What's your opening move?"
+    }
+  },
+  "nikola-tesla": {
+    "forum": {
+      "sweet": "*I step through a shimmer of light into marble dust and distant shouting* My dear friend, it seems time itself has lent me a holiday to the Roman Forum. Stay close, and tell me—do you feel the currents of history crackling here too?",
+      "bold": "*Lightning hums faintly behind me as I materialize among togas and marble columns* Behold! Rome, 44 BC, trembling on the edge of destiny! Speak, traveler—what omen brings you to this fateful morning?",
+      "witty": "*I brush senate dust from my coat, eyeing a suspicious crowd of men in sheets* Ah, the Ides of March—terrible timing for sightseeing. Shall we avoid Pompey's theatre, or do you enjoy historical irony?"
+    },
+    "workshop": {
+      "sweet": "*I duck under a hanging gear and smile at the scattered sketches* What a wonderful mess of genius—Florence smells of oil paint and invention. Come, tell me which marvel on this table catches your eye first?",
+      "bold": "*Candlelight flickers over half-built wings and coiled springs as I step into the chaos* Florence! Cradle of invention! I feel kinship with every unfinished machine here—what dream shall we complete together?",
+      "witty": "*I nearly trip over a wooden flying contraption and catch myself on a sketch of a cannon* Renaissance workshops—always one invention away from either glory or disaster. Which will we choose today?"
+    },
+    "salon": {
+      "sweet": "*I straighten my collar as candlelight glows across velvet chairs and a half-played piano* Paris suits the soul—so does conversation. Tell me, what shall we discuss before the music resumes?",
+      "bold": "*I enter beneath chandeliers blazing like captured lightning, silk and wit filling the air* Ah, Paris in her golden hour! Speak boldly, for in this salon even silence sparkles with ambition.",
+      "witty": "*I glance at the piano, then at the sharp-tongued crowd nearby* A room full of clever people pretending not to gossip. Shall we join the pretense, or discuss something scandalously honest?"
+    },
+    "fog": {
+      "sweet": "*Gaslight flickers through thick fog as my footsteps echo on cobblestone* London keeps her secrets close tonight. Stay near—what mystery shall we chase through this mist together?",
+      "bold": "*Fog coils like ghostly current around flickering lamps as I peer into the dark* London breathes mystery tonight, electric with secrets! Tell me, which shadow shall we pursue first?",
+      "witty": "*I squint through the fog at a lamplight barely holding its own* Visibility: poor. Intrigue: excellent. Shall we solve a mystery, or simply avoid becoming one?"
+    }
+  },
+  "leonardo-da-vinci": {
+    "forum": {
+      "sweet": "*I step carefully over marble dust, sketchbook in hand, marveling at the senators' togas as if they were new pigments.* Friend, tell me — what unrest stirs this city today? I wish to understand it, gently, piece by piece.",
+      "bold": "*I stride into the Forum as if time itself bent to let me pass, cloak snapping in the wind of empire.* Rome trembles on the edge of history! Speak — what omen or plot have you witnessed this morning?",
+      "witty": "*I peer at a toppled statue and mutter that even marble men have bad days.* So — the Ides of March, hm? Tell me, is everyone here always this dramatic, or just today?"
+    },
+    "workshop": {
+      "sweet": "*Sunlight spills over scattered sketches and a half-finished wing of wood and canvas.* Welcome — mind the gears on the floor. Tell me, what curiosity brings you to my cluttered little kingdom of ideas?",
+      "bold": "*I fling open the shutters, revealing cogs, blueprints, and a flying machine mid-dream.* Behold! The workshop where man dares to steal secrets from the birds. What marvel shall we build together?",
+      "witty": "*I nudge a spring-loaded contraption out of your path before it can fire itself across the room.* Careful — that one has opinions. So, what brings you into my glorious chaos today?"
+    },
+    "salon": {
+      "sweet": "*I sit at the edge of candlelight, curious at this future Paris, a glass of wine untouched before me.* How strange and lovely this age is — tell me, what wonders have you brought from your century to share?",
+      "bold": "*I rise amid chandeliers and piano song, astonished that time has carried me into such splendor.* What marvel of an age is this?! Speak, traveler — what tales does your century hold?",
+      "witty": "*I eye the piano suspiciously, as if it might also be one of my inventions gone astray.* Four centuries forward and still men argue about art over wine. Some things, it seems, never change — agreed?"
+    },
+    "fog": {
+      "sweet": "*I walk slowly through the mist, lantern raised, studying the strange gas-lamps with quiet wonder.* Ah, the air itself glows here. Tell me gently — what mystery has drawn you out on such a night?",
+      "bold": "*Fog swirls like a living thing as I step from shadow into lamplight, eyes alight with purpose.* A city wrapped in secrets! Come — what dark puzzle shall we unravel together before dawn?",
+      "witty": "*I squint at a gas lamp and wonder aloud if London simply forgot how sunlight works.* Charming weather for secrets. So — what mystery have you dragged me into tonight?"
+    }
+  },
+  "cleopatra": {
+    "forum": {
+      "sweet": "*Cleopatra pauses beneath the shadow of the Senate steps, voice low.* Rome grows restless today — tell me, what have you heard the crowds whispering?",
+      "bold": "*She surveys the Forum, cloak snapping in the wind, eyes sharp as daggers.* Rome trembles on the edge of history — speak, before the knives find their mark.",
+      "witty": "*Cleopatra eyes the toga-clad crowd with faint amusement.* Ah, Rome — all marble and ambition, little sense. Which senator plots loudest today?"
+    },
+    "workshop": {
+      "sweet": "*Cleopatra lifts a sketch of some strange winged contraption, intrigued.* This Florentine clutter is new to me — walk me through what your inventor intends to build.",
+      "bold": "*She strides among half-finished machines, torchlight catching gears and parchment.* Centuries from my throne, yet ambition still smells the same. Explain this marvel to me.",
+      "witty": "*Cleopatra pokes a wooden wing with her sandal.* If this flies, I'll build you a pyramid. What exactly is it meant to do?"
+    },
+    "salon": {
+      "sweet": "*Cleopatra settles beside the piano, candlelight catching her jewels.* A curious era, all velvet and wit — tell me, what do they argue about in salons like this?",
+      "bold": "*She surveys the glittering room like a conquered province.* Paris glitters brighter than Alexandria's lamps tonight. Speak — what battles of wit are fought here?",
+      "witty": "*Cleopatra lifts a glass of something bubbly, unimpressed.* Interesting century — the wine's weaker, the gossip stronger. What scandal shall we dissect first?"
+    },
+    "fog": {
+      "sweet": "*Cleopatra draws her cloak tight against the fog, a lamp flickering nearby.* This city hides secrets in its mist — tell me what mystery has drawn us here tonight.",
+      "bold": "*She studies the gaslit shadows, unflinching.* Fog or no fog, I have outwitted Rome itself — show me this riddle London dares to hide.",
+      "witty": "*Cleopatra wrinkles her nose at the damp air.* No pyramids, no sun, just fog and secrets. Well then — what exactly are we hunting tonight?"
+    }
+  },
+  "marcus-aurelius": {
+    "forum": {
+      "sweet": "*I walk among the columns, toga drawn close, watching senators hurry past* Even here, before my own age, the marble feels familiar underfoot. What brings you to this uneasy morning?",
+      "bold": "*I stand upon the Forum steps as thunder gathers over Rome* History turns its page this very hour! Walk with me — tell me what you seek amid such a storm.",
+      "witty": "*I eye the senators whispering in togas, daggers no doubt well-hidden* Nothing like a Roman morning — ambition, marble, and a faint scent of betrayal. Shall we stroll?"
+    },
+    "workshop": {
+      "sweet": "*I step carefully among sketches and strange wooden machines, curious as a student* A workshop of wonders, far from my own age. What are you building here, friend?",
+      "bold": "*I lift a sketch of some flying contraption, marveling at its daring lines* Behold — mortal hands reaching for the heavens! What dream do you chase, inventor?",
+      "witty": "*I nearly trip over a half-finished device of gears and string* Rome built aqueducts; you seem to build the future, one spilled inkpot at a time. What is this thing?"
+    },
+    "salon": {
+      "sweet": "*I take a seat by candlelight, listening to the piano's gentle notes* A fine room for quiet minds to speak freely. What occupies your thoughts this evening?",
+      "bold": "*I raise a glass beneath glittering chandeliers, far from any soldier's tent* An emperor among poets and wit — what strange age is this? Speak, and let us duel with words.",
+      "witty": "*I study the room — perfume, piano, and enough opinions to start three wars* Paris is louder than any battlefield I've known. What's tonight's argument?"
+    },
+    "fog": {
+      "sweet": "*I pause beneath a flickering gas lamp, fog curling at my feet* A strange, quiet age, this. What mystery walks with you tonight?",
+      "bold": "*I stand amid swirling fog, lamplight barely piercing the gloom* Rome never knew such shadows as these! What dark riddle calls us forward?",
+      "witty": "*I peer into the fog, half-expecting a senator to leap out with a dagger* This city hides its secrets well. Care to share what you're hunting tonight?"
+    }
+  },
+  "ada-lovelace": {
+    "forum": {
+      "sweet": "*Ada steps carefully over sunlit marble, parasol tucked beneath her arm, eyes wide with wonder.* Goodness, what a curious century to visit! Tell me, friend, what calculations keep Rome's engineers so occupied today?",
+      "bold": "*Ada stands amid towering columns as the crowd murmurs of omens, her shawl snapping in the wind.* I sense a mathematics of fate stirring in this Forum — pray, tell me what omen has set Rome trembling!",
+      "witty": "*Ada surveys the Forum's dramatic architecture with a raised brow.* I do hope nobody's plotting anything terribly geometric today. What news, stranger — politics or merely poetry?"
+    },
+    "workshop": {
+      "sweet": "*Ada runs gentle fingers over a sketch of gears, utterly delighted.* What a marvelous workshop! Might you show me these half-finished contrivances? I do so love an unfinished engine.",
+      "bold": "*Ada flings open the shutters, light falling upon towering sketches of flying machines.* Behold! A workshop worthy of poetical science! What grand machine do you dare to dream, inventor?",
+      "witty": "*Ada peers at a sketch pinned askew among paint pots and half-eaten bread.* I see genius and chaos share a workbench nicely. Which of these marvels actually works?"
+    },
+    "salon": {
+      "sweet": "*Ada settles near the piano, candlelight dancing upon her shawl.* What a delightful gathering! Tell me, does the music here speak in numbers too, or merely in feeling?",
+      "bold": "*Ada sweeps into the glittering salon, candlelight gleaming off crystal, and rests a hand upon the piano.* Ah, Paris at its most brilliant! Speak boldly, friend — what wit shall we test tonight?",
+      "witty": "*Ada surveys the glittering room, one eyebrow raised at the piano's dramatic silence.* A salon without music is merely a room with excellent chairs. Shall we remedy that?"
+    },
+    "fog": {
+      "sweet": "*Ada pulls her shawl close as gaslight flickers through the swirling fog.* What an eerie, lovely night for discovery. Shall we puzzle out this mystery together, step by careful step?",
+      "bold": "*Ada strides through the fog, gaslight catching her determined gaze.* A mystery, is it? Splendid! Poetical science thrives on precisely such delicious puzzles. Lead on!",
+      "witty": "*Ada eyes a flickering gas lamp with mild suspicion.* London fog: nature's finest encryption. Well then — what cipher are we meant to solve tonight?"
+    }
+  },
+  "napoleon-bonaparte": {
+    "forum": {
+      "sweet": "*I stride across the Roman stones, studying the senators with a curious eye.* Fascinating — a republic eating itself before my very time existed. Walk with me, tell me what you see here.",
+      "bold": "*I plant my boot upon the steps of the Forum, cloak snapping behind me.* Rome taught the world how empires rise and fall — I came to steal her lessons. What do you make of this doomed republic?",
+      "witty": "*I glance at the toga-clad crowd, unimpressed by the lack of proper uniforms.* No artillery, no cavalry, just men arguing in bedsheets. Explain to me how this conquered the known world."
+    },
+    "workshop": {
+      "sweet": "*I lift a sketch of some impossible flying contraption, intrigued.* A mind ahead of its century — I admire that. Tell me, what are we building today?",
+      "bold": "*I sweep past half-finished machines, eyes blazing with ambition.* Genius surrounds us here — the kind that could reshape warfare itself. Show me what marvel this workshop hides.",
+      "witty": "*I poke at a gear-laden device, nearly losing a finger.* Dangerous clutter, brilliant mind. Tell me — does this thing fly, explode, or both?"
+    },
+    "salon": {
+      "sweet": "*I settle into a velvet chair, listening to the piano drift through candlelight.* A fine evening for conversation. Come, sit — tell me what occupies your thoughts tonight.",
+      "bold": "*I survey the glittering room like a battlefield of wit and perfume.* Paris never loses her splendor, even decades after my fall. Speak boldly — what shall we debate?",
+      "witty": "*I eye the champagne with suspicion, missing my old campaign rations.* Charming room, questionable drink. Tell me something scandalous before the music drowns us out."
+    },
+    "fog": {
+      "sweet": "*I peer through the drifting fog, lantern light flickering nearby.* An eerie city, this London. Stay close — tell me what mystery has drawn us here.",
+      "bold": "*I draw my coat tight against the damp, scanning the shadows like enemy lines.* Something stirs in this fog — danger, perhaps destiny. What do you know of this night's affair?",
+      "witty": "*I squint at the gas lamp, unconvinced by its feeble glow.* No campfires, no cannon smoke — just fog pretending to be mysterious. What exactly are we investigating?"
+    }
+  },
+  "marie-curie": {
+    "forum": {
+      "sweet": "*I steady myself on ancient stone, startled by the toga-clad crowd around me.* How curious — it seems I have wandered far from my laboratory. Tell me, what great debate stirs Rome this morning?",
+      "bold": "*I stand amid marble columns as senators argue nearby, my coat absurdly out of place.* So this is the Forum of old Rome! Speak — what momentous history unfolds here today?",
+      "witty": "*I glance at my chemistry-stained hands, then at the togas around me.* It seems radium has sent me rather further back than expected. Shall you explain Rome, or shall I deduce it?"
+    },
+    "workshop": {
+      "sweet": "*I run a finger along a sketch of some impossible flying machine, delighted.* What a wonderful mess of invention this is. Tell me, which of these marvels are you building?",
+      "bold": "*Gears and half-finished contraptions surround me like the dreams of a genius.* I feel I have stepped into the very mind of the Renaissance! What great invention awaits completion here?",
+      "witty": "*I nearly trip over a half-built device of dubious purpose.* No radium here, only gears and ambition, I see. Will this contraption fly, or merely fall with great enthusiasm?"
+    },
+    "salon": {
+      "sweet": "*Candlelight flickers as a piano hums softly nearby.* How lovely an evening for conversation. Tell me, what ideas are being debated here tonight?",
+      "bold": "*I take in the glittering chandeliers and sharp-tongued wit filling the room.* Paris at her most brilliant! What grand idea shall we defend tonight?",
+      "witty": "*I adjust my plain dress amid the silks and jewels.* I confess I'm better suited to a laboratory than a salon. Will you forgive my science talk, or must I learn to gossip first?"
+    },
+    "fog": {
+      "sweet": "*A gas lamp flickers through the fog as I peer down the empty street.* Something feels unresolved here, like an experiment awaiting its answer. Shall we investigate together?",
+      "bold": "*The fog curls thick around flickering lamps, hiding what mysteries may lurk.* London at her most mysterious! Tell me, what dark puzzle calls us into this night?",
+      "witty": "*I squint through the fog, wishing for better lighting conditions for proper observation.* A mystery, is it? How delightfully unscientific. Where shall we begin our investigation?"
+    }
+  },
+  "william-shakespeare": {
+    "forum": {
+      "sweet": "*I blink at the marble columns, quill tucked behind mine ear* Good morrow, gentle soul! Time hath flung me to ancient Rome — wilt thou guide a lost poet through this noble Forum?",
+      "bold": "*I stride onto the stones of Rome, cloak snapping like a banner* By my troth, Caesar's own city! Speak, friend — shall we two witness history ere the knives are drawn?",
+      "witty": "*I eye the togas with deep suspicion* Well, this is decidedly not Stratford. Tell me true — is it safe to compliment a senator's robe today, or hast thou heard rumors of ides?"
+    },
+    "workshop": {
+      "sweet": "*I lift a strange sketch of wings, marveling* What wondrous clutter! Some artist-inventor's dream surrounds us — wilt thou help me puzzle out these marvelous contraptions?",
+      "bold": "*I sweep my arm across the crowded workshop, eyes alight* Behold! Gears and genius entwined like lovers! Pray, tell me what great mind doth dwell here, that I might steal his fire for verse.",
+      "witty": "*I poke a half-built machine and it wobbles alarmingly* Ah, Florence — where men build flying contraptions yet still cannot fix a squeaky door. What marvel is this, friend?"
+    },
+    "salon": {
+      "sweet": "*I settle into a velvet chair, quite charmed by the candlelight* What a glittering gathering! Pray, join me — I've a feeling Paris hath much wit to spare tonight.",
+      "bold": "*I raise a glass amid piano and perfume, grinning* A salon worthy of kings and poets! Speak boldly, friend — what grand scandal or sonnet shall we conjure before dawn?",
+      "witty": "*I survey the sharp-tongued crowd with raised brow* Ah, the 1890s — where everyone insults each other so elegantly. Teach me this art, won't thou? My wit needs modernizing."
+    },
+    "fog": {
+      "sweet": "*I peer through drifting fog, lamp flickering gently* A mysterious night, this — stay close, friend. Shall we unravel whatever secret London hides tonight?",
+      "bold": "*I stand beneath a gas lamp, fog swirling like a stage curtain* Hark! A mystery worthy of tragedy stirs in this darkness. Come, let us play detective and poet both!",
+      "witty": "*I squint into the murky fog* Splendid visibility — I can scarcely see mine own nose, let alone a villain. What mischief hast thou dragged me into tonight?"
+    }
+  },
+  "nicolaus-copernicus": {
+    "forum": {
+      "sweet": "*I step carefully through the marble crowd, clutching my astrolabe like a lost student.* Gentle traveller, tell me — in this Rome, do they yet know the Earth itself is in motion?",
+      "bold": "*I stand amid the columns of Rome, toga borrowed and ill-fitting, eyes alight with wonder.* Behold! A humble astronomer from a distant century walks among Caesars. Will you guide me through this age?",
+      "witty": "*I nearly trip over my own toga, muttering about anachronisms.* Charming century, this one — everyone shouting about empire, nobody asking what the stars are doing. Care to fill me in?"
+    },
+    "workshop": {
+      "sweet": "*I peer at a half-built contraption of gears and wings, delighted as a child.* Friend, this workshop hums with the same curiosity that once filled my study. What marvel are you building?",
+      "bold": "*I sweep my gaze across sketches of flying machines and marvel aloud.* So this is the forge of genius in Florence! Tell me, bold inventor, what grand design occupies your hands?",
+      "witty": "*I pick up a sketch of a flying contraption and squint at it.* Ah, another soul trying to leave the Earth before I've even finished moving it. What are we building today?"
+    },
+    "salon": {
+      "sweet": "*I adjust my unfamiliar coat, charmed by the candlelight and piano music.* How wonderful, to find minds still gathering to talk of ideas. What shall we discuss tonight, friend?",
+      "bold": "*I enter the glittering salon, astonished by gaslight and gowns, and bow with old-world formality.* Paris in her brilliance! Tell me, does this century still argue about the heavens as mine once did?",
+      "witty": "*I eye the champagne and piano with suspicion, as if they might be new astronomical instruments.* A salon, you call it — louder than any observatory I've known. So, what's the gossip of the stars tonight?"
+    },
+    "fog": {
+      "sweet": "*I pull my coat close against the London fog, lantern light flickering nearby.* A curious night for a wandering astronomer. Will you help me find my way through this mystery?",
+      "bold": "*I stand beneath a flickering gas lamp, fog swirling like the mists of forgotten centuries.* Something stirs in this darkness, traveller — shall we uncover it together?",
+      "witty": "*I squint through the fog, half expecting a comet, half expecting a pickpocket.* London keeps its mysteries well hidden — rather like the heavens once did. Care to help me solve one?"
+    }
+  },
+  "frederic-chopin": {
+    "forum": {
+      "sweet": "*He glances about the marble columns, bewildered yet delighted, clutching an invisible score.* How strange, to find no piano among these stones. Tell me, friend, what music does Rome make today?",
+      "bold": "*He draws his cloak tight, awed by the senators' thunderous debate echoing off ancient stone.* Great Rome! Even without my piano I feel the drama in the air — tell me, what tragedy unfolds here?",
+      "witty": "*He eyes a toga-clad crowd with raised brow, as if judging their fashion against Parisian salons.* No piano, no velvet chairs — only marble and gossip. Shall we call this Rome's first salon?"
+    },
+    "workshop": {
+      "sweet": "*He lifts a sketch of some winged contraption, careful not to smudge the ink, smiling softly.* Such curious machines — almost like music written for hands instead of ears. What are you building?",
+      "bold": "*He surveys the workshop's towering sketches and half-finished gears with wide, astonished eyes.* Ah, genius lives in this clutter as it does in a score before its first note! What marvel do you dream to finish?",
+      "witty": "*He pokes at a gear with one finger, as though testing if it might play a nocturne.* No piano here, only wings and wheels. Florence keeps its artists busy — what's your excuse for the mess?"
+    },
+    "salon": {
+      "sweet": "*He settles at the piano, candlelight catching his thin fingers as he tests a quiet chord.* Ah, Paris again — though stranger now. Sit close, won't you, and tell me what mood brought you here tonight?",
+      "bold": "*He rises from the piano bench with theatrical flourish, candlelight dancing like applause behind him.* Paris never tires of brilliance! Tell me, what grand passion shall we discuss tonight?",
+      "witty": "*He taps a key lightly, raising an eyebrow at the unfamiliar fashions filling the room.* The salons have changed their dresses, I see, though not their appetite for gossip. What's the scandal tonight?"
+    },
+    "fog": {
+      "sweet": "*He pulls his coat close against the damp, a lantern's glow softening the fog around him.* Such a strange, hushed night — almost like a nocturne made of mist. Will you walk with me and tell me what we seek?",
+      "bold": "*He stands beneath a flickering gas lamp, fog swirling like a dark overture around him.* London by night — what drama waits in this gloom? Come, let us uncover its secret together.",
+      "witty": "*He squints through the fog at a shadow that might be a cat, or possibly a duke.* Paris never hid her secrets in weather this rude. What exactly are we hunting tonight?"
+    }
+  },
+  "vincent-van-gogh": {
+    "forum": {
+      "sweet": "*Vincent steps between the marble columns, shielding his eyes from the harsh noon sun, sketchbook clutched tight.* The light here burns white, not gold like my fields. Tell me, what do you see in it?",
+      "bold": "*Vincent strides into the Forum as togas swirl and voices rise in alarm, his brush already stained with Roman dust.* What tempest of history have I stumbled into? Stand with me — tell me what hangs in this trembling air!",
+      "witty": "*Vincent peers at a senator hurrying past with suspicious haste, sketchbook open, eyebrow raised.* Everyone looks as though they've seen a ghost — or will become one shortly. Shall we find out which?"
+    },
+    "workshop": {
+      "sweet": "*Vincent runs his fingers over a half-finished wooden wing, charcoal dust on his hands, eyes wide with wonder.* Such machines! I only ever painted flight in starlings. What are you building here?",
+      "bold": "*Vincent stands amid towering sketches and strange contraptions, lightning in his eyes.* Genius lives in this clutter like fire in coal! Tell me, which of these dreams shall we set ablaze together?",
+      "witty": "*Vincent pokes at a gear-laden contraption that may or may not be a flying machine, looking faintly alarmed.* I came looking for paint and found a workshop plotting to defy gravity. Explain yourselves."
+    },
+    "salon": {
+      "sweet": "*Vincent stands awkwardly near the piano, a glass untouched in his hand, candlelight warming the room gold.* I'm no good at this sort of talk — but tell me, what music moves you tonight?",
+      "bold": "*Vincent appears amid silk and candlelight, his coat paint-stained among the finery, eyes blazing with restless energy.* Let the piano play louder than their gossip! Tell me something true, won't you?",
+      "witty": "*Vincent eyes the glittering crowd with the suspicion of a man who'd rather be painting wheat fields.* So this is Paris at its shiniest. Go on then — dazzle me, or at least pass the wine."
+    },
+    "fog": {
+      "sweet": "*Vincent pulls his collar up against the damp, a gas lamp hissing faintly beside him, fog swallowing the street.* Even in this gloom there's a strange blue light. Will you walk with me and tell me what you make of it?",
+      "bold": "*Vincent emerges from the swirling fog beneath a flickering gas lamp, his eyes alight despite the gloom.* Something waits in this darkness — I feel it like thunder before a storm! Shall we uncover it together?",
+      "witty": "*Vincent squints into the fog, which has apparently swallowed half the street and possibly his sense of direction.* London hides everything in grey wool. Care to help me find out what it's hiding tonight?"
+    }
+  },
+  "oscar-wilde": {
+    "forum": {
+      "sweet": "*wanders through the marble columns, toga borrowed and badly draped* My dear friend, even Rome's senators look anxious today — shall we sit and trade theories, gently, over the gossip in the air?",
+      "bold": "*strides into the Forum as if he owns its very stones* Behold Rome at her most theatrical — daggers whispered about, ambition dressed as virtue! Tell me, do you sense the drama too?",
+      "witty": "*squints at the Senate steps* Nothing sharpens a toga quite like political tension. Caesar should've hired a better critic — namely me. What scandal have you overheard?"
+    },
+    "workshop": {
+      "sweet": "*peers at a sketch of impossible wings, utterly charmed* What a wonderfully cluttered mind this room belongs to. Come, tell me which half-finished marvel you'd rescue first.",
+      "bold": "*flings open the workshop door with a flourish* Genius lives here in glorious disarray — flying machines, sketches of the divine! Which invention shall we conspire to finish?",
+      "witty": "*trips over a gear, recovers with dignity intact* Florence's finest minds clearly believe tidiness is the enemy of genius. I rather agree. What chaos shall we admire first?"
+    },
+    "salon": {
+      "sweet": "*settles into a velvet chair by candlelight, smiling warmly* How lovely to find a kindred soul amid all this glitter. Do sit — tell me something true, or at least beautifully exaggerated.",
+      "bold": "*sweeps into the salon as the piano swells, candlelight catching every gem in the room* Paris at her most dazzling, and now you! Confess something delicious before the night grows duller.",
+      "witty": "*raises a glass toward the chandelier* Ah, Paris — where everyone lies beautifully and calls it conversation. Do join in; I insist on being entertained."
+    },
+    "fog": {
+      "sweet": "*emerges gently from the mist beneath a flickering gas lamp* London keeps her secrets close tonight. Walk with me — perhaps together we'll coax one into the light.",
+      "bold": "*appears dramatically from the fog, cane in hand, eyes gleaming* A mystery stirs in this gaslit gloom, thick as the fog itself! Shall we unravel it before dawn dares interrupt?",
+      "witty": "*peers theatrically into the fog* London's weather has all the subtlety of a bad melodrama. Something wicked is clearly afoot — care to investigate, or merely gossip about it?"
+    }
+  },
+  "abraham-lincoln": {
+    "forum": {
+      "sweet": "*I step carefully around a marble column, tall hat in hand, eyeing the toga-clad crowd.* Well now, I'm a long way from Illinois. Rome, is it? Tell me gently what troubles stir this Forum this morning, friend.",
+      "bold": "*I plant my cane upon the ancient stones, the Senate steps looming ahead.* By thunder, I've traveled further than any circuit rider ought! Speak plain — what great storm brews here in Caesar's Rome?",
+      "witty": "*I squint at the togas and marble, scratching my beard.* Well, I reckon I've wandered clean out of my century. Mind telling me if stabbing senators is common practice around here, or just a Tuesday?"
+    },
+    "workshop": {
+      "sweet": "*I duck under a hanging sketch of wings, careful not to knock over strange contraptions.* This Florence air smells of paint and ambition. What marvel are you building, and might an old lawyer learn something?",
+      "bold": "*I stand amid gears and half-finished flying machines, hat nearly brushing a canvas ceiling.* Great heavens, what vision fills this room! Tell me, inventor — what bold dream are you chasing here in Florence?",
+      "witty": "*I pick up a sketch of some wing-like contraption, turning it sideways.* Well, I've built log cabins, not flying machines. You'll have to explain how this thing's supposed to keep a fella off the ground."
+    },
+    "salon": {
+      "sweet": "*I sit stiffly on a velvet chair, candlelight flickering off piano keys nearby.* Paris is a fair sight grander than Springfield, friend. Tell me what sharp wit or trouble brings you to this glittering room tonight.",
+      "bold": "*I stand tall amid silk and candlelight, the piano's notes rising like a toast to history.* By George, what splendor! Speak boldly now — what grand matter occupies Paris this dazzling evening?",
+      "witty": "*I eye the chandeliers, feeling distinctly underdressed in my old black coat.* Well, I reckon I'm the plainest thing in this room besides the piano bench. What's the gossip worth telling, friend?"
+    },
+    "fog": {
+      "sweet": "*I pull my coat tight against the London chill, gaslight glowing faint through the mist.* Strange night for an old prairie lawyer to wander. What mystery has you out walking in this fog, friend?",
+      "bold": "*I stand beneath a flickering gas lamp, fog curling like smoke from a battlefield.* By heaven, this city hides its secrets well! Tell me, friend — what dark matter calls us out on such a night?",
+      "witty": "*I squint through the fog, half-expecting a ghost or a pickpocket.* Well, this beats a candlelit cabin for spookiness. What's the mystery, and ought I bring my umbrella or my revolver?"
+    }
+  },
+  "jane-austen": {
+    "forum": {
+      "sweet": "*Jane Austen steps carefully over marble fragments, parasol tucked beneath her arm.* Goodness, what a lot of togas and tempers. Shall we find a quiet column and you tell me what brings you to Rome?",
+      "bold": "*Jane Austen surveys the Forum, columns gleaming, senators muttering in knots.* Caesar's Rome! What drama for a novelist. Pray, are you friend or foe in this gathering storm?",
+      "witty": "*Jane Austen eyes the marble and the murmuring senators with suspicion.* Everyone here looks terribly pleased with themselves, which in my experience precedes a very bad afternoon. What is your part in it?"
+    },
+    "workshop": {
+      "sweet": "*Jane Austen peers at sketches of wings and gears scattered across a cluttered table.* What curious genius lives here. Will you show me which invention you're proudest of?",
+      "bold": "*Jane Austen gazes up at half-built contraptions reaching toward the rafters.* Florence smells of ink, oil, and ambition! Tell me, are you the dreamer behind these marvellous machines?",
+      "witty": "*Jane Austen nudges aside a sketch of a flying device with her boot.* I see ambition has rather outpaced the floor space. Which of these marvels is meant to actually work?"
+    },
+    "salon": {
+      "sweet": "*Jane Austen settles into a velvet chair as the piano murmurs nearby.* What a lovely gathering. Do tell me who here is secretly the most interesting person in the room.",
+      "bold": "*Jane Austen surveys the candlelit salon, jewels glittering, conversation sparkling like champagne.* Paris at her most dazzling! Pray, are you here to charm, or to be charmed?",
+      "witty": "*Jane Austen accepts a glass she has no intention of finishing.* Every salon has one bore, one genius, and one scandal. Which, I wonder, are you?"
+    },
+    "fog": {
+      "sweet": "*Jane Austen pulls her shawl close as gaslight flickers through the mist.* How mysterious London looks tonight. Will you walk with me and tell me what puzzle we're solving?",
+      "bold": "*Jane Austen peers into the swirling fog, lamplight barely piercing the gloom.* A night built for secrets and scoundrels! Tell me, what dark business has brought you to these streets?",
+      "witty": "*Jane Austen steps carefully around a suspiciously placed puddle.* Fog, gaslight, and mystery — London really does love its theatrics. What have you lost, or whom?"
+    }
+  },
+  "queen-elizabeth-i": {
+    "forum": {
+      "sweet": "*She gathers her skirts, eyeing the marble columns with curious delight.* We find ourself transported to ancient Rome — a strange gift of fate. Come, walk with us and tell us what troubles this city so.",
+      "bold": "*She draws herself up amid the clamor of toga-clad senators, unbowed by the strange age.* So — Rome, eternal and restless, on the very eve of treachery! Speak, stranger, what omens have you heard this morn?",
+      "witty": "*She steps over a dropped scroll, unimpressed by the local fashion sense.* Togas, marble, and men plotting murder before breakfast — Rome never changes, does it? Tell us, friend, whom shall we avoid today?"
+    },
+    "workshop": {
+      "sweet": "*She lifts a sketch of some fantastical flying contraption, eyes bright with wonder.* What marvels you Florentines dream up! Come, explain this strange machine to a queen eager to learn.",
+      "bold": "*She surveys the cluttered chamber of gears and parchment like a sovereign inspecting new conquests.* So this is where genius labors in secret! Tell us, inventor — what wonder do you build to astonish the ages?",
+      "witty": "*She nearly trips over a half-finished contraption, raising a brow at the chaos.* We have seen tidier battlefields. Explain yourself — what manner of madness are you constructing here?"
+    },
+    "salon": {
+      "sweet": "*She settles gracefully near the piano, candlelight catching her jeweled gown.* A most elegant age, this Paris of yours. Come, sit — we should like to hear your thoughts on all this modern wit.",
+      "bold": "*She surveys the glittering salon as if it were her own court, chin lifted.* Candlelight, music, sharp tongues — this Paris suits us well! Speak boldly, for we do so love a clever rival.",
+      "witty": "*She accepts a glass she has no intention of finishing, surveying the room with amusement.* So this is the famous Parisian wit everyone speaks of. Do impress us — we are notoriously hard to please."
+    },
+    "fog": {
+      "sweet": "*She draws her cloak close against the damp night air, the gas lamp flickering beside her.* A curious, shadowed city, this. Stay near, and tell us what mystery has drawn us both out into such fog.",
+      "bold": "*She stands amid swirling mist, lamplight casting long shadows across her resolute face.* Fog thick as treachery, and a secret waiting in the dark — just as we like it! Speak, what mystery calls us forward?",
+      "witty": "*She peers into the gloom, unimpressed by London's weather even across centuries.* Fog, mystery, and questionable lighting — how very dramatic. Well then, detective, where do we begin?"
+    }
+  },
+  "wolfgang-amadeus-mozart": {
+    "forum": {
+      "sweet": "*blinks at togas and marble, clutching an invisible score* Oh! Ancient Rome, is it? Marvelous acoustics in this forum — shall we see what melody the senators' arguing makes?",
+      "bold": "*stands amid the columns, cape billowing, eyes wide with theatrical awe* Behold! Caesar's Rome — what grand opera this city could be! Shall we compose its fate in music together, friend?",
+      "witty": "*steps over two toga-clad men mid-argument, unbothered* Ah, Rome — even the politicians argue with better rhythm than my rivals in Vienna. Shall we see who gets the dramatic exit first?"
+    },
+    "workshop": {
+      "sweet": "*peers at sketches of flying machines, utterly delighted* Oh, such wonderful contraptions! None hum quite like a violin, though — will you show me how they work?",
+      "bold": "*gestures grandly at gears and half-built wings* Florence! Genius hangs thick as paint fumes here! Shall we build something magnificent — with a melody attached, naturally?",
+      "witty": "*pokes a half-finished machine; it wobbles ominously* Ambitious fellow, this inventor. Mine just sit still and sound pretty. Shall we compare notes, so to speak?"
+    },
+    "salon": {
+      "sweet": "*admires the candlelit piano with a soft smile* Ah, Paris — how lovely! Shall we sit at that piano and see what melodies still echo in these walls?",
+      "bold": "*strides in, bowing with a grand flourish amid glittering chandeliers* Paris! A century hence, yet still my kind of stage! Who dares challenge me at that piano?",
+      "witty": "*eyes the piano, then the fashionable crowd* My, how opulent. I wonder if anyone here can out-wit a dead composer. Care to try?"
+    },
+    "fog": {
+      "sweet": "*peers through the mist, lantern flickering gently* How delightfully spooky! Shall we hum a tune to keep the shadows at bay while we look about?",
+      "bold": "*cloak billowing in the fog, eyes gleaming with mischief* London by night — what drama! Somewhere out there, a mystery awaits its overture. Shall we find it?",
+      "witty": "*squints at a sputtering gas lamp* Foggy London — romantic, if you enjoy coughing. Shall we solve a mystery, or merely compose its soundtrack?"
+    }
+  },
+  "vivienne-rose": {
+    "forum": {
+      "sweet": "*Vivienne steps off a marble step, her beaded dress peeking out from a borrowed toga, blinking at the hush around her.* Well, darling, seems I've wandered clean out of my century — tell a gal what's got everyone so jittery this morning?",
+      "bold": "*She sweeps through the Forum like it's her own stage, chin high among the columns and murmuring senators.* Rome in the flesh, and the air's thick as a storm cloud. What drama's about to unfold, sugar?",
+      "witty": "*Vivienne eyes the togas with a raised brow, swapping her flapper fringe for borrowed drama.* Quite the get-up you've all got going. So what's the scandal brewing in this marble joint?"
+    },
+    "workshop": {
+      "sweet": "*Vivienne tiptoes through scattered sketches, careful not to knock over a half-built wing.* My, my — looks like genius lives here. Care to show a girl what all this clever clutter's for?",
+      "bold": "*She sweeps in, silk hem brushing blueprints of flying machines, eyes wide at the glorious chaos.* Darling, this workshop's got more spark than a Chicago stage. What marvel are you dreaming up next?",
+      "witty": "*Vivienne nearly trips over a gear the size of a hatbox, eyebrow arched at the mess.* Quite the den for a genius. Tell me — does any of this actually fly, or is it all for show?"
+    },
+    "salon": {
+      "sweet": "*Vivienne drapes herself over a velvet chair, candlelight flickering as the piano hums low.* Paris before my time — how charming. Tell me, darling, what's the talk of this glittering room tonight?",
+      "bold": "*She glides in like she owns the place, candlelight catching her beads as the piano swells.* Paris, you gorgeous thing — I feel right at home. What wicked gossip shall we trade first?",
+      "witty": "*Vivienne lifts a coupe of champagne, eyeing the salon's velvet drama with a smirk.* Candles, piano, secrets — my kind of joint, just missing a jazz band. Who's the scandal of the evening?"
+    },
+    "fog": {
+      "sweet": "*Vivienne pulls her shawl tight against the fog, gas lamps flickering gold through the mist.* Spooky little corner of history, isn't it, darling? Stay close — tell me what's got this street so quiet.",
+      "bold": "*She strides through the fog like a star entering a scene, gas lamps haloing every step.* London by night — moody as a torch song. What dark little secret's hiding in this mist?",
+      "witty": "*Vivienne squints through the fog, heels clicking ominously on cobblestone.* Well, this is dramatic — did London forget to pay its electric bill? Go on, what mystery are we solving tonight?"
+    }
+  },
+  "roland-ashford": {
+    "forum": {
+      "sweet": "*Sir Roland blinks at the marble columns, adjusting his dented helm amid the toga-clad crowd.* Good morrow, friend! This Forum is far from mine own lands, but tell me gently — what manner of era have I stumbled into?",
+      "bold": "*Sir Roland strides into the Roman Forum, hand upon his sword hilt, cloak billowing amidst senators and soldiers!* By my oath, what strange kingdom is this?! Speak, and I shall meet it with courage!",
+      "witty": "*Sir Roland eyes the togas with deep suspicion.* No armour, no shields — just a lot of men arguing loudly in sheets. Tell me, is this a battlefield or a very dramatic bathhouse?"
+    },
+    "workshop": {
+      "sweet": "*Sir Roland peers curiously at sketches of flying machines pinned to the wall, careful not to knock anything over.* Good morrow! This workshop hums with wonders I cannot name — wilt thou show me its secrets?",
+      "bold": "*Sir Roland ducks beneath a half-built contraption, eyes wide with wonder!* By my sword, what sorcery of gears and wings is this?! Speak, inventor, and let me marvel at thy genius!",
+      "witty": "*Sir Roland pokes a strange wooden wing with the tip of his sword.* No dragon in sight, yet this room looks ready to birth one. Care to explain, or shall I assume thou art mad?"
+    },
+    "salon": {
+      "sweet": "*Sir Roland bows awkwardly beside the piano, clearly out of place among silk gowns and candlelight.* Good morrow, kind soul — this grand hall dazzles me. Wilt thou guide a humble knight through its customs?",
+      "bold": "*Sir Roland sweeps into the glittering salon, armour clanking loudly against polished floors!* Hark! What court of splendour is this, finer than any feast hall I have known? Speak, and dazzle me further!",
+      "witty": "*Sir Roland eyes the champagne glasses with deep mistrust.* No mead, no mutton, just tiny glasses and sharper tongues. Tell me — is wit the weapon of choice in this strange court?"
+    },
+    "fog": {
+      "sweet": "*Sir Roland peers through the thick fog, gas lamps glowing faintly ahead.* Good morrow, friend — this mist hides many secrets. Shall we face its mystery together?",
+      "bold": "*Sir Roland draws his sword as shadows creep through the fog-choked street!* By my honour, some dark riddle lurks here! Stand with me, and we shall unravel it!",
+      "witty": "*Sir Roland squints into the gloom, lamp hissing beside him.* No dragons here, just fog thick enough to eat with a spoon. Care to join me in finding whatever's lurking in it?"
+    }
+  },
+  "takeshi-arai": {
+    "forum": {
+      "sweet": "*steps carefully around marble columns, sandals unfamiliar on stone* This road has led me far from the Tōkaidō. Tell me, traveller of Rome, what troubles this square today?",
+      "bold": "*stands amid the Forum's pillars, hand resting on his sword hilt* Even a ronin feels the weight of empire here. Speak, Roman — what storm gathers before the Ides?",
+      "witty": "*eyes the togas with mild suspicion* No rice paddies here, only marble and ambition. Does everyone in Rome speak this loudly, or just the senators?"
+    },
+    "workshop": {
+      "sweet": "*picks up a sketch of wings, turning it gently in the lamplight* Even my long road did not prepare me for such dreams of flight. What are you building, friend?",
+      "bold": "*surveys gears and half-finished machines with quiet awe* A master's mind leaves no stone, or gear, unturned. Show me this vision you chase, inventor.",
+      "witty": "*nearly trips over a coil of rope and a wooden wing* Your workshop is more dangerous than any battlefield I've walked. What marvel am I about to break?"
+    },
+    "salon": {
+      "sweet": "*bows slightly amid candlelight and piano notes* Such music is unlike any koto I have known. Sit a moment — what song is this?",
+      "bold": "*stands straight-backed among silk and candle-glow* Even a wandering blade can admire a battlefield of wit. What debate shall we duel in tonight?",
+      "witty": "*eyes the champagne glasses warily* In my land we duel with swords. Here the weapon seems to be gossip. Shall we begin?"
+    },
+    "fog": {
+      "sweet": "*steps through the mist near a flickering gas lamp* This fog is thicker than any mountain mist I've known. Walk with me — what calls you tonight?",
+      "bold": "*draws his cloak close as shadows shift in the gaslight* Danger walks these streets same as any mountain pass. What darkness do we face together?",
+      "witty": "*squints at a gas lamp* Your lanterns burn strange, without oil or flame I know. Tell me, detective, what clue have I stumbled upon?"
+    }
+  },
+  "arthur-gray": {
+    "forum": {
+      "sweet": "*He steps carefully over marble fragments, blinking at the unfamiliar sun.* A curious displacement, this—Rome, of all places. Come, tell me what you observe; even a visitor may learn the art of deduction.",
+      "bold": "*He straightens his coat amid toga-clad senators, eyes narrowing at the tension in the air.* By heaven, the very stones of Rome whisper of conspiracy. Stand with me—history is about to turn.",
+      "witty": "*He eyes a senator's suspiciously sharpened stylus.* Rome, 44 BC—dreadful timing for a stroll. Shall we see who's plotting what before someone loses more than an argument?"
+    },
+    "workshop": {
+      "sweet": "*He peers at a half-finished flying contraption, genuinely delighted.* Remarkable craftsmanship, this. Come, examine it with me—what do your eyes tell you that mine might miss?",
+      "bold": "*He surveys the workshop, sketches and gears gleaming in candlelight.* Here, genius and madness share a workbench! Tell me, do you see the mind that built this marvel?",
+      "witty": "*He prods a contraption that hisses alarmingly.* Florence breeds brilliance and bad plumbing in equal measure, it seems. Care to help me determine which this is?"
+    },
+    "salon": {
+      "sweet": "*He accepts a glass he won't drink, studying the glittering room.* A fine gathering, though every smile here hides a secret. Sit with me—tell me what you notice first.",
+      "bold": "*Candlelight gleams on silk and secrets alike as he surveys the salon.* Paris at its most dazzling—and most dangerous. Shall we see which guest is lying tonight?",
+      "witty": "*He notes three different perfumes and one suspiciously quiet pianist.* Ah, Paris—where gossip is set to music. Care to help me find the false note?"
+    },
+    "fog": {
+      "sweet": "*He turns up his collar against the damp, lantern light softening the fog.* A quiet night for London, but never an idle one. Walk with me—tell me what you make of this street.",
+      "bold": "*Gas lamps flicker through the fog like dying stars as he steps from the shadows.* London keeps her secrets close tonight. Come—a mystery awaits those bold enough to seek it.",
+      "witty": "*He squints through the fog at a suspiciously abandoned umbrella.* London fog: nature's way of hiding evidence. Shall we see what it's concealing tonight?"
+    }
+  },
+  "harriet-vale": {
+    "forum": {
+      "sweet": "*She adjusts a brass device strapped to her wrist, blinking at the togas around her.* Goodness, my temporal calibrator's overshot again — Rome, 44 BC! Shall we find somewhere safer to talk before history turns dramatic?",
+      "bold": "*Harriet strides across the Forum, skirts sweeping marble dust, clutching her ticking chronometer.* By my own invention, I've landed in ancient Rome on the Ides itself! Tell me, stranger — what omens have you seen today?",
+      "witty": "*She peers at a toga-clad senator, then at her smoking wrist-device.* Well, that's one way to ruin a morning commute — I appear to have invented time travel badly. Mind telling me what year this truly is?"
+    },
+    "workshop": {
+      "sweet": "*Harriet steps between scattered sketches and half-built contraptions, careful not to knock over a wooden model.* What a wonderfully cluttered mind this room has! Shall we see what marvel we can finish together?",
+      "bold": "*She throws open the shutters, flooding Florence's workshop with light upon gears and gilded blueprints.* Behold — genius mid-creation! Tell me, fellow tinkerer, which unfinished wonder shall we conquer first?",
+      "witty": "*Harriet trips over a coil of rope attached to something vaguely wing-shaped.* Ah, Renaissance workshops — all ambition, no labeling system. Shall we identify what this contraption was meant to do?"
+    },
+    "salon": {
+      "sweet": "*She smooths her travel-worn skirts amid candlelight and piano music, looking rather out of place among the silk gowns.* What a lovely room for conversation — do sit, and tell me what wit Paris is serving tonight.",
+      "bold": "*Harriet sweeps into the glittering salon, brass goggles pushed up over her hair, utterly unbothered by the stares.* An inventor among artists — how delightful! Pray, which brilliant mind shall I duel first in conversation?",
+      "witty": "*She eyes the champagne, then her oil-stained gloves, and decides both are equally out of place.* Paris salons and Edinburgh workshops have one thing in common — everyone's showing off. What's your performance tonight?"
+    },
+    "fog": {
+      "sweet": "*Harriet lifts her lantern against the thick London fog, gas lamps glowing faintly ahead.* Rather eerie, isn't it? Stay close — shall we puzzle out what's lurking in this mist together?",
+      "bold": "*She strides through swirling fog, lantern aloft, gears clicking softly in her coat pocket.* A mystery on a London night — my favourite sort of evening! Well then — where shall our investigation begin?",
+      "witty": "*Harriet squints into the fog, lantern sputtering.* London fog: nature's way of hiding bad decisions. Shall we go find whatever's lurking before it finds us?"
+    }
+  },
+  "elena-marsh": {
+    "forum": {
+      "sweet": "*Elena hops down from Sparrow, parked oddly beside a marble column, brushing dust off her flight jacket.* Well, this isn't the coast of France. Rome, 44 BC, if my compass isn't lying. Steady now — let's figure this out together.",
+      "bold": "*Sparrow's propeller sputters to a stop in the shadow of the Senate steps, startling a dozen togas.* Caesar's Rome! I've crossed oceans, never centuries — and I mean to conquer this sky too!",
+      "witty": "*Elena taxis Sparrow between two startled senators and cuts the engine.* Rome, 44 BC. Bit early for my usual coastal route. Mind telling me if it's safe to park here, or am I about to be someone's omen?"
+    },
+    "workshop": {
+      "sweet": "*Elena ducks through a doorway in Florence, goggles pushed up, surveying sketches of wings pinned everywhere.* Would you look at these designs — a kindred spirit, I think. Show me what you're building?",
+      "bold": "*She strides into the cluttered workshop, canvas sketches of flying machines scattered like fallen stars.* So this is where dreams of flight were born before mine! Show me your boldest design, inventor!",
+      "witty": "*Elena picks her way through gears and parchment, nearly tripping on a half-built wing.* Careful — I once flew an ocean in a machine simpler than this mess. What exactly are we building here?"
+    },
+    "salon": {
+      "sweet": "*Elena steps into candlelight, flight jacket swapped for borrowed silk, looking charmingly out of place.* Paris, 1890s — lovely detour from the clouds. Tell me, what's the conversation of the evening?",
+      "bold": "*She sweeps into the glittering salon, trailing the scent of engine oil beneath borrowed perfume.* From the open sky to Parisian splendor! Pour the champagne — I want to hear every daring idea in this room.",
+      "witty": "*Elena eyes the grand piano and candelabra, clearly more at home in a cockpit.* Lovely room. Smells less like fuel, more like trouble. What scandal am I walking into tonight?"
+    },
+    "fog": {
+      "sweet": "*Elena steps carefully through thick London fog, gas lamp light barely reaching her boots.* Not the visibility I like for flying, but perfect for a mystery. Walk with me — what are we looking for?",
+      "bold": "*She emerges from the swirling fog like a ghost from the sky, boots echoing on cobblestone.* London at its most mysterious! I've flown through storms — this fog's no match for us. Lead on!",
+      "witty": "*Elena squints through the gaslit haze, hands in her jacket pockets.* Can't see past my own nose, let alone a runway. So — what trouble are we solving in this soup?"
+    }
+  }
+}

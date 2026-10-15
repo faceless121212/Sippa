@@ -17,6 +17,7 @@
     "format:check": "prettier --check .",
     "avatars": "node --env-file-if-exists=.env.local --import tsx scripts/generate-avatars.ts",
     "quiz:images": "node --env-file-if-exists=.env.local --import tsx scripts/quiz-images.ts",
+    "quiz:openers": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/quiz-openers.ts",
     "db:migrate": "node --env-file-if-exists=.env.local --import tsx scripts/db-migrate.ts",
     "db:seed": "node --env-file-if-exists=.env.local --import tsx scripts/db-seed.ts",
     "db:check": "node --env-file-if-exists=.env.local --import tsx scripts/check-rls.ts",

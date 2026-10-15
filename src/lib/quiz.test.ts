@@ -1,10 +1,13 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { isQuestion, quizImages, quizzes, type QuizStep } from "@/config/quizzes";
+import { isQuestion, quizImages, quizSceneIds, quizzes, VIBES, type QuizStep } from "@/config/quizzes";
 import { segmentIds, segments } from "@/config/segments";
 import { seedCharacters } from "@/data/characters";
-import { answerLeanings, matchFromAnswers, type QuizAnswers } from "./quiz";
+import openers from "@/data/quiz-openers.json";
+import { answerLeanings, defaultVibe, matchFromAnswers, type QuizAnswers } from "./quiz";
+import { parseQuizStart, welcomePath } from "./quiz-start";
+import { isMinorSexualContent } from "./safety/content";
 
 const byId = (id: string) => seedCharacters.find((c) => c.id === id)!;
 
@@ -15,6 +18,7 @@ function answerAll(steps: QuizStep[], pick: (step: QuizStep, n: number) => numbe
     if (s.kind === "single" || s.kind === "multi")
       out[s.id] = [s.options[pick(s, s.options.length) % s.options.length].id];
     else if (s.kind === "statement") out[s.id] = v;
+    else if (s.kind === "slider") out[s.id] = (v - 1) * 25; // 1→0 … 5→100
     else if (s.kind === "name") out[s.id] = "Kate";
   }
   return out;
@@ -41,6 +45,11 @@ describe("quiz content", () => {
         const leans =
           s.kind === "statement"
             ? [{ id: s.id, ...s.leans }]
+            : s.kind === "slider"
+              ? [
+                  { id: `${s.id}-left`, ...s.left.leans },
+                  { id: `${s.id}-right`, ...s.right.leans },
+                ]
             : s.kind === "single" || s.kind === "multi"
               ? s.options
               : [];
@@ -140,5 +149,71 @@ describe("info screens", () => {
           expect(s.demo.some((l) => l.kind === "you") && s.demo.some((l) => l.kind === "them")).toBe(true);
           expect(s.demo.some((l) => l.kind === "badge"), s.id).toBe(true);
         }
+  });
+});
+
+describe("second-round funnel screens", () => {
+  it.each(segmentIds)("%s: a guide line per section, a scene question, a doubt with an answer for every option", (id) => {
+    const q = quizzes[id];
+    expect(q.host).toHaveLength(q.sections.length);
+    expect(quizSceneIds(id)).toHaveLength(4);
+    const doubt = q.steps.find((s) => s.id === "doubt");
+    const answer = q.steps.find((s) => s.kind === "reassure");
+    expect(doubt?.kind).toBe("single");
+    expect(answer?.kind === "reassure" && answer.step).toBe("doubt");
+    if (doubt?.kind === "single" && answer?.kind === "reassure")
+      for (const o of doubt.options) expect(answer.variants[o.id], o.id).toBeTruthy();
+    // The recap comes after the doubt and answer, and there's something to show.
+    const recap = q.steps.findIndex((s) => s.kind === "recap");
+    expect(recap).toBeGreaterThan(q.steps.indexOf(answer!));
+    expect(q.steps.some((s) => s.kind === "slider")).toBe(true);
+    expect(q.steps.some((s) => s.kind === "compare")).toBe(true);
+    expect(q.steps.some((s) => (s.kind === "single" ? s.options.some((o) => o.reaction) : false))).toBe(true);
+  });
+
+  it("sliders lean only past a third of the way, and twice near the ends", () => {
+    const steps = quizzes.love.steps;
+    expect(answerLeanings(steps, { pace: 50 })).toHaveLength(0);
+    expect(answerLeanings(steps, { pace: 30 })).toHaveLength(1);
+    expect(answerLeanings(steps, { pace: 30 })[0].label).toBe("Slow burn");
+    expect(answerLeanings(steps, { pace: 95 })).toHaveLength(2);
+    expect(answerLeanings(steps, { pace: 95 })[0].label).toBe("Instant spark");
+  });
+
+  it("the default vibe follows the answer that sets one", () => {
+    expect(defaultVibe("love", {})).toBe("sweet");
+    expect(defaultVibe("love", { voice: ["bold"] })).toBe("bold");
+    expect(defaultVibe("history", { personality: ["witty"] })).toBe("witty");
+  });
+
+  it("every character has a first message for every scene and vibe, and they're safe", () => {
+    const all = openers as Record<string, Record<string, Record<string, string>>>;
+    for (const id of segmentIds)
+      for (const c of seedCharacters.filter((c) => c.category === segments[id].category))
+        for (const scene of quizSceneIds(id))
+          for (const v of VIBES) {
+            const text = all[c.id]?.[scene]?.[v];
+            expect(text, `${c.id}/${scene}/${v}`).toBeTruthy();
+            expect(text.length).toBeLessThanOrEqual(400);
+            expect(isMinorSexualContent(text), `${c.id}/${scene}/${v}`).toBe(false);
+          }
+  });
+});
+
+describe("quiz → app hand-off", () => {
+  it("only accepts known shapes (ids, a known vibe, a short reply)", () => {
+    const ok = encodeURIComponent(JSON.stringify({ c: "mara-vellin", s: "rooftop", v: "bold", r: "Hey you 😊" }));
+    expect(parseQuizStart(ok)).toEqual({ c: "mara-vellin", s: "rooftop", v: "bold", r: "Hey you 😊" });
+    const bad = (o: object) => parseQuizStart(encodeURIComponent(JSON.stringify(o)));
+    expect(bad({ c: "../etc" })).toBeNull();
+    expect(bad({ c: "mara-vellin", v: "spicy" })).toBeNull();
+    expect(bad({ c: "mara-vellin", r: "x".repeat(301) })).toBeNull();
+    expect(parseQuizStart("%%%not json")).toBeNull();
+    expect(parseQuizStart(undefined)).toBeNull();
+  });
+
+  it("the welcome link carries ids only — never the reply", () => {
+    expect(welcomePath("mara-vellin", "rooftop", "bold")).toBe("/app/welcome?c=mara-vellin&s=rooftop&v=bold");
+    expect(welcomePath("mara-vellin")).toBe("/app/welcome?c=mara-vellin");
   });
 });

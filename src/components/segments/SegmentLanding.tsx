@@ -7,6 +7,7 @@ import { Footer } from "@/components/landing/Footer";
 import { Header } from "@/components/landing/Header";
 import { Pricing } from "@/components/landing/Pricing";
 import { buttonClass } from "@/components/ui/button";
+import { TrustChips } from "./TrustChips";
 import { segments, type SegmentId } from "@/config/segments";
 import { seedCharacters } from "@/data/characters";
 import { exploreHref } from "@/lib/explore-params";
@@ -52,7 +53,8 @@ export function SegmentLanding({ id }: { id: SegmentId }) {
                   </li>
                 ))}
               </ul>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <TrustChips className="mt-6" />
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                 <Link href={`/quiz/${id}`} className={buttonClass({ size: "lg" })}>
                   <Sparkles className="h-4 w-4" aria-hidden="true" />
                   {seg.quizTitle}

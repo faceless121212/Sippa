@@ -7,17 +7,35 @@ import { requireAdult } from "@/lib/auth";
 import { bondLevel, sceneById, XP } from "@/config/engagement";
 import { planLimits } from "@/config/site";
 import { createChat } from "@/lib/chat/service";
+import { quizChatStart } from "@/lib/quiz-openers";
 import { writeSceneOpener } from "@/lib/scenes";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 const characterId = z.string().regex(/^[a-z0-9-]{2,64}$/);
 
-/** "Start chat" on a character page: reopen the latest chat with them, or create one. */
+/**
+ * "Start chat" on a character page: reopen the latest chat with them, or create one.
+ * From the quiz (scene + vibe picked on the result) it always starts a fresh chat in that
+ * scene, opening with the exact message the visitor saw.
+ */
 export async function startChat(form: FormData) {
   const id = characterId.parse(form.get("character_id"));
   const viewer = await requireAdult(`/app/c/${id}`);
   const supabase = await createClient();
+
+  const sceneId = form.get("scene_id");
+  const vibe = form.get("vibe");
+  if (typeof sceneId === "string" && typeof vibe === "string") {
+    const { data: c } = await supabase.from("characters").select("category").eq("id", id).maybeSingle();
+    const start = c && quizChatStart(id, c.category, sceneId, vibe);
+    if (start) {
+      const chatId = await createChat(viewer.user.id, id, { prompt: start.prompt, opener: start.opener });
+      revalidatePath("/app/chats", "layout");
+      redirect(`/app/chats/${chatId}`);
+    }
+  }
+
   const { data: existing } = await supabase
     .from("chats")
     .select("id")

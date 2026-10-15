@@ -5,6 +5,7 @@ import Link from "next/link";
 import { buttonClass } from "@/components/ui/button";
 import { requireAdult } from "@/lib/auth";
 import { fulfilCheckout, stripeConfigured } from "@/lib/billing/stripe";
+import { parseQuizStart, QUIZ_START_COOKIE, welcomePath } from "@/lib/quiz-start";
 
 export const metadata: Metadata = { title: "Thank you" };
 
@@ -18,6 +19,13 @@ export default async function SuccessPage({
   // Came from a quiz match? "Start chatting" goes back to that character.
   const raw = (await cookies()).get("sippa_next_character")?.value;
   const next = raw && /^[a-z0-9-]{2,64}$/.test(decodeURIComponent(raw)) ? decodeURIComponent(raw) : null;
+  // …and in the scene picked on the quiz result, if there was one.
+  const quiz = parseQuizStart((await cookies()).get(QUIZ_START_COOKIE)?.value);
+  const startHref = next
+    ? quiz?.c === next && quiz.s && quiz.v
+      ? welcomePath(next, quiz.s, quiz.v)
+      : `/app/c/${next}`
+    : "/app/explore";
   const { session_id, demo, beans } = await searchParams;
   const result = demo
     ? demoResult(demo, beans)
@@ -52,7 +60,7 @@ export default async function SuccessPage({
       <h1 className="mt-6 text-3xl font-extrabold tracking-[-0.03em]">{title}</h1>
       <p className="text-muted mt-2 text-sm">{body}</p>
       <div className="mt-8 flex gap-2">
-        <Link href={next ? `/app/c/${next}` : "/app/explore"} className={buttonClass()}>
+        <Link href={startHref} className={buttonClass()}>
           Start chatting
         </Link>
         <Link href="/app/plus" className={buttonClass({ variant: "secondary" })}>

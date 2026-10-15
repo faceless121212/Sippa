@@ -1,4 +1,4 @@
-import { quizzes, type QuizOption, type QuizStep } from "@/config/quizzes";
+import { quizzes, type QuizOption, type QuizStep, type Vibe } from "@/config/quizzes";
 import { segments, type SegmentId } from "@/config/segments";
 import { seedCharacters, type Character } from "@/data/characters";
 
@@ -11,14 +11,15 @@ export type QuizMatch = Pick<
   reasons: string[];
 };
 
-/** What the visitor answered: option ids for choices, 1–5 for statements, text for the name. */
+/** What the visitor answered: option ids for choices, 1–5 for statements, 0–100 for sliders, text for the name. */
 export type QuizAnswers = Record<string, string[] | number | string>;
 
 const norm = (s: string) => s.toLowerCase();
 
 /**
  * Turns answers into weighted leanings. Choices count once; a statement counts once
- * when you mostly agree (4) and twice when it's "totally you" (5).
+ * when you mostly agree (4) and twice when it's "totally you" (5); a slider counts once
+ * past a third of the way to one side and twice near the end.
  */
 export function answerLeanings(steps: QuizStep[], answers: QuizAnswers): QuizOption[] {
   const out: QuizOption[] = [];
@@ -30,6 +31,12 @@ export function answerLeanings(steps: QuizStep[], answers: QuizAnswers): QuizOpt
     } else if (step.kind === "statement" && typeof a === "number" && a >= 4) {
       const lean = { id: step.id, label: step.statement, ...step.leans };
       out.push(...(a === 5 ? [lean, lean] : [lean]));
+    } else if (step.kind === "slider" && typeof a === "number") {
+      const side = a <= 35 ? step.left : a >= 65 ? step.right : null;
+      if (side) {
+        const lean = { id: step.id, label: side.label, ...side.leans };
+        out.push(...(a <= 15 || a >= 85 ? [lean, lean] : [lean]));
+      }
     }
   }
   return out;
@@ -104,4 +111,9 @@ export function matchCharacters(
 /** Matches straight from a segment's quiz answers. */
 export function matchFromAnswers(segmentId: SegmentId, answers: QuizAnswers, limit = 3) {
   return matchCharacters(segmentId, answerLeanings(quizzes[segmentId].steps, answers), undefined, limit);
+}
+
+/** The vibe of the first message the answers point to (the last answer that sets one). */
+export function defaultVibe(segmentId: SegmentId, answers: QuizAnswers): Vibe {
+  return answerLeanings(quizzes[segmentId].steps, answers).findLast((o) => o.vibe)?.vibe ?? "sweet";
 }
