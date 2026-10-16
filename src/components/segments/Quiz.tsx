@@ -13,7 +13,6 @@ import {
   quizScene,
   quizzes,
   STATEMENT_SCALE,
-  VIBES,
   type ChoiceStep,
   type CompareStep,
   type DemoLine,
@@ -949,7 +948,8 @@ function ResultScreen({
   const quiz = quizzes[segment];
   const matches = useMemo(() => matchFromAnswers(segment, answers), [segment, answers]);
   const [pick, setPick] = useState(0);
-  const [vibe, setVibe] = useState<Vibe>(() => defaultVibe(segment, answers));
+  // The tone of the first message follows the answers (no switch — fewer things on screen).
+  const vibe = useMemo(() => defaultVibe(segment, answers), [segment, answers]);
   const [reply, setReply] = useState("");
   const match = matches[pick];
   const sceneId = (answers.scene as string[] | undefined)?.[0];
@@ -1002,22 +1002,6 @@ function ResultScreen({
               <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               <span className="truncate">{scene.label}</span>
             </p>
-            <div className="flex shrink-0 gap-1" role="group" aria-label="Tune the first message">
-              {VIBES.map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  aria-pressed={vibe === v}
-                  onClick={() => setVibe(v)}
-                  className={cn(
-                    "rounded-full border px-2 py-0.5 text-[11px] font-bold transition-colors",
-                    vibe === v ? "border-primary bg-primary text-on-primary" : "border-border text-text hover:text-primary-ink",
-                  )}
-                >
-                  {quiz.vibes[v]}
-                </button>
-              ))}
-            </div>
           </div>
         )}
         <div className="mt-2 flex gap-2">

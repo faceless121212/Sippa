@@ -79,13 +79,9 @@ for (const [segment, headline] of [
     await expect(page.getByRole("list", { name: "Why you two click" })).toBeVisible();
     await expect(page.getByRole("region", { name: "Your first week" })).toBeVisible();
 
-    // Tuning the vibe rewrites the first message.
-    const message = page.locator('section[aria-label^="Your first message"] .animate-msg');
-    const before = await message.innerText();
-    const vibes = page.getByRole("group", { name: "Tune the first message" }).getByRole("button");
-    const current = await vibes.evaluateAll((b) => b.findIndex((x) => x.getAttribute("aria-pressed") === "true"));
-    await vibes.nth((current + 1) % 3).click();
-    await expect.poll(() => message.innerText()).not.toBe(before);
+    // The first message is shown, with no extra switches around it.
+    await expect(page.locator('section[aria-label^="Your first message"] .animate-msg')).not.toBeEmpty();
+    await expect(page.getByRole("group", { name: "Tune the first message" })).toHaveCount(0);
 
     await expect(page.getByRole("list", { name: "Quick replies" })).toBeVisible();
     await expect(page.getByRole("list", { name: "Also a great fit" })).toBeVisible();
