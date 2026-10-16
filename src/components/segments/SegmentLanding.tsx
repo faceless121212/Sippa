@@ -31,7 +31,7 @@ export function SegmentLanding({ id }: { id: SegmentId }) {
         <section className="border-border relative border-b" aria-labelledby="segment-title">
           <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-[1.1fr_1fr]">
             <div>
-              <p className="border-border bg-bg text-muted mb-5 inline-flex items-center gap-2 rounded-lg border px-2.5 py-1 text-xs font-medium">
+              <p className="border-border bg-bg text-text mb-5 inline-flex items-center gap-2 rounded-lg border px-2.5 py-1 text-xs font-medium">
                 <span className="bg-primary h-2 w-2 rounded-full ring-2 ring-black/10" aria-hidden="true" />
                 {seg.eyebrow}
               </p>
@@ -44,7 +44,7 @@ export function SegmentLanding({ id }: { id: SegmentId }) {
                   {seg.highlight}
                 </span>
               </h1>
-              <p className="text-muted mt-6 max-w-xl text-lg leading-relaxed">{seg.subtitle}</p>
+              <p className="text-text mt-6 max-w-xl text-lg leading-relaxed">{seg.subtitle}</p>
               <ul className="mt-6 space-y-2">
                 {seg.points.map((p) => (
                   <li key={p} className="flex gap-2 text-sm">
@@ -67,7 +67,7 @@ export function SegmentLanding({ id }: { id: SegmentId }) {
                 </Link>
               </div>
               {seg.adultsOnly && (
-                <p className="text-muted mt-4 text-xs">
+                <p className="text-text mt-4 text-xs">
                   18+ only. Every character is a fictional adult, and always an AI.
                 </p>
               )}
@@ -104,7 +104,7 @@ export function SegmentLanding({ id }: { id: SegmentId }) {
                     {i + 1}
                   </span>
                   <h3 className="mt-3 font-extrabold">{t}</h3>
-                  <p className="text-muted mt-1 text-sm">{d}</p>
+                  <p className="text-text mt-1 text-sm">{d}</p>
                 </li>
               ))}
             </ol>

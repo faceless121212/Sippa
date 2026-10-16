@@ -120,7 +120,7 @@ export function Quiz({ segment }: { segment: SegmentId }) {
             type="button"
             onClick={goBack}
             aria-label="Back"
-            className="text-muted hover:text-text -ml-2 grid h-10 w-10 place-items-center rounded-full"
+            className="text-text hover:text-primary-ink -ml-2 grid h-10 w-10 place-items-center rounded-full"
           >
             <ChevronLeft className="h-6 w-6" aria-hidden="true" />
           </button>
@@ -131,7 +131,7 @@ export function Quiz({ segment }: { segment: SegmentId }) {
           <Logo />
         </Link>
         {phase === "steps" && isQuestion(step) ? (
-          <span className="text-muted justify-self-end text-xs font-semibold tabular-nums">
+          <span className="text-text justify-self-end text-xs font-semibold tabular-nums">
             {questionNumber}/{totalQuestions}
           </span>
         ) : (
@@ -229,7 +229,7 @@ function Progress({ sections, current, fraction }: { sections: string[]; current
           </div>
         ))}
       </div>
-      <p className="text-muted mt-2 text-center text-[11px] font-bold tracking-[0.08em] uppercase">
+      <p className="text-text mt-2 text-center text-[11px] font-bold tracking-[0.08em] uppercase">
         <span className="sr-only">
           Part {current + 1} of {sections.length}:{" "}
         </span>
@@ -254,7 +254,7 @@ function Title({ children, hint }: { children: React.ReactNode; hint?: string })
   return (
     <div className="animate-rise mt-6 text-center">
       <h1 className="text-[26px] leading-tight font-extrabold tracking-[-0.03em] sm:text-3xl">{children}</h1>
-      {hint && <p className="text-muted mt-2 text-sm">{hint}</p>}
+      {hint && <p className="text-text mt-2 text-sm">{hint}</p>}
     </div>
   );
 }
@@ -347,7 +347,7 @@ function ChoiceScreen({
                   )}
                   <span className="flex flex-1 items-center justify-between gap-1 px-3 py-2.5 text-sm leading-snug font-semibold">
                     {o.label}
-                    <ChevronRight className="text-muted h-4 w-4 shrink-0" aria-hidden="true" />
+                    <ChevronRight className="text-text h-4 w-4 shrink-0" aria-hidden="true" />
                   </span>
                 </button>
               </li>
@@ -386,7 +386,7 @@ function ChoiceScreen({
                       {on && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
                     </span>
                   ) : (
-                    <ChevronRight className="text-muted h-4 w-4 shrink-0" aria-hidden="true" />
+                    <ChevronRight className="text-text h-4 w-4 shrink-0" aria-hidden="true" />
                   )}
                 </button>
               </li>
@@ -400,7 +400,7 @@ function ChoiceScreen({
             <CharacterAvatar id={reacting.id} name={reacting.name} sizes="36px" />
           </span>
           <p className="bg-surface-2 rounded-2xl rounded-bl-md px-3.5 py-2.5 text-[15px] leading-snug">
-            <span className="text-muted block text-[11px] font-bold">{reacting.name.split(" ")[0]}</span>
+            <span className="text-text block text-[11px] font-bold">{reacting.name.split(" ")[0]}</span>
             {reaction}
           </p>
         </div>
@@ -458,7 +458,7 @@ function StatementScreen({
           </button>
         ))}
       </div>
-      <div className="text-muted mt-2 flex justify-between text-xs font-semibold" aria-hidden="true">
+      <div className="text-text mt-2 flex justify-between text-xs font-semibold" aria-hidden="true">
         <span>{STATEMENT_SCALE[0].label}</span>
         <span>{STATEMENT_SCALE[4].label}</span>
       </div>
@@ -496,8 +496,8 @@ function SliderScreen({
         style={{ background: `color-mix(in oklab, var(--primary) ${Math.round(lean * 28)}%, var(--surface))` }}
       >
         <div className="flex justify-between gap-4 text-sm font-extrabold">
-          <span className={cn("transition-opacity", value > 60 && "opacity-50")}>{step.left.label}</span>
-          <span className={cn("text-right transition-opacity", value < 40 && "opacity-50")}>{step.right.label}</span>
+          <span className={cn("transition-colors", value < 40 && "text-primary-ink")}>{step.left.label}</span>
+          <span className={cn("text-right transition-colors", value > 60 && "text-primary-ink")}>{step.right.label}</span>
         </div>
         <input
           type="range"
@@ -546,9 +546,9 @@ function NameScreen({ step, initial, onDone }: { step: NameStep; initial: string
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Your name"
-          className="border-border bg-surface focus:border-primary w-full rounded-2xl border-2 px-4 py-4 text-center text-xl font-bold outline-none"
+          className="placeholder:text-text border-border bg-surface focus:border-primary w-full rounded-2xl border-2 px-4 py-4 text-center text-xl font-bold outline-none"
         />
-        <button type="button" onClick={() => onDone("")} className="text-muted hover:text-text mt-4 self-center text-sm">
+        <button type="button" onClick={() => onDone("")} className="text-text hover:text-primary-ink mt-4 self-center text-sm">
           Skip
         </button>
         <BottomButton type="submit" disabled={!clean}>
@@ -604,7 +604,7 @@ function InfoScreen({ step, answers, onDone }: { step: InfoStep; answers: QuizAn
       >
         {step.title}
       </h1>
-      <p className="text-muted animate-rise mt-3 text-center leading-relaxed" style={{ animationDelay: "300ms" }}>
+      <p className="text-text animate-rise mt-3 text-center leading-relaxed" style={{ animationDelay: "300ms" }}>
         {step.body}
       </p>
       {step.points && <Points points={step.points} />}
@@ -625,14 +625,14 @@ function ReassureScreen({ step, answers, onDone }: { step: ReassureStep; answers
       >
         {v.emoji}
       </span>
-      <p className="text-muted animate-rise mt-6 text-xs font-bold tracking-[0.08em] uppercase">Fair question</p>
+      <p className="text-text animate-rise mt-6 text-xs font-bold tracking-[0.08em] uppercase">Fair question</p>
       <h1
         className="animate-rise mt-1 text-center text-[26px] leading-tight font-extrabold tracking-[-0.03em]"
         style={{ animationDelay: "120ms" }}
       >
         {v.title}
       </h1>
-      <p className="text-muted animate-rise mt-3 text-center leading-relaxed" style={{ animationDelay: "240ms" }}>
+      <p className="text-text animate-rise mt-3 text-center leading-relaxed" style={{ animationDelay: "240ms" }}>
         {v.body}
       </p>
       <Points points={v.points} delay={380} />
@@ -682,7 +682,7 @@ function RecapScreen({
               className="border-border bg-surface hover:border-text flex items-center gap-1.5 rounded-full border-2 px-3.5 py-2 text-sm font-semibold"
             >
               {c.label}
-              <Pencil className="text-muted h-3 w-3" aria-hidden="true" />
+              <Pencil className="text-text h-3 w-3" aria-hidden="true" />
               <span className="sr-only">(change)</span>
             </button>
           </li>
@@ -700,19 +700,19 @@ function CompareScreen({ step, onDone }: { step: CompareStep; onDone: () => void
       <Title>{step.title}</Title>
       <div className="mt-6 grid grid-cols-2 gap-3">
         <section aria-label="A typical chatbot" className="animate-rise">
-          <p className="text-muted text-center text-xs font-bold tracking-[0.08em] uppercase">Typical chatbot</p>
-          <div className="bg-surface-2 mt-2 flex h-64 flex-col justify-end gap-2 rounded-3xl p-3 grayscale">
+          <p className="text-text text-center text-xs font-bold tracking-[0.08em] uppercase">Typical chatbot</p>
+          <div className="bg-surface-2 mt-2 flex h-64 flex-col justify-end gap-2 rounded-3xl p-3">
             {step.theirs.map((t, i) => (
               <p
                 key={t}
-                className="animate-msg text-muted self-start rounded-2xl rounded-bl-md bg-white/10 px-3 py-2 text-[13px] leading-snug"
+                className="animate-msg text-text self-start rounded-2xl rounded-bl-md bg-white/10 px-3 py-2 text-[13px] leading-snug"
                 style={{ animationDelay: `${700 + i * 1100}ms` }}
               >
                 {t}
               </p>
             ))}
             <p
-              className="animate-pop text-muted self-center rounded-full border border-current px-2.5 py-1 text-[11px] font-bold"
+              className="animate-pop text-text self-center rounded-full border border-current px-2.5 py-1 text-[11px] font-bold"
               style={{ animationDelay: "2600ms" }}
             >
               😶 Forgets you
@@ -726,7 +726,7 @@ function CompareScreen({ step, onDone }: { step: CompareStep; onDone: () => void
           </div>
         </section>
       </div>
-      <p className="text-muted animate-rise mt-5 text-center leading-relaxed" style={{ animationDelay: "300ms" }}>
+      <p className="text-text animate-rise mt-5 text-center leading-relaxed" style={{ animationDelay: "300ms" }}>
         {step.body}
       </p>
       <BottomButton onClick={onDone}>Continue</BottomButton>
@@ -775,7 +775,7 @@ function ChatDemo({ lines }: { lines: DemoLine[] }) {
         line.kind === "note" ? (
           <p
             key={i}
-            className="animate-msg self-center rounded-full bg-black/50 px-2.5 py-0.5 text-[10px] font-bold tracking-[0.08em] text-white/80 uppercase"
+            className="animate-msg self-center rounded-full bg-black/50 px-2.5 py-0.5 text-[10px] font-bold tracking-[0.08em] text-white uppercase"
           >
             {line.text}
           </p>
@@ -869,11 +869,11 @@ function MatchingScreen({ segment, lines, onDone }: { segment: SegmentId; lines:
           return (
             <li key={line}>
               <div className="flex items-center justify-between text-sm font-semibold">
-                <span className={f > 0 ? "" : "text-muted"}>{line}</span>
+                <span className={f > 0 ? "" : "text-text"}>{line}</span>
                 {f >= 1 ? (
                   <Check className="text-primary-ink h-4 w-4" strokeWidth={3} aria-hidden="true" />
                 ) : (
-                  <span className="text-muted tabular-nums" aria-hidden="true">
+                  <span className="text-text tabular-nums" aria-hidden="true">
                     {Math.round(f * 100)}%
                   </span>
                 )}
@@ -891,7 +891,7 @@ function MatchingScreen({ segment, lines, onDone }: { segment: SegmentId; lines:
             <CharacterAvatar id={s.id} name={s.name} sizes="32px" />
           </span>
           <p className="bg-surface-2 rounded-2xl rounded-bl-md px-3 py-2 text-sm">
-            <span className="text-muted block text-[11px] font-bold">{s.name}</span>“{s.text}”
+            <span className="text-text block text-[11px] font-bold">{s.name}</span>“{s.text}”
           </p>
         </div>
       )}
@@ -974,7 +974,7 @@ function ResultScreen({
       <Confetti />
       <h1 className="animate-rise text-center text-3xl font-extrabold tracking-[-0.03em]">
         {name ? `${name}, meet ${first}` : `Meet ${first}`}
-        {match.age ? <span className="text-muted font-semibold">, {match.age}</span> : null}
+        {match.age ? <span className="text-text font-semibold">, {match.age}</span> : null}
       </h1>
 
       {/* Portrait with the hook and why you click laid over it. */}
@@ -998,7 +998,7 @@ function ResultScreen({
       <section aria-label={`Your first message from ${first}`} className="mt-5">
         {scene && (
           <div className="flex items-center justify-between gap-2">
-            <p className="text-muted flex min-w-0 items-center gap-1 truncate text-xs font-semibold">
+            <p className="text-text flex min-w-0 items-center gap-1 truncate text-xs font-semibold">
               <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               <span className="truncate">{scene.label}</span>
             </p>
@@ -1011,7 +1011,7 @@ function ResultScreen({
                   onClick={() => setVibe(v)}
                   className={cn(
                     "rounded-full border px-2 py-0.5 text-[11px] font-bold transition-colors",
-                    vibe === v ? "border-primary bg-primary text-on-primary" : "border-border text-muted hover:text-text",
+                    vibe === v ? "border-primary bg-primary text-on-primary" : "border-border text-text hover:text-primary-ink",
                   )}
                 >
                   {quiz.vibes[v]}
@@ -1028,7 +1028,7 @@ function ResultScreen({
             key={`${match.id}-${vibe}`}
             className="animate-msg bg-surface-2 rounded-2xl rounded-tl-sm px-4 py-3 text-[15px] leading-relaxed"
           >
-            <MessageText text={opener} />
+            <MessageText text={opener} dim={false} />
           </div>
         </div>
 
@@ -1067,7 +1067,7 @@ function ResultScreen({
                 maxLength={MAX_FIRST_REPLY}
                 onChange={(e) => setReply(e.target.value)}
                 placeholder={`Reply to ${first}…`}
-                className="border-border bg-surface focus:border-primary min-w-0 flex-1 rounded-full border-2 px-4 py-3 outline-none"
+                className="placeholder:text-text border-border bg-surface focus:border-primary min-w-0 flex-1 rounded-full border-2 px-4 py-3 outline-none"
               />
               <button
                 type="submit"
@@ -1080,7 +1080,7 @@ function ResultScreen({
             </form>
           </>
         )}
-        <p className="text-muted mt-2 text-center text-xs">
+        <p className="text-text mt-2 text-center text-xs">
           Free · {adultsOnly ? "18+ · " : ""}always an AI
           {!isStaticLanding && (
             <>
@@ -1106,7 +1106,7 @@ function ResultScreen({
                 )}
                 aria-hidden="true"
               />
-              <span className="text-muted mt-1.5 block text-[10px] font-bold tracking-[0.08em] uppercase">{w.day}</span>
+              <span className="text-text mt-1.5 block text-[10px] font-bold tracking-[0.08em] uppercase">{w.day}</span>
               <span className="block text-xs leading-tight font-semibold">{w.text.replaceAll("{name}", first)}</span>
             </li>
           ))}
@@ -1116,7 +1116,7 @@ function ResultScreen({
       <div className="mt-7 flex items-center justify-center gap-3">
         {matches.length > 1 && (
           <>
-            <span className="text-muted text-xs font-semibold">Or meet</span>
+            <span className="text-text text-xs font-semibold">Or meet</span>
             <ul className="flex gap-2" aria-label="Also a great fit">
               {matches.map((m, i) =>
                 i === pick ? null : (
@@ -1141,7 +1141,7 @@ function ResultScreen({
           type="button"
           onClick={onRestart}
           aria-label="Retake the quiz"
-          className="text-muted hover:text-text flex items-center gap-1 text-xs font-semibold"
+          className="text-text hover:text-primary-ink flex items-center gap-1 text-xs font-semibold"
         >
           <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> Retake
         </button>
