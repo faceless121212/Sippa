@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react";
+import { MessageCircle } from "@/components/icons";
 import { categoryStyles, type CategoryId } from "@/config/categories";
 import { showUsageStats } from "@/config/site";
 import { cn, formatCount } from "@/lib/utils";

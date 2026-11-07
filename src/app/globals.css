@@ -72,8 +72,8 @@
   --color-famous: var(--famous);
   --color-famous-ink: var(--famous-ink);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
 
   --animate-pour: pour 800ms cubic-bezier(0.22, 1.2, 0.36, 1) both;
   --animate-steam: steam 1100ms ease-in-out infinite;

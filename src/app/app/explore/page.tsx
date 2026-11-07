@@ -1,4 +1,4 @@
-import { Search, Sparkles, Star } from "lucide-react";
+import { Search, Sparkles, Star } from "@/components/icons";
 import { showUsageStats } from "@/config/site";
 import type { Metadata } from "next";
 import Link from "next/link";

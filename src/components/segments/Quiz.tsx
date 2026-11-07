@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronLeft, ChevronRight, MapPin, Pencil, RotateCcw, SendHorizontal } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, MapPin, Pencil, RotateCcw, SendHorizontal } from "@/components/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";

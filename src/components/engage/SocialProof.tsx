@@ -1,4 +1,4 @@
-import { Bot, Database, ShieldCheck, ThumbsUp, Trash2, UserX } from "lucide-react";
+import { Bot, Database, ShieldCheck, ThumbsUp, Trash2, UserX } from "@/components/icons";
 import Link from "next/link";
 import { categoryStyles } from "@/config/categories";
 import type { SocialProof } from "@/lib/social-proof";

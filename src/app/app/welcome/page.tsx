@@ -1,4 +1,4 @@
-import { Check, MapPin, MessageCircle } from "lucide-react";
+import { Check, MapPin, MessageCircle } from "@/components/icons";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";

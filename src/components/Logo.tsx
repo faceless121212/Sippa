@@ -9,7 +9,7 @@ export function LogoMark({ className }: { className?: string }) {
         x="16"
         y="23"
         textAnchor="middle"
-        fontFamily="Inter, system-ui, sans-serif"
+        fontFamily="Nunito, system-ui, sans-serif"
         fontSize="21"
         fontWeight="800"
         fill="#C3FF00"

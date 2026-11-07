@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check } from "@/components/icons";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";

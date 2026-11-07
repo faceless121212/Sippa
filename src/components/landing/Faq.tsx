@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "@/components/icons";
 import { faqs } from "@/data/landing";
 
 export function Faq() {

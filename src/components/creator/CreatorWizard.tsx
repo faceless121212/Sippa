@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowUp, Bot, Check, Coffee, ImageIcon, RotateCcw, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowUp, Bot, Check, Coffee, ImageIcon, RotateCcw, Sparkles } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { categories, categoryStyles, type CategoryId } from "@/config/categories";

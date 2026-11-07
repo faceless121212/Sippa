@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Eye, EyeOff } from "lucide-react";
+import { Check, Eye, EyeOff } from "@/components/icons";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { inputCls } from "./AuthShell";

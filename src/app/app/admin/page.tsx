@@ -1,4 +1,4 @@
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CharacterAvatar } from "@/components/CharacterAvatar";

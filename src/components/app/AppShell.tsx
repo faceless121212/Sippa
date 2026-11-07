@@ -10,7 +10,7 @@ import {
   Plus,
   ShieldCheck,
   User,
-} from "lucide-react";
+} from "@/components/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";

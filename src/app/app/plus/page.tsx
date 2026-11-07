@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check } from "@/components/icons";
 import { BrandIcon } from "@/components/BrandIcon";
 import type { Metadata } from "next";
 import { BuyButton } from "@/components/billing/BuyButton";

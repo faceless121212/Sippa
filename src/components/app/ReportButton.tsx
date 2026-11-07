@@ -1,6 +1,6 @@
 "use client";
 
-import { Flag, X } from "lucide-react";
+import { Flag, X } from "@/components/icons";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { REPORT_REASONS } from "@/lib/report";
 import { buttonClass } from "../ui/button";

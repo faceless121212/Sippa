@@ -1,4 +1,4 @@
-import { ChevronRight, Clock, Flame, MessageCircle, Sparkles, TrendingUp } from "lucide-react";
+import { ChevronRight, Clock, Flame, MessageCircle, Sparkles, TrendingUp } from "@/components/icons";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";

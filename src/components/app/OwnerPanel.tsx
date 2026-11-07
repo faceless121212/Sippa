@@ -1,6 +1,6 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
+import { Trash2 } from "@/components/icons";
 import { useState } from "react";
 import { changeVisibility, deleteMyCharacter } from "@/app/app/c/[id]/actions";
 import { buttonClass } from "../ui/button";

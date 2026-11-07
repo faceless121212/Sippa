@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check } from "@/components/icons";
 import { useState } from "react";
 import { formatPrice, planFeatures, pricing, yearlySavingsPercent } from "@/config/site";
 import { cn } from "@/lib/utils";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
+import { Sparkles } from "@/components/icons";
 import { useEffect, useState } from "react";
 import { creatorExamples } from "@/data/landing";
 import { cn } from "@/lib/utils";

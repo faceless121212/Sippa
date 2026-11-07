@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react";
+import { MessageCircle } from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChatList } from "@/components/chat/ChatList";

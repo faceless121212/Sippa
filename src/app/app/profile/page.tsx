@@ -1,4 +1,4 @@
-import { LogOut } from "lucide-react";
+import { LogOut } from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CharacterCard } from "@/components/CharacterCard";

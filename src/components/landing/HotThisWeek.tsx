@@ -1,4 +1,4 @@
-import { Flame, Sparkles } from "lucide-react";
+import { Flame, Sparkles } from "@/components/icons";
 import { showUsageStats } from "@/config/site";
 import Link from "next/link";
 import { signupHref } from "@/lib/signup";

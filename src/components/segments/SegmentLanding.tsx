@@ -1,4 +1,4 @@
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles } from "@/components/icons";
 import Link from "next/link";
 import { CharacterCard } from "@/components/CharacterCard";
 import { Reveal } from "@/components/Reveal";

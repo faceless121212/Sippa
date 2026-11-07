@@ -1,6 +1,6 @@
 "use client";
 
-import { Coffee, MessageCircle, PenLine } from "lucide-react";
+import { Coffee, MessageCircle, PenLine } from "@/components/icons";
 import Link from "next/link";
 import { useRef, useState, type FormEvent } from "react";
 import { creatorExamples, pickCreatorExample, type CreatorExample } from "@/data/landing";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "@/components/icons";
 import { useTheme } from "next-themes";
 
 /** Icons swap via the `.dark` class so there's no hydration mismatch. */

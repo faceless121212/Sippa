@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/icons";
 import Link from "next/link";
 import { appComingSoon } from "@/lib/paths";
 import { signupHref } from "@/lib/signup";

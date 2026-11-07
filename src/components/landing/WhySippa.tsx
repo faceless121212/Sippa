@@ -1,4 +1,4 @@
-import { Ban, Brain, Lock, MonitorSmartphone, Theater } from "lucide-react";
+import { Ban, Brain, Lock, MonitorSmartphone, Theater } from "@/components/icons";
 import { whySippa } from "@/data/landing";
 
 const icons = {

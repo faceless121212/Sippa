@@ -1,4 +1,4 @@
-import { Bot, Heart, MessageCircle } from "lucide-react";
+import { Bot, Heart, MessageCircle } from "@/components/icons";
 import { signupHref } from "@/lib/signup";
 import type { Metadata } from "next";
 import Link from "next/link";

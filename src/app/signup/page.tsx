@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Check } from "lucide-react";
+import { Check } from "@/components/icons";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { CharacterAvatar } from "@/components/CharacterAvatar";
 import { characterById } from "@/data/characters";
