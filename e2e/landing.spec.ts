@@ -7,7 +7,7 @@ test.beforeEach(async ({ context }) => {
 
 test("renders all landing sections without horizontal scroll", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("create your own");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("remember you");
   for (const id of ["vibes", "creator", "why", "hot", "pricing", "faq", "join"]) {
     await expect(page.locator(`#${id}`)).toBeAttached();
   }

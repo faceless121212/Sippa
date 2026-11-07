@@ -32,7 +32,7 @@ export function Header() {
               <li key={l.href}>
                 <a
                   href={l.href}
-                  className="text-muted hover:text-text hover:bg-surface-2 rounded-lg px-3 py-1.5 text-sm font-medium"
+                  className="hover:bg-surface-2 rounded-lg px-3 py-1.5 text-sm font-bold"
                 >
                   {l.label}
                 </a>

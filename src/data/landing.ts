@@ -144,31 +144,9 @@ export function pickCreatorExample(input: string): CreatorExample {
 // ---- Why Sippa ----
 
 export const whySippa = [
-  {
-    icon: "brain",
-    title: "Remembers you",
-    body: "Long-term memory you can see and edit.",
-  },
-  {
-    icon: "ban",
-    title: "No pop-up ads",
-    body: "Never interrupts your chat. Ever.",
-  },
-  {
-    icon: "devices",
-    title: "Web + phone",
-    body: "Start on desktop, continue on your phone.",
-  },
-  {
-    icon: "theater",
-    title: "Stays in character",
-    body: "No personality drift, even in long chats.",
-  },
-  {
-    icon: "lock",
-    title: "Private by default",
-    body: "Never used for ads. Delete anytime.",
-  },
+  { icon: "brain", title: "Remembers you", body: "Your cat, your exam, your bad day." },
+  { icon: "ban", title: "No ads mid-chat", body: "Never interrupted. Ever." },
+  { icon: "lock", title: "Private", body: "Never used for ads. Delete anytime." },
 ] as const;
 
 // ---- FAQ ----

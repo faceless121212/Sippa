@@ -26,17 +26,12 @@ export function Pricing() {
     <section id="pricing" aria-labelledby="pricing-title" className="border-border bg-surface/50 border-y">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24">
         <div className="text-center">
-          <p className="text-muted mb-3 inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.08em] uppercase">
-            <span className="bg-primary h-1.5 w-1.5 rounded-full ring-1 ring-black/20" aria-hidden="true" />
-            Pricing
-          </p>
           <h2
             id="pricing-title"
             className="font-display text-3xl font-extrabold tracking-[-0.03em] sm:text-[44px] sm:leading-[1.05]"
           >
             Free to start
           </h2>
-          <p className="text-muted mt-3">Go Plus for unlimited chats, or Ultra for the deepest memory.</p>
 
           <fieldset className="border-border bg-surface mt-6 inline-flex rounded-lg border p-1">
             <legend className="sr-only">Billing period</legend>
@@ -45,7 +40,7 @@ export function Pricing() {
                 key={b}
                 className={cn(
                   "has-[:focus-visible]:outline-text cursor-pointer rounded-md px-4 py-2 text-sm font-medium transition-colors has-[:focus-visible]:outline-2",
-                  billing === b ? "bg-primary text-on-primary" : "text-muted hover:text-text",
+                  billing === b ? "bg-primary text-on-primary" : "text-text hover:text-primary-ink",
                 )}
               >
                 <input
@@ -86,7 +81,7 @@ export function Pricing() {
             upgrade
           />
         </div>
-        <p className="text-muted mt-6 text-center text-xs">Taxes included. Cancel anytime.</p>
+        <p className="mt-6 text-center text-sm font-semibold">Taxes included. Cancel anytime.</p>
       </div>
     </section>
   );
@@ -128,12 +123,13 @@ function PlanCard({
       <h3 className="font-display text-2xl font-bold">{name}</h3>
       <p className="mt-4">
         <span className="font-display text-4xl font-bold">{price}</span>{" "}
-        <span className="text-muted text-sm">{period}</span>
+        <span className="text-sm font-semibold">{period}</span>
       </p>
-      <p className="text-muted mt-1 min-h-5 text-xs">{note}</p>
+      <p className="mt-1 min-h-5 text-sm font-semibold">{note}</p>
       <ul className="mt-6 flex flex-1 flex-col gap-3">
-        {features.map((f) => (
-          <li key={f} className="flex gap-2 text-sm">
+        {/* Three lines per plan — the full list is on the Plus page. */}
+        {features.slice(0, 3).map((f) => (
+          <li key={f} className="flex gap-2 font-semibold">
             <Check className="text-primary-ink mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
             {f}
           </li>

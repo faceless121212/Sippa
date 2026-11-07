@@ -18,21 +18,21 @@ export function Hero() {
       />
       <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 sm:px-6 md:py-20 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
         <div>
-          <p className="border-border bg-bg text-muted mb-5 inline-flex items-center gap-2 rounded-lg border px-2.5 py-1 text-xs font-medium">
+          <p className="border-border bg-bg mb-5 inline-flex items-center gap-2 rounded-lg border px-3 py-1 text-sm font-bold">
             <span className="bg-primary h-2 w-2 rounded-full ring-2 ring-black/10" aria-hidden="true" />
-            Free to start · No card needed
+            Free · No card · 18+
           </p>
           <h1
             id="hero-title"
             className="text-[40px] leading-[1.02] font-extrabold tracking-[-0.035em] text-balance sm:text-6xl lg:text-[68px]"
           >
-            Speak with different characters — or{" "}
+            Chat with characters who{" "}
             <span className="bg-primary text-on-primary rounded-lg box-decoration-clone px-2">
-              create your own.
+              remember you.
             </span>
           </h1>
-          <p className="text-muted mt-6 max-w-xl text-lg leading-relaxed">
-            One sentence in. A whole character out — face, voice and backstory.
+          <p className="mt-6 max-w-xl text-xl leading-relaxed font-semibold">
+            Pick one — or create your own in one sentence.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link href={signupHref("/app/create")} className={buttonClass({ size: "lg" })}>
@@ -45,7 +45,7 @@ export function Hero() {
               Meet the characters
             </Link>
           </div>
-          <div className="mt-8 flex items-center gap-3">
+          <div className="mt-8">
             <ul className="flex -space-x-2" aria-label="Some of the characters on Sippa">
               {faces.map((c) => (
                 <li key={c.id} className="ring-bg h-9 w-9 overflow-hidden rounded-full ring-2">
@@ -53,11 +53,6 @@ export function Hero() {
                 </li>
               ))}
             </ul>
-            <p className="text-muted text-xs leading-snug">
-              Lovers, friends &amp; famous minds.
-              <br />
-              18+ only · Always an AI
-            </p>
           </div>
         </div>
         <CreatorMock />

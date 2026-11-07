@@ -17,11 +17,8 @@ export function Footer() {
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[2fr_1fr_1fr_1fr]">
         <div>
           <Logo />
-          <p className="text-muted mt-3 max-w-xs text-sm">{siteConfig.tagline}</p>
-          <p className="text-muted mt-4 max-w-sm text-xs">
-            Sippa characters and their images are AI-generated. They are not real people and don&apos;t give
-            professional advice. 18+ only.
-          </p>
+          <p className="mt-3 max-w-xs font-semibold">{siteConfig.tagline}</p>
+          <p className="mt-4 max-w-sm text-sm font-semibold">AI characters, not real people. 18+.</p>
         </div>
         <nav aria-label="Discover">
           <h2 className="text-sm font-semibold">Discover</h2>
@@ -32,7 +29,7 @@ export function Footer() {
               ["/history", "Sippa History"],
             ].map(([href, label]) => (
               <li key={href}>
-                <Link href={href} className="text-muted hover:text-text text-sm">
+                <Link href={href} className="hover:text-primary-ink text-sm font-semibold">
                   {label}
                 </Link>
               </li>
@@ -44,7 +41,7 @@ export function Footer() {
           <ul className="mt-3 space-y-2">
             {legal.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="text-muted hover:text-text text-sm">
+                <Link href={l.href} className="hover:text-primary-ink text-sm font-semibold">
                   {l.label}
                 </Link>
               </li>
@@ -57,7 +54,7 @@ export function Footer() {
             <ul className="mt-3 space-y-2">
               {socials.map((s) => (
                 <li key={s.label}>
-                  <a href={s.href} className="text-muted hover:text-text text-sm" rel="noopener noreferrer">
+                  <a href={s.href} className="hover:text-primary-ink text-sm font-semibold" rel="noopener noreferrer">
                     {s.label}
                   </a>
                 </li>
@@ -67,7 +64,7 @@ export function Footer() {
         )}
       </div>
       <div className="border-border border-t">
-        <p className="text-muted mx-auto max-w-6xl px-4 py-6 text-xs sm:px-6">
+        <p className="mx-auto max-w-6xl px-4 py-6 text-sm sm:px-6">
           © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
         </p>
       </div>

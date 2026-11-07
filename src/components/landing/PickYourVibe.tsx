@@ -5,7 +5,6 @@ import { useRef, useState, type KeyboardEvent } from "react";
 import { categories, categoryStyles, type CategoryId } from "@/config/categories";
 import { segmentForCategory } from "@/config/segments";
 import { charactersByCategory } from "@/data/landing";
-import { exploreHref } from "@/lib/explore-params";
 import { signupHref } from "@/lib/signup";
 import { cn } from "@/lib/utils";
 import { CharacterCard } from "../CharacterCard";
@@ -47,17 +46,12 @@ export function PickYourVibe() {
       className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24"
     >
       <div className="max-w-2xl">
-        <p className="text-muted mb-3 inline-flex items-center gap-1.5 text-xs font-semibold tracking-[0.08em] uppercase">
-          <span className="bg-primary h-1.5 w-1.5 rounded-full ring-1 ring-black/20" aria-hidden="true" />
-          Characters
-        </p>
         <h2
           id="vibes-title"
           className="font-display text-3xl font-extrabold tracking-[-0.03em] sm:text-[44px] sm:leading-[1.05]"
         >
           Pick your vibe
         </h2>
-        <p className="text-muted mt-3">Three kinds of characters.</p>
       </div>
 
       <div role="tablist" aria-label="Character categories" className="mt-8 grid gap-3 sm:grid-cols-3">
@@ -93,12 +87,11 @@ export function PickYourVibe() {
                 </span>
                 <span className={cn("font-display text-xl font-bold", s.ink)}>{cat.label}</span>
                 {cat.adultsOnly && (
-                  <span className="border-border text-muted ml-auto rounded-md border px-1.5 py-0.5 text-[11px] font-medium">
+                  <span className="border-border ml-auto rounded-md border px-1.5 py-0.5 text-xs font-bold">
                     18+
                   </span>
                 )}
               </span>
-              <span className="text-muted mt-2 block text-sm">{cat.blurb}</span>
             </button>
           );
         })}
@@ -114,19 +107,7 @@ export function PickYourVibe() {
         <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {charactersByCategory(active).map((c, i) => (
             <li key={c.id} className="animate-rise" style={{ animationDelay: `${i * 70}ms` }}>
-              <CharacterCard character={c} className="h-full" />
-            </li>
-          ))}
-        </ul>
-        <ul className="no-scrollbar mt-5 flex gap-2 overflow-x-auto" aria-label={`${current.label} sub-tags`}>
-          {current.subTags.map((t) => (
-            <li key={t} className="shrink-0">
-              <Link
-                href={signupHref(exploreHref({ category: active, tag: t }))}
-                className="border-border text-muted hover:border-text hover:text-text block rounded-md border px-2.5 py-1 text-xs font-medium"
-              >
-                {t}
-              </Link>
+              <CharacterCard character={c} className="h-full" minimal />
             </li>
           ))}
         </ul>
@@ -142,9 +123,8 @@ export function PickYourVibe() {
           </Link>
         </div>
         {active === "famous" && (
-          <p className="text-muted mt-4 text-xs">
-            Famous characters are inspired by historical figures who died long ago, or are fictional
-            archetypes. No living celebrities, ever.
+          <p className="mt-4 text-sm font-semibold">
+            Historical figures and fictional legends — never living people.
           </p>
         )}
       </div>

@@ -30,10 +30,13 @@ export function CharacterCard({
   className,
   priority,
   rank,
+  minimal,
 }: {
   character: CardCharacter;
   className?: string;
   priority?: boolean;
+  /** Landing page: no tags, full-white text (less to read). */
+  minimal?: boolean;
   /** Position in a ranking, shown as a numbered circle in the top-left corner. */
   rank?: number;
 }) {
@@ -93,19 +96,30 @@ export function CharacterCard({
         <h3 className="flex items-center gap-1.5 text-[15px] leading-tight font-bold">
           <span className={cn("h-2 w-2 shrink-0 rounded-full", style.fill)} aria-hidden="true" />
           <span className="truncate">{character.name}</span>
-          {character.age ? <span className="font-medium text-white/70">{character.age}</span> : null}
+          {character.age ? (
+            <span className={cn("font-medium", !minimal && "text-white/70")}>{character.age}</span>
+          ) : null}
         </h3>
-        <p className="mt-1 line-clamp-2 text-xs leading-snug text-white/80">{character.hook}</p>
-        <ul className="mt-2 flex flex-wrap gap-1" aria-label="Tags">
-          {character.tags.slice(0, 2).map((tag) => (
-            <li
-              key={tag}
-              className="rounded-md bg-white/15 px-1.5 py-0.5 text-[10px] font-semibold backdrop-blur-sm"
-            >
-              {tag}
-            </li>
-          ))}
-        </ul>
+        <p
+          className={cn(
+            "mt-1 line-clamp-2 leading-snug",
+            minimal ? "text-sm text-white" : "text-xs text-white/80",
+          )}
+        >
+          {character.hook}
+        </p>
+        {!minimal && (
+          <ul className="mt-2 flex flex-wrap gap-1" aria-label="Tags">
+            {character.tags.slice(0, 2).map((tag) => (
+              <li
+                key={tag}
+                className="rounded-md bg-white/15 px-1.5 py-0.5 text-[10px] font-semibold backdrop-blur-sm"
+              >
+                {tag}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </article>
   );

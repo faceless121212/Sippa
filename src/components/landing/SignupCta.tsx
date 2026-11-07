@@ -26,9 +26,7 @@ export function SignupCta() {
             >
               Your first cup is on us.
             </h2>
-            <p className="mt-3 max-w-md text-base font-medium text-black/70">
-              Free account, 30 messages a day, 3 characters to brew. No card needed.
-            </p>
+            <p className="mt-3 max-w-md text-lg font-bold text-black">30 free messages a day. No card.</p>
             {appComingSoon ? (
               <p className="mt-6 inline-flex rounded-xl bg-black px-5 py-3 font-bold text-white">
                 Opening soon — the app launches shortly.
@@ -53,9 +51,6 @@ export function SignupCta() {
                 </Link>
               </div>
             )}
-            <p className="mt-4 text-xs font-medium text-black/60">
-              18+ only · You&apos;re always chatting with an AI
-            </p>
           </div>
           <div className="relative hidden h-44 w-52 shrink-0 sm:block" aria-hidden="true">
             <BrandIcon name="cup" size={150} className="absolute top-0 left-0 rotate-[-6deg] shadow-2xl" />

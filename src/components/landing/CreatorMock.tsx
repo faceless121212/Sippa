@@ -118,7 +118,7 @@ export function CreatorMock() {
                     : "translate-x-0 rotate-0 opacity-0",
                 )}
               >
-                <CharacterCard character={p.character} />
+                <CharacterCard character={p.character} minimal />
               </div>
             ))}
 
@@ -145,7 +145,7 @@ export function CreatorMock() {
               className={cn("absolute top-0 z-20 w-[62%] max-w-[250px]", animate && "animate-pour")}
             >
               <div className="relative overflow-hidden rounded-xl shadow-2xl shadow-black/30">
-                <CharacterCard character={example.character} priority={index === 0} />
+                <CharacterCard minimal character={example.character} priority={index === 0} />
                 {animate && <span className="animate-shine pointer-events-none absolute inset-0" />}
               </div>
 
